@@ -161,310 +161,282 @@
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="#tpfilecontent"><code>tp.file.content</code></a></li>
-<li><a href="#tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile ⎮ string, filename?: string, open_new: boolean = false, folder?: TFolder | string)</code></a></li>
-<li><a href="#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
-<li><a href="#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></li>
-<li><a href="#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></li>
-<li><a href="#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></li>
-<li><a href="#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></li>
-<li><a href="#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></li>
-<li><a href="#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string ⎮ TFile)</code></a></li>
-<li><a href="#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
-<li><a href="#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></li>
-<li><a href="#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></li>
-<li><a href="#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></li>
+<li><a href="#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></li>
+<li><a href="#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></li>
+<li><a href="#tpfilecursororder"><code>tp.file.cursor(order)</code></a></li>
+<li><a href="#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></li>
+<li><a href="#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></li>
+<li><a href="#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></li>
+<li><a href="#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></li>
+<li><a href="#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></li>
+<li><a href="#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></li>
+<li><a href="#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></li>
+<li><a href="#tpfilepathrelative"><code>tp.file.path(relative)</code></a></li>
+<li><a href="#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></li>
 <li><a href="#tpfileselection"><code>tp.file.selection()</code></a></li>
 <li><a href="#tpfiletags"><code>tp.file.tags</code></a></li>
 <li><a href="#tpfiletitle"><code>tp.file.title</code></a></li>
 </ul>
 </li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-16">示例</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B-15">示例</a></li>
 </ul>
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpfilecontent"><a class="header" href="#tpfilecontent"><code>tp.file.content</code></a></h3>
-<p>The string contents of the file at the time that Templater was executed. Manipulating this string will <em>not</em> update the current file.</p>
-<h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// Retrieve file content
-&lt;% tp.file.content %&gt;
-</code></pre>
-<h3 id="tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><a class="header" href="#tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile ⎮ string, filename?: string, open_new: boolean = false, folder?: TFolder | string)</code></a></h3>
-<p>Creates a new file using a specified template or with a specified content.</p>
+<p>获取当前文件的全部内容。</p>
+<h3 id="tpfilecreate_newtemplate-filename-open_new-folder"><a class="header" href="#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></h3>
+<p>使用指定的模板创建一个新文件。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li>
-<p><code>template</code>: Either the template used for the new file content, or the file content as a string. If it is the template to use, you retrieve it with <code>tp.file.find_tfile(TEMPLATENAME)</code>.</p>
-</li>
-<li>
-<p><code>filename</code>: The filename of the new file, defaults to "Untitled".</p>
-</li>
-<li>
-<p><code>open_new</code>: Whether to open or not the newly created file. Warning: if you use this option, since commands are executed asynchronously, the file can be opened first and then other commands are appended to that new file and not the previous file.</p>
-</li>
-<li>
-<p><code>folder</code>: The folder to put the new file in, defaults to Obsidian's default location. If you want the file to appear in a different folder, specify it with <code>"PATH/TO/FOLDERNAME"</code> or <code>app.vault.getAbstractFileByPath("PATH/TO/FOLDERNAME")</code>.</p>
-</li>
+<li><code>template</code>: 要使用的模板路径（相对于模板文件夹）。</li>
+<li><code>filename</code>: 新文件的文件名。</li>
+<li><code>open_new</code>: 创建后是否打开新文件。默认为true。</li>
+<li><code>folder</code>: 新文件的目标文件夹（相对于保险库根目录）。默认为当前文件所在文件夹。</li>
 </ul>
-<h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// File creation
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename") %&gt;
-// File creation with template
-&lt;%* await tp.file.create_new(tp.file.find_tfile("MyTemplate"), "MyFilename") %&gt;
-// File creation and open created note
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", true) %&gt;
-// File creation in current folder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, tp.file.folder(true)) %&gt;
-// File creation in specified folder with string path
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, "Path/To/MyFolder") %&gt;
-// File creation in specified folder with TFolder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, app.vault.getAbstractFileByPath("MyFolder")) %&gt;
-// File creation and append link to current note
-[[&lt;% (await tp.file.create_new("MyFileContent", "MyFilename")).basename %&gt;]]
+<h5 id="示例"><a class="header" href="#示例">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
 </code></pre>
-<h3 id="tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
-<p>Retrieves the file's creation date.</p>
+<h3 id="tpfilecreation_dateformat"><a class="header" href="#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></h3>
+<p>获取文件的创建日期。</p>
 <h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD HH:mm"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
-<h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
-<pre><code class="language-javascript">// File creation date
+<h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.creation_date() %&gt;
-// File creation date with format
+
+// 自定义格式
 &lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
 </code></pre>
-<h3 id="tpfilecursororder-number"><a class="header" href="#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></h3>
-<p>Sets the cursor to this location after the template has been inserted.</p>
-<p>You can navigate between the different cursors using the configured hotkey in Obsidian settings.</p>
+<h3 id="tpfilecursororder"><a class="header" href="#tpfilecursororder"><code>tp.file.cursor(order)</code></a></h3>
+<p>在渲染后将光标放置在特定位置。</p>
 <h5 id="参数-2"><a class="header" href="#参数-2">参数</a></h5>
 <ul>
-<li><code>order</code>: The order of the different cursors jump, e.g. it will jump from 1 to 2 to 3, and so on.
-If you specify multiple tp.file.cursor with the same order, the editor will switch to multi-cursor.</li>
+<li><code>order</code>: 决定光标放置的顺序（如果有多个光标）。默认为1。</li>
 </ul>
-<h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
-<pre><code class="language-javascript">// File cursor
+<h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.cursor() %&gt;
-// File multi-cursor
-&lt;% tp.file.cursor(1) %&gt;Content&lt;% tp.file.cursor(1) %&gt;
+
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
 </code></pre>
-<h3 id="tpfilecursor_appendcontent-string"><a class="header" href="#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></h3>
-<p>Appends some content after the active cursor in the file.</p>
+<h3 id="tpfilecursor_appendcontent"><a class="header" href="#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></h3>
+<p>在光标位置追加内容。</p>
 <h5 id="参数-3"><a class="header" href="#参数-3">参数</a></h5>
 <ul>
-<li><code>content</code>: The content to append after the active cursor.</li>
+<li><code>content</code>: 要追加的内容。</li>
 </ul>
-<h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
-<pre><code class="language-javascript">// File cursor append
-&lt;% tp.file.cursor_append("Some text") %&gt;
+<h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
 </code></pre>
-<h3 id="tpfileexistsfilepath-string"><a class="header" href="#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></h3>
-<p>Check to see if a file exists by it's file path. The full path to the file, relative to the Vault and containing the extension, must be provided.</p>
+<h3 id="tpfileexistsfilename"><a class="header" href="#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></h3>
+<p>检查文件是否存在。</p>
 <h5 id="参数-4"><a class="header" href="#参数-4">参数</a></h5>
 <ul>
-<li><code>filepath</code>: The full file path of the file we want to check existence for.</li>
+<li><code>filename</code>: 要检查的文件名（绝对路径或相对于保险库根目录的路径）。</li>
 </ul>
-<h5 id="示例-5"><a class="header" href="#示例-5">示例</a></h5>
-<pre><code class="language-javascript">// File existence
-&lt;% await tp.file.exists("MyFolder/MyFile.md") %&gt;
-// File existence of current file
-&lt;% await tp.file.exists(tp.file.folder(true) + "/" + tp.file.title + ".md") %&gt;
+<h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
+
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
 </code></pre>
-<h3 id="tpfilefind_tfilefilename-string"><a class="header" href="#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></h3>
-<p>Search for a file and returns its <code>TFile</code> instance.</p>
+<h3 id="tpfilefind_tfilefilename"><a class="header" href="#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></h3>
+<p>通过名称查找一个TFile对象。</p>
 <h5 id="参数-5"><a class="header" href="#参数-5">参数</a></h5>
 <ul>
-<li><code>filename</code>: The filename we want to search and resolve as a <code>TFile</code>.</li>
+<li><code>filename</code>: 文件名（绝对路径或相对于保险库根目录的路径）。</li>
 </ul>
-<h5 id="示例-6"><a class="header" href="#示例-6">示例</a></h5>
-<pre><code class="language-javascript">// File find TFile
-&lt;% tp.file.find_tfile("MyFile").basename %&gt;
+<h5 id="示例-5"><a class="header" href="#示例-5">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
 </code></pre>
-<h3 id="tpfilefolderabsolute-boolean--false"><a class="header" href="#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></h3>
-<p>Retrieves the file's folder name.</p>
+<h3 id="tpfilefolderrelative"><a class="header" href="#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></h3>
+<p>获取文件所在的文件夹路径。</p>
 <h5 id="参数-6"><a class="header" href="#参数-6">参数</a></h5>
 <ul>
-<li><code>absolute</code>: If set to <code>true</code>, returns the vault-absolute path of the folder. If <code>false</code>, only returns the basename of the folder (the last part). Defaults to <code>false</code>.</li>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
 </ul>
-<h5 id="示例-7"><a class="header" href="#示例-7">示例</a></h5>
-<pre><code class="language-javascript">// File folder (Folder)
+<h5 id="示例-6"><a class="header" href="#示例-6">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
 &lt;% tp.file.folder() %&gt;
-// File folder with vault-absolute path (Path/To/Folder)
+
+// 相对路径
 &lt;% tp.file.folder(true) %&gt;
 </code></pre>
-<h3 id="tpfileincludeinclude_link-string--tfile"><a class="header" href="#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string ⎮ TFile)</code></a></h3>
-<p>Includes the file's link content. Templates in the included content will be resolved.</p>
+<h3 id="tpfileincludeinclude_link"><a class="header" href="#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></h3>
+<p>包含另一个文件的内容。</p>
 <h5 id="参数-7"><a class="header" href="#参数-7">参数</a></h5>
 <ul>
-<li><code>include_link</code>: The link to the file to include, e.g. <code>"[[MyFile]]"</code>, or a TFile object. Also supports sections or blocks inclusions.</li>
+<li><code>include_link</code>: 要包含的文件链接（可以是文件名、相对路径或Wiki链接）。</li>
 </ul>
-<h5 id="示例-8"><a class="header" href="#示例-8">示例</a></h5>
-<pre><code class="language-javascript">// File include
-&lt;% tp.file.include("[[Template1]]") %&gt;
-// File include TFile
-&lt;% tp.file.include(tp.file.find_tfile("MyFile")) %&gt;
-// File include section
-&lt;% tp.file.include("[[MyFile#Section1]]") %&gt;
-// File include block
-&lt;% tp.file.include("[[MyFile#^block1]]") %&gt;
+<h5 id="示例-7"><a class="header" href="#示例-7">示例</a></h5>
+<pre><code class="language-javascript">// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
+
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
 </code></pre>
-<h3 id="tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
-<p>Retrieves the file's last modification date.</p>
+<h3 id="tpfilelast_modified_dateformat"><a class="header" href="#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></h3>
+<p>获取文件的最后修改日期。</p>
 <h5 id="参数-8"><a class="header" href="#参数-8">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD HH:mm"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
-<h5 id="示例-9"><a class="header" href="#示例-9">示例</a></h5>
-<pre><code class="language-javascript">// File last modified date
+<h5 id="示例-8"><a class="header" href="#示例-8">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.last_modified_date() %&gt;
-// File last modified date with format
+
+// 自定义格式
 &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
 </code></pre>
-<h3 id="tpfilemovenew_path-string-file_to_move-tfile"><a class="header" href="#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></h3>
-<p>Moves the file to the desired vault location.</p>
+<h3 id="tpfilemovenew_path-file_to_move"><a class="header" href="#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></h3>
+<p>将文件移动到新位置。</p>
 <h5 id="参数-9"><a class="header" href="#参数-9">参数</a></h5>
 <ul>
-<li>
-<p><code>new_path</code>: The new vault relative path of the file, without the file extension. Note: the new path needs to include the folder and the filename, e.g. <code>"/Notes/MyNote"</code>.</p>
-</li>
-<li>
-<p><code>file_to_move</code>: The file to move, defaults to the current file.</p>
-</li>
+<li><code>new_path</code>: 新的文件路径（相对于保险库根目录）。</li>
+<li><code>file_to_move</code>: 要移动的文件（TFile对象）。如果未提供，则使用当前文件。</li>
 </ul>
-<h5 id="示例-10"><a class="header" href="#示例-10">示例</a></h5>
-<pre><code class="language-javascript">// File move
-&lt;% await tp.file.move("/A/B/" + tp.file.title) %&gt;
-// File move and rename
-&lt;% await tp.file.move("/A/B/NewTitle") %&gt;
+<h5 id="示例-9"><a class="header" href="#示例-9">示例</a></h5>
+<pre><code class="language-javascript">// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
+
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
 </code></pre>
-<h3 id="tpfilepathrelative-boolean--false"><a class="header" href="#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></h3>
-<p>Retrieves the file's absolute path on the system.</p>
+<h3 id="tpfilepathrelative"><a class="header" href="#tpfilepathrelative"><code>tp.file.path(relative)</code></a></h3>
+<p>获取文件的路径。</p>
 <h5 id="参数-10"><a class="header" href="#参数-10">参数</a></h5>
 <ul>
-<li><code>relative</code>: If set to <code>true</code>, only retrieves the vault's relative path.</li>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
 </ul>
-<h5 id="示例-11"><a class="header" href="#示例-11">示例</a></h5>
-<pre><code class="language-javascript">// File path
+<h5 id="示例-10"><a class="header" href="#示例-10">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
 &lt;% tp.file.path() %&gt;
-// File relative path (relative to vault root)
+
+// 相对路径
 &lt;% tp.file.path(true) %&gt;
 </code></pre>
-<h3 id="tpfilerenamenew_title-string"><a class="header" href="#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></h3>
-<p>Renames the file (keeps the same file extension).</p>
+<h3 id="tpfilerenamenew_title"><a class="header" href="#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></h3>
+<p>重命名当前文件。</p>
 <h5 id="参数-11"><a class="header" href="#参数-11">参数</a></h5>
 <ul>
-<li><code>new_title</code>: The new file title.</li>
+<li><code>new_title</code>: 文件的新标题/名称。</li>
 </ul>
-<h5 id="示例-12"><a class="header" href="#示例-12">示例</a></h5>
-<pre><code class="language-javascript">// File rename
-&lt;% await tp.file.rename("MyNewName") %&gt;
-// File append a 2 to the file name
-&lt;% await tp.file.rename(tp.file.title + "2") %&gt;
+<h5 id="示例-11"><a class="header" href="#示例-11">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
 </code></pre>
 <h3 id="tpfileselection"><a class="header" href="#tpfileselection"><code>tp.file.selection()</code></a></h3>
-<p>Retrieves the active file's text selection.</p>
-<h5 id="示例-13"><a class="header" href="#示例-13">示例</a></h5>
-<pre><code class="language-javascript">// File selection
+<p>获取当前选择的文本。</p>
+<h5 id="示例-12"><a class="header" href="#示例-12">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.selection() %&gt;
 </code></pre>
 <h3 id="tpfiletags"><a class="header" href="#tpfiletags"><code>tp.file.tags</code></a></h3>
-<p>Retrieves the file's tags (array of string).</p>
-<h5 id="示例-14"><a class="header" href="#示例-14">示例</a></h5>
-<pre><code class="language-javascript">// File tags
+<p>获取文件的标签列表。</p>
+<h5 id="示例-13"><a class="header" href="#示例-13">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.tags %&gt;
 </code></pre>
 <h3 id="tpfiletitle"><a class="header" href="#tpfiletitle"><code>tp.file.title</code></a></h3>
-<p>Retrieves the file's title.</p>
-<h5 id="示例-15"><a class="header" href="#示例-15">示例</a></h5>
-<pre><code class="language-javascript">// File title
+<p>获取当前文件的标题（不带扩展名）。</p>
+<h5 id="示例-14"><a class="header" href="#示例-14">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.title %&gt;
-// Strip the Zettelkasten ID of title (if space separated)
-&lt;% tp.file.title.split(" ")[1] %&gt;
 </code></pre>
-<h2 id="示例-16"><a class="header" href="#示例-16">示例</a></h2>
-<pre><code class="language-javascript">// Retrieve file content
-&lt;% tp.file.content %&gt;
-
-// File creation
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename") %&gt;
-// File creation with template
-&lt;%* await tp.file.create_new(tp.file.find_tfile("MyTemplate"), "MyFilename") %&gt;
-// File creation and open created note
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", true) %&gt;
-// File creation in current folder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, tp.file.folder(true)) %&gt;
-// File creation in specified folder with string path
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, "Path/To/MyFolder") %&gt;
-// File creation in specified folder with TFolder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, app.vault.getAbstractFileByPath("MyFolder")) %&gt;
-// File creation and append link to current note
-[[&lt;% (await tp.file.create_new("MyFileContent", "MyFilename")).basename %&gt;]]
-
-// File creation date
+<h2 id="示例-15"><a class="header" href="#示例-15">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.creation_date() %&gt;
-// File creation date with format
+
+// 自定义格式
 &lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
 
-// File cursor
+// 基本用法
 &lt;% tp.file.cursor() %&gt;
-// File multi-cursor
-&lt;% tp.file.cursor(1) %&gt;Content&lt;% tp.file.cursor(1) %&gt;
 
-// File cursor append
-&lt;% tp.file.cursor_append("Some text") %&gt;
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
 
-// File existence
-&lt;% await tp.file.exists("MyFolder/MyFile.md") %&gt;
-// File existence of current file
-&lt;% await tp.file.exists(tp.file.folder(true) + "/" + tp.file.title + ".md") %&gt;
+// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
 
-// File find TFile
-&lt;% tp.file.find_tfile("MyFile").basename %&gt;
+// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
 
-// File folder (Folder)
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
+
+// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
+
+// 绝对路径
 &lt;% tp.file.folder() %&gt;
-// File folder with vault-absolute path (Path/To/Folder)
+
+// 相对路径
 &lt;% tp.file.folder(true) %&gt;
 
-// File include
-&lt;% tp.file.include("[[Template1]]") %&gt;
-// File include TFile
-&lt;% tp.file.include(tp.file.find_tfile("MyFile")) %&gt;
-// File include section
-&lt;% tp.file.include("[[MyFile#Section1]]") %&gt;
-// File include block
-&lt;% tp.file.include("[[MyFile#^block1]]") %&gt;
+// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
 
-// File last modified date
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
+
+// 基本用法
 &lt;% tp.file.last_modified_date() %&gt;
-// File last modified date with format
+
+// 自定义格式
 &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
 
-// File move
-&lt;% await tp.file.move("/A/B/" + tp.file.title) %&gt;
-// File move and rename
-&lt;% await tp.file.move("/A/B/NewTitle") %&gt;
+// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
 
-// File path
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
+
+// 绝对路径
 &lt;% tp.file.path() %&gt;
-// File relative path (relative to vault root)
+
+// 相对路径
 &lt;% tp.file.path(true) %&gt;
 
-// File rename
-&lt;% await tp.file.rename("MyNewName") %&gt;
-// File append a 2 to the file name
-&lt;% await tp.file.rename(tp.file.title + "2") %&gt;
+// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
 
-// File selection
+// 基本用法
 &lt;% tp.file.selection() %&gt;
 
-// File tags
+// 基本用法
 &lt;% tp.file.tags %&gt;
 
-// File title
+// 基本用法
 &lt;% tp.file.title %&gt;
-// Strip the Zettelkasten ID of title (if space separated)
-&lt;% tp.file.title.split(" ")[1] %&gt;
 
+// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
 </code></pre>
 
                     </main>

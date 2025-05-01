@@ -161,75 +161,49 @@
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></li>
-<li><a href="#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code>tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></li>
-<li><a href="#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></li>
+<li><a href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></li>
 </ul>
 </li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B-2">示例</a></li>
 </ul>
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpwebdaily_quote"><a class="header" href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
-<p>Retrieves and parses the daily quote from <code>https://github.com/Zachatoo/quotes-database</code> as a callout.</p>
+<p>从https://api.quotable.io/random获取每日名言。</p>
 <h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// Daily quote
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.daily_quote() %&gt;
 </code></pre>
-<h3 id="tpwebrandom_picturesize-string-query-string-include_size-boolean"><a class="header" href="#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code>tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></h3>
-<p>Gets a random image from <code>https://unsplash.com/</code>.</p>
+<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
+<p>从Unsplash获取随机图片。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li>
-<p><code>size</code>: Image size in the format <code>&lt;width&gt;x&lt;height&gt;</code>.</p>
-</li>
-<li>
-<p><code>query</code>: Limits selection to photos matching a search term. Multiple search terms can be passed separated by a comma.</p>
-</li>
-<li>
-<p><code>include_size</code>: Optional argument to include the specified size in the image link markdown. Defaults to false.</p>
-</li>
+<li><code>size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
+<li><code>query</code>: 搜索查询，以获取特定类型的图片。</li>
+<li><code>provider</code>: 提供商，目前只支持"unsplash"。</li>
 </ul>
 <h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// Random picture
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.random_picture() %&gt;
-// Random picture with size
+
+// 指定尺寸
 &lt;% tp.web.random_picture("200x200") %&gt;
-// Random picture with size and query
-&lt;% tp.web.random_picture("200x200", "landscape,water") %&gt;
+
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
 </code></pre>
-<h3 id="tpwebrequesturl-string-path-string"><a class="header" href="#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></h3>
-<p>Makes a HTTP request to the specified URL. Optionally, you can specify a path to extract specific data from the response.</p>
-<h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
-<ul>
-<li>
-<p><code>url</code>: The URL to which the HTTP request will be made.</p>
-</li>
-<li>
-<p><code>path</code>: A path within the response JSON to extract specific data.</p>
-</li>
-</ul>
-<h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
-<pre><code class="language-javascript">// Simple request
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos/1") %&gt;
-// Request with path
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos", "0.title") %&gt;
-</code></pre>
-<h2 id="示例-3"><a class="header" href="#示例-3">示例</a></h2>
-<pre><code class="language-javascript">// Daily quote
+<h2 id="示例-2"><a class="header" href="#示例-2">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.daily_quote() %&gt;
 
-// Random picture
+// 基本用法
 &lt;% tp.web.random_picture() %&gt;
-// Random picture with size
+
+// 指定尺寸
 &lt;% tp.web.random_picture("200x200") %&gt;
-// Random picture with size and query
-&lt;% tp.web.random_picture("200x200", "landscape,water") %&gt;
 
-// Simple request
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos/1") %&gt;
-// Request with path
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos", "0.title") %&gt;
-
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
 </code></pre>
 
                     </main>

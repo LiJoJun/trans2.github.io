@@ -335,7 +335,7 @@ modification date: Thursday 7th January 2021 17:20:43
 <h2 id="贡献"><a class="header" href="#贡献">贡献</a></h2>
 <p>我邀请每个人通过添加新的内置函数来为这个插件的开发做出贡献。更多信息请点击<a href="internal-functions/./contribute.html">这里</a>。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="app模块"><a class="header" href="#app模块">App模块</a></h1>
-<p>This module exposes the app instance. Prefer to use this over the global app instance.</p>
+<p>App模块提供对Obsidian App对象的访问，允许您使用Obsidian的核心功能。</p>
 <p>这主要在编写脚本时有用。</p>
 <p>更多信息请参考Obsidian的<a href="https://docs.obsidian.md/Reference/TypeScript+API/App">开发者文档</a>。</p>
 <h2 id="示例-2"><a class="header" href="#示例-2">示例</a></h2>
@@ -359,31 +359,31 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 <ul>
 <li><a href="internal-functions/internal-modules/config-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
-<li><a href="internal-functions/internal-modules/config-module.html#tpconfigactive_file"><code>tp.config.active_file?</code></a></li>
-<li><a href="internal-functions/internal-modules/config-module.html#tpconfigrun_mode"><code>tp.config.run_mode</code></a></li>
-<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtarget_file"><code>tp.config.target_file</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigactive_file_template"><code>tp.config.active_file_template</code></a></li>
 <li><a href="internal-functions/internal-modules/config-module.html#tpconfigtemplate_file"><code>tp.config.template_file</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtarget_file"><code>tp.config.target_file</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtr"><code>tp.config.tR</code></a></li>
 </ul>
 </li>
 </ul>
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
-<h3 id="tpconfigactive_file"><a class="header" href="#tpconfigactive_file"><code>tp.config.active_file?</code></a></h3>
-<p>The active file (if existing) when launching Templater.</p>
-<h3 id="tpconfigrun_mode"><a class="header" href="#tpconfigrun_mode"><code>tp.config.run_mode</code></a></h3>
-<p>The <code>RunMode</code>, representing the way Templater was launched (Create new from template, Append to active file, ...).</p>
-<h3 id="tpconfigtarget_file"><a class="header" href="#tpconfigtarget_file"><code>tp.config.target_file</code></a></h3>
-<p>The <code>TFile</code> object representing the target file where the template will be inserted.</p>
+<h3 id="tpconfigactive_file_template"><a class="header" href="#tpconfigactive_file_template"><code>tp.config.active_file_template</code></a></h3>
+<p>获取当前活动文件模板的相对路径。</p>
 <h3 id="tpconfigtemplate_file"><a class="header" href="#tpconfigtemplate_file"><code>tp.config.template_file</code></a></h3>
-<p>The <code>TFile</code> object representing the template file.</p>
+<p>获取当前执行模板文件的相对路径。</p>
+<h3 id="tpconfigtarget_file"><a class="header" href="#tpconfigtarget_file"><code>tp.config.target_file</code></a></h3>
+<p>获取目标文件的相对路径（模板将应用到该文件）。</p>
+<h3 id="tpconfigtr"><a class="header" href="#tpconfigtr"><code>tp.config.tR</code></a></h3>
+<p>检索与当前上下文相关的模板结果对象（tR）。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="date模块"><a class="header" href="#date模块">Date模块</a></h1>
 <p>日期模块包含与日期和时间相关的函数。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/date-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
-<li><a href="internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number⎮string, reference?: string, reference_format?: string)</code></a></li>
-<li><a href="internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></li>
-<li><a href="internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></li>
-<li><a href="internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></li>
 </ul>
 </li>
 <li><a href="internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></li>
@@ -391,139 +391,134 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 </ul>
 <h2 id="文档-1"><a class="header" href="#文档-1">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><a class="header" href="#tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number⎮string, reference?: string, reference_format?: string)</code></a></h3>
-<p>Retrieves the date.</p>
+<h3 id="tpdatenowformat-offset-reference-reference_format"><a class="header" href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></h3>
+<p>返回当前日期和时间。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li>
-<p><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
-<li>
-<p><code>offset</code>: Duration to offset the date from. If a number is provided, duration will be added to the date in days. You can also specify the offset as a string using the ISO 8601 format.</p>
-</li>
-<li>
-<p><code>reference</code>: The date referential, e.g. set this to the note's title.</p>
-</li>
-<li>
-<p><code>reference_format</code>: The format for the reference date. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>offset</code>: 从当前日期开始的偏移量（可以是正数或负数）。默认为0。</li>
+<li><code>reference</code>: 参考日期，偏移量将从该日期计算而不是当前日期。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
 </ul>
 <h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
-<pre><code class="language-javascript">// Date now
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.now() %&gt;
-// Date now with format
+
+// 自定义格式
 &lt;% tp.date.now("Do MMMM YYYY") %&gt;
-// Last week
-&lt;% tp.date.now("YYYY-MM-DD", -7) %&gt;
-// Next week
-&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;
-// Last month
-&lt;% tp.date.now("YYYY-MM-DD", "P-1M") %&gt;
-// Next year
-&lt;% tp.date.now("YYYY-MM-DD", "P1Y") %&gt;
-// File's title date + 1 day (tomorrow)
-&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title date - 1 day (yesterday)
-&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;
+
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
+
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
+
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
 </code></pre>
-<h3 id="tpdatetomorrowformat-string--yyyy-mm-dd"><a class="header" href="#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></h3>
-<p>Retrieves tomorrow's date.</p>
+<h3 id="tpdatetomorrowformat"><a class="header" href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></h3>
+<p>返回明天的日期。</p>
 <h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
 <h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
-<pre><code class="language-javascript">// Date tomorrow
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.tomorrow() %&gt;
-// Date tomorrow with format
+
+// 自定义格式
 &lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
 </code></pre>
-<h3 id="tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><a class="header" href="#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></h3>
+<h3 id="tpdateweekdayformat-weekday-reference-reference_format"><a class="header" href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></h3>
+<p>返回特定的工作日。</p>
 <h5 id="参数-2"><a class="header" href="#参数-2">参数</a></h5>
 <ul>
-<li>
-<p><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
-<li>
-<p><code>weekday</code>: Week day number. If the locale assigns Monday as the first day of the week, <code>0</code> will be Monday, <code>-7</code> will be last week's day.</p>
-</li>
-<li>
-<p><code>reference</code>: The date referential, e.g. set this to the note's title.</p>
-</li>
-<li>
-<p><code>reference_format</code>: The format for the reference date. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code>reference</code>: 参考日期，将返回最接近参考日期的工作日。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
 </ul>
 <h5 id="示例-5"><a class="header" href="#示例-5">示例</a></h5>
-<pre><code class="language-javascript">// This week's Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0) %&gt;
-// Next Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 7) %&gt;
-// File's title Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title previous Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", -7, tp.file.title, "YYYY-MM-DD") %&gt;
+<pre><code class="language-javascript">// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
 </code></pre>
-<h3 id="tpdateyesterdayformat-string--yyyy-mm-dd"><a class="header" href="#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></h3>
-<p>Retrieves yesterday's date.</p>
+<h3 id="tpdateyesterdayformat"><a class="header" href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></h3>
+<p>返回昨天的日期。</p>
 <h5 id="参数-3"><a class="header" href="#参数-3">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
 <h5 id="示例-6"><a class="header" href="#示例-6">示例</a></h5>
-<pre><code class="language-javascript">// Date yesterday
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.yesterday() %&gt;
-// Date yesterday with format
+
+// 自定义格式
 &lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
 </code></pre>
 <h2 id="momentjs"><a class="header" href="#momentjs">Moment.js</a></h2>
 <p>Templater提供了对<code>moment</code>对象的访问，可以使用它的所有功能。</p>
 <p>关于moment.js的更多信息<a href="https://momentjs.com/docs/#/displaying/">在此</a>。</p>
 <h5 id="示例-7"><a class="header" href="#示例-7">示例</a></h5>
-<pre><code class="language-javascript">// Date now
-&lt;% moment(tp.file.title, "YYYY-MM-DD").format("YYYY-MM-DD") %&gt;
-// Get start of month from note title
-&lt;% moment(tp.file.title, "YYYY-MM-DD").startOf("month").format("YYYY-MM-DD") %&gt;
-// Get end of month from note title
-&lt;% moment(tp.file.title, "YYYY-MM-DD").endOf("month").format("YYYY-MM-DD") %&gt;
+<pre><code class="language-javascript">// 当前日期，格式为YYYY-MM-DD
+&lt;% moment().format("YYYY-MM-DD") %&gt;
+
+// 当前日期，使用"星期几，月份+日 年份"的格式
+&lt;% moment().format("dddd, MMMM Do YYYY") %&gt;
+
+// 7天前的日期
+&lt;% moment().subtract(7, 'days').format("YYYY-MM-DD") %&gt;
+
+// 一个月后的日期，使用自定义格式
+&lt;% moment().add(1, 'month').format("YYYY-MM-DD") %&gt;
 </code></pre>
 <h2 id="示例-8"><a class="header" href="#示例-8">示例</a></h2>
-<pre><code class="language-javascript">// Date now
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.now() %&gt;
-// Date now with format
+
+// 自定义格式
 &lt;% tp.date.now("Do MMMM YYYY") %&gt;
-// Last week
-&lt;% tp.date.now("YYYY-MM-DD", -7) %&gt;
-// Next week
-&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;
-// Last month
-&lt;% tp.date.now("YYYY-MM-DD", "P-1M") %&gt;
-// Next year
-&lt;% tp.date.now("YYYY-MM-DD", "P1Y") %&gt;
-// File's title date + 1 day (tomorrow)
-&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title date - 1 day (yesterday)
-&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;
 
-// Date tomorrow
-&lt;% tp.date.tomorrow() %&gt;
-// Date tomorrow with format
-&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
 
-// This week's Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0) %&gt;
-// Next Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 7) %&gt;
-// File's title Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title previous Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", -7, tp.file.title, "YYYY-MM-DD") %&gt;
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
 
-// Date yesterday
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法
 &lt;% tp.date.yesterday() %&gt;
-// Date yesterday with format
+
+// 自定义格式
 &lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
 
+// 基本用法
+&lt;% tp.date.tomorrow() %&gt;
+
+// 自定义格式
+&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file模块"><a class="header" href="#file模块">File模块</a></h1>
 <p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
@@ -531,314 +526,285 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 <li><a href="internal-functions/internal-modules/file-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="internal-functions/internal-modules/file-module.html#tpfilecontent"><code>tp.file.content</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile ⎮ string, filename?: string, open_new: boolean = false, folder?: TFolder | string)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string ⎮ TFile)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></li>
-<li><a href="internal-functions/internal-modules/file-module.html#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursororder"><code>tp.file.cursor(order)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilepathrelative"><code>tp.file.path(relative)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></li>
 <li><a href="internal-functions/internal-modules/file-module.html#tpfileselection"><code>tp.file.selection()</code></a></li>
 <li><a href="internal-functions/internal-modules/file-module.html#tpfiletags"><code>tp.file.tags</code></a></li>
 <li><a href="internal-functions/internal-modules/file-module.html#tpfiletitle"><code>tp.file.title</code></a></li>
 </ul>
 </li>
-<li><a href="internal-functions/internal-modules/file-module.html#%E7%A4%BA%E4%BE%8B-16">示例</a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#%E7%A4%BA%E4%BE%8B-15">示例</a></li>
 </ul>
 <h2 id="文档-2"><a class="header" href="#文档-2">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpfilecontent"><a class="header" href="#tpfilecontent"><code>tp.file.content</code></a></h3>
-<p>The string contents of the file at the time that Templater was executed. Manipulating this string will <em>not</em> update the current file.</p>
-<h5 id="示例-9"><a class="header" href="#示例-9">示例</a></h5>
-<pre><code class="language-javascript">// Retrieve file content
-&lt;% tp.file.content %&gt;
-</code></pre>
-<h3 id="tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><a class="header" href="#tpfilecreate_newtemplate-tfile--string-filename-string-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile ⎮ string, filename?: string, open_new: boolean = false, folder?: TFolder | string)</code></a></h3>
-<p>Creates a new file using a specified template or with a specified content.</p>
+<p>获取当前文件的全部内容。</p>
+<h3 id="tpfilecreate_newtemplate-filename-open_new-folder"><a class="header" href="#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></h3>
+<p>使用指定的模板创建一个新文件。</p>
 <h5 id="参数-4"><a class="header" href="#参数-4">参数</a></h5>
 <ul>
-<li>
-<p><code>template</code>: Either the template used for the new file content, or the file content as a string. If it is the template to use, you retrieve it with <code>tp.file.find_tfile(TEMPLATENAME)</code>.</p>
-</li>
-<li>
-<p><code>filename</code>: The filename of the new file, defaults to "Untitled".</p>
-</li>
-<li>
-<p><code>open_new</code>: Whether to open or not the newly created file. Warning: if you use this option, since commands are executed asynchronously, the file can be opened first and then other commands are appended to that new file and not the previous file.</p>
-</li>
-<li>
-<p><code>folder</code>: The folder to put the new file in, defaults to Obsidian's default location. If you want the file to appear in a different folder, specify it with <code>"PATH/TO/FOLDERNAME"</code> or <code>app.vault.getAbstractFileByPath("PATH/TO/FOLDERNAME")</code>.</p>
-</li>
+<li><code>template</code>: 要使用的模板路径（相对于模板文件夹）。</li>
+<li><code>filename</code>: 新文件的文件名。</li>
+<li><code>open_new</code>: 创建后是否打开新文件。默认为true。</li>
+<li><code>folder</code>: 新文件的目标文件夹（相对于保险库根目录）。默认为当前文件所在文件夹。</li>
 </ul>
-<h5 id="示例-10"><a class="header" href="#示例-10">示例</a></h5>
-<pre><code class="language-javascript">// File creation
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename") %&gt;
-// File creation with template
-&lt;%* await tp.file.create_new(tp.file.find_tfile("MyTemplate"), "MyFilename") %&gt;
-// File creation and open created note
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", true) %&gt;
-// File creation in current folder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, tp.file.folder(true)) %&gt;
-// File creation in specified folder with string path
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, "Path/To/MyFolder") %&gt;
-// File creation in specified folder with TFolder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, app.vault.getAbstractFileByPath("MyFolder")) %&gt;
-// File creation and append link to current note
-[[&lt;% (await tp.file.create_new("MyFileContent", "MyFilename")).basename %&gt;]]
+<h5 id="示例-9"><a class="header" href="#示例-9">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
 </code></pre>
-<h3 id="tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
-<p>Retrieves the file's creation date.</p>
+<h3 id="tpfilecreation_dateformat"><a class="header" href="#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></h3>
+<p>获取文件的创建日期。</p>
 <h5 id="参数-5"><a class="header" href="#参数-5">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD HH:mm"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
-<h5 id="示例-11"><a class="header" href="#示例-11">示例</a></h5>
-<pre><code class="language-javascript">// File creation date
+<h5 id="示例-10"><a class="header" href="#示例-10">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.creation_date() %&gt;
-// File creation date with format
+
+// 自定义格式
 &lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
 </code></pre>
-<h3 id="tpfilecursororder-number"><a class="header" href="#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></h3>
-<p>Sets the cursor to this location after the template has been inserted.</p>
-<p>You can navigate between the different cursors using the configured hotkey in Obsidian settings.</p>
+<h3 id="tpfilecursororder"><a class="header" href="#tpfilecursororder"><code>tp.file.cursor(order)</code></a></h3>
+<p>在渲染后将光标放置在特定位置。</p>
 <h5 id="参数-6"><a class="header" href="#参数-6">参数</a></h5>
 <ul>
-<li><code>order</code>: The order of the different cursors jump, e.g. it will jump from 1 to 2 to 3, and so on.
-If you specify multiple tp.file.cursor with the same order, the editor will switch to multi-cursor.</li>
+<li><code>order</code>: 决定光标放置的顺序（如果有多个光标）。默认为1。</li>
 </ul>
-<h5 id="示例-12"><a class="header" href="#示例-12">示例</a></h5>
-<pre><code class="language-javascript">// File cursor
+<h5 id="示例-11"><a class="header" href="#示例-11">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.cursor() %&gt;
-// File multi-cursor
-&lt;% tp.file.cursor(1) %&gt;Content&lt;% tp.file.cursor(1) %&gt;
+
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
 </code></pre>
-<h3 id="tpfilecursor_appendcontent-string"><a class="header" href="#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></h3>
-<p>Appends some content after the active cursor in the file.</p>
+<h3 id="tpfilecursor_appendcontent"><a class="header" href="#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></h3>
+<p>在光标位置追加内容。</p>
 <h5 id="参数-7"><a class="header" href="#参数-7">参数</a></h5>
 <ul>
-<li><code>content</code>: The content to append after the active cursor.</li>
+<li><code>content</code>: 要追加的内容。</li>
 </ul>
-<h5 id="示例-13"><a class="header" href="#示例-13">示例</a></h5>
-<pre><code class="language-javascript">// File cursor append
-&lt;% tp.file.cursor_append("Some text") %&gt;
+<h5 id="示例-12"><a class="header" href="#示例-12">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
 </code></pre>
-<h3 id="tpfileexistsfilepath-string"><a class="header" href="#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></h3>
-<p>Check to see if a file exists by it's file path. The full path to the file, relative to the Vault and containing the extension, must be provided.</p>
+<h3 id="tpfileexistsfilename"><a class="header" href="#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></h3>
+<p>检查文件是否存在。</p>
 <h5 id="参数-8"><a class="header" href="#参数-8">参数</a></h5>
 <ul>
-<li><code>filepath</code>: The full file path of the file we want to check existence for.</li>
+<li><code>filename</code>: 要检查的文件名（绝对路径或相对于保险库根目录的路径）。</li>
 </ul>
-<h5 id="示例-14"><a class="header" href="#示例-14">示例</a></h5>
-<pre><code class="language-javascript">// File existence
-&lt;% await tp.file.exists("MyFolder/MyFile.md") %&gt;
-// File existence of current file
-&lt;% await tp.file.exists(tp.file.folder(true) + "/" + tp.file.title + ".md") %&gt;
+<h5 id="示例-13"><a class="header" href="#示例-13">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
+
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
 </code></pre>
-<h3 id="tpfilefind_tfilefilename-string"><a class="header" href="#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></h3>
-<p>Search for a file and returns its <code>TFile</code> instance.</p>
+<h3 id="tpfilefind_tfilefilename"><a class="header" href="#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></h3>
+<p>通过名称查找一个TFile对象。</p>
 <h5 id="参数-9"><a class="header" href="#参数-9">参数</a></h5>
 <ul>
-<li><code>filename</code>: The filename we want to search and resolve as a <code>TFile</code>.</li>
+<li><code>filename</code>: 文件名（绝对路径或相对于保险库根目录的路径）。</li>
 </ul>
-<h5 id="示例-15"><a class="header" href="#示例-15">示例</a></h5>
-<pre><code class="language-javascript">// File find TFile
-&lt;% tp.file.find_tfile("MyFile").basename %&gt;
+<h5 id="示例-14"><a class="header" href="#示例-14">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
 </code></pre>
-<h3 id="tpfilefolderabsolute-boolean--false"><a class="header" href="#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></h3>
-<p>Retrieves the file's folder name.</p>
+<h3 id="tpfilefolderrelative"><a class="header" href="#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></h3>
+<p>获取文件所在的文件夹路径。</p>
 <h5 id="参数-10"><a class="header" href="#参数-10">参数</a></h5>
 <ul>
-<li><code>absolute</code>: If set to <code>true</code>, returns the vault-absolute path of the folder. If <code>false</code>, only returns the basename of the folder (the last part). Defaults to <code>false</code>.</li>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
 </ul>
-<h5 id="示例-16"><a class="header" href="#示例-16">示例</a></h5>
-<pre><code class="language-javascript">// File folder (Folder)
+<h5 id="示例-15"><a class="header" href="#示例-15">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
 &lt;% tp.file.folder() %&gt;
-// File folder with vault-absolute path (Path/To/Folder)
+
+// 相对路径
 &lt;% tp.file.folder(true) %&gt;
 </code></pre>
-<h3 id="tpfileincludeinclude_link-string--tfile"><a class="header" href="#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string ⎮ TFile)</code></a></h3>
-<p>Includes the file's link content. Templates in the included content will be resolved.</p>
+<h3 id="tpfileincludeinclude_link"><a class="header" href="#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></h3>
+<p>包含另一个文件的内容。</p>
 <h5 id="参数-11"><a class="header" href="#参数-11">参数</a></h5>
 <ul>
-<li><code>include_link</code>: The link to the file to include, e.g. <code>"[[MyFile]]"</code>, or a TFile object. Also supports sections or blocks inclusions.</li>
+<li><code>include_link</code>: 要包含的文件链接（可以是文件名、相对路径或Wiki链接）。</li>
 </ul>
-<h5 id="示例-17"><a class="header" href="#示例-17">示例</a></h5>
-<pre><code class="language-javascript">// File include
-&lt;% tp.file.include("[[Template1]]") %&gt;
-// File include TFile
-&lt;% tp.file.include(tp.file.find_tfile("MyFile")) %&gt;
-// File include section
-&lt;% tp.file.include("[[MyFile#Section1]]") %&gt;
-// File include block
-&lt;% tp.file.include("[[MyFile#^block1]]") %&gt;
+<h5 id="示例-16"><a class="header" href="#示例-16">示例</a></h5>
+<pre><code class="language-javascript">// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
+
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
 </code></pre>
-<h3 id="tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
-<p>Retrieves the file's last modification date.</p>
+<h3 id="tpfilelast_modified_dateformat"><a class="header" href="#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></h3>
+<p>获取文件的最后修改日期。</p>
 <h5 id="参数-12"><a class="header" href="#参数-12">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD HH:mm"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
-<h5 id="示例-18"><a class="header" href="#示例-18">示例</a></h5>
-<pre><code class="language-javascript">// File last modified date
+<h5 id="示例-17"><a class="header" href="#示例-17">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.last_modified_date() %&gt;
-// File last modified date with format
+
+// 自定义格式
 &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
 </code></pre>
-<h3 id="tpfilemovenew_path-string-file_to_move-tfile"><a class="header" href="#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></h3>
-<p>Moves the file to the desired vault location.</p>
+<h3 id="tpfilemovenew_path-file_to_move"><a class="header" href="#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></h3>
+<p>将文件移动到新位置。</p>
 <h5 id="参数-13"><a class="header" href="#参数-13">参数</a></h5>
 <ul>
-<li>
-<p><code>new_path</code>: The new vault relative path of the file, without the file extension. Note: the new path needs to include the folder and the filename, e.g. <code>"/Notes/MyNote"</code>.</p>
-</li>
-<li>
-<p><code>file_to_move</code>: The file to move, defaults to the current file.</p>
-</li>
+<li><code>new_path</code>: 新的文件路径（相对于保险库根目录）。</li>
+<li><code>file_to_move</code>: 要移动的文件（TFile对象）。如果未提供，则使用当前文件。</li>
 </ul>
-<h5 id="示例-19"><a class="header" href="#示例-19">示例</a></h5>
-<pre><code class="language-javascript">// File move
-&lt;% await tp.file.move("/A/B/" + tp.file.title) %&gt;
-// File move and rename
-&lt;% await tp.file.move("/A/B/NewTitle") %&gt;
+<h5 id="示例-18"><a class="header" href="#示例-18">示例</a></h5>
+<pre><code class="language-javascript">// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
+
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
 </code></pre>
-<h3 id="tpfilepathrelative-boolean--false"><a class="header" href="#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></h3>
-<p>Retrieves the file's absolute path on the system.</p>
+<h3 id="tpfilepathrelative"><a class="header" href="#tpfilepathrelative"><code>tp.file.path(relative)</code></a></h3>
+<p>获取文件的路径。</p>
 <h5 id="参数-14"><a class="header" href="#参数-14">参数</a></h5>
 <ul>
-<li><code>relative</code>: If set to <code>true</code>, only retrieves the vault's relative path.</li>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
 </ul>
-<h5 id="示例-20"><a class="header" href="#示例-20">示例</a></h5>
-<pre><code class="language-javascript">// File path
+<h5 id="示例-19"><a class="header" href="#示例-19">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
 &lt;% tp.file.path() %&gt;
-// File relative path (relative to vault root)
+
+// 相对路径
 &lt;% tp.file.path(true) %&gt;
 </code></pre>
-<h3 id="tpfilerenamenew_title-string"><a class="header" href="#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></h3>
-<p>Renames the file (keeps the same file extension).</p>
+<h3 id="tpfilerenamenew_title"><a class="header" href="#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></h3>
+<p>重命名当前文件。</p>
 <h5 id="参数-15"><a class="header" href="#参数-15">参数</a></h5>
 <ul>
-<li><code>new_title</code>: The new file title.</li>
+<li><code>new_title</code>: 文件的新标题/名称。</li>
 </ul>
-<h5 id="示例-21"><a class="header" href="#示例-21">示例</a></h5>
-<pre><code class="language-javascript">// File rename
-&lt;% await tp.file.rename("MyNewName") %&gt;
-// File append a 2 to the file name
-&lt;% await tp.file.rename(tp.file.title + "2") %&gt;
+<h5 id="示例-20"><a class="header" href="#示例-20">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
 </code></pre>
 <h3 id="tpfileselection"><a class="header" href="#tpfileselection"><code>tp.file.selection()</code></a></h3>
-<p>Retrieves the active file's text selection.</p>
-<h5 id="示例-22"><a class="header" href="#示例-22">示例</a></h5>
-<pre><code class="language-javascript">// File selection
+<p>获取当前选择的文本。</p>
+<h5 id="示例-21"><a class="header" href="#示例-21">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.selection() %&gt;
 </code></pre>
 <h3 id="tpfiletags"><a class="header" href="#tpfiletags"><code>tp.file.tags</code></a></h3>
-<p>Retrieves the file's tags (array of string).</p>
-<h5 id="示例-23"><a class="header" href="#示例-23">示例</a></h5>
-<pre><code class="language-javascript">// File tags
+<p>获取文件的标签列表。</p>
+<h5 id="示例-22"><a class="header" href="#示例-22">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.tags %&gt;
 </code></pre>
 <h3 id="tpfiletitle"><a class="header" href="#tpfiletitle"><code>tp.file.title</code></a></h3>
-<p>Retrieves the file's title.</p>
-<h5 id="示例-24"><a class="header" href="#示例-24">示例</a></h5>
-<pre><code class="language-javascript">// File title
+<p>获取当前文件的标题（不带扩展名）。</p>
+<h5 id="示例-23"><a class="header" href="#示例-23">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.title %&gt;
-// Strip the Zettelkasten ID of title (if space separated)
-&lt;% tp.file.title.split(" ")[1] %&gt;
 </code></pre>
-<h2 id="示例-25"><a class="header" href="#示例-25">示例</a></h2>
-<pre><code class="language-javascript">// Retrieve file content
-&lt;% tp.file.content %&gt;
-
-// File creation
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename") %&gt;
-// File creation with template
-&lt;%* await tp.file.create_new(tp.file.find_tfile("MyTemplate"), "MyFilename") %&gt;
-// File creation and open created note
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", true) %&gt;
-// File creation in current folder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, tp.file.folder(true)) %&gt;
-// File creation in specified folder with string path
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, "Path/To/MyFolder") %&gt;
-// File creation in specified folder with TFolder
-&lt;%* await tp.file.create_new("MyFileContent", "MyFilename", false, app.vault.getAbstractFileByPath("MyFolder")) %&gt;
-// File creation and append link to current note
-[[&lt;% (await tp.file.create_new("MyFileContent", "MyFilename")).basename %&gt;]]
-
-// File creation date
+<h2 id="示例-24"><a class="header" href="#示例-24">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.file.creation_date() %&gt;
-// File creation date with format
+
+// 自定义格式
 &lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
 
-// File cursor
+// 基本用法
 &lt;% tp.file.cursor() %&gt;
-// File multi-cursor
-&lt;% tp.file.cursor(1) %&gt;Content&lt;% tp.file.cursor(1) %&gt;
 
-// File cursor append
-&lt;% tp.file.cursor_append("Some text") %&gt;
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
 
-// File existence
-&lt;% await tp.file.exists("MyFolder/MyFile.md") %&gt;
-// File existence of current file
-&lt;% await tp.file.exists(tp.file.folder(true) + "/" + tp.file.title + ".md") %&gt;
+// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
 
-// File find TFile
-&lt;% tp.file.find_tfile("MyFile").basename %&gt;
+// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
 
-// File folder (Folder)
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
+
+// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
+
+// 绝对路径
 &lt;% tp.file.folder() %&gt;
-// File folder with vault-absolute path (Path/To/Folder)
+
+// 相对路径
 &lt;% tp.file.folder(true) %&gt;
 
-// File include
-&lt;% tp.file.include("[[Template1]]") %&gt;
-// File include TFile
-&lt;% tp.file.include(tp.file.find_tfile("MyFile")) %&gt;
-// File include section
-&lt;% tp.file.include("[[MyFile#Section1]]") %&gt;
-// File include block
-&lt;% tp.file.include("[[MyFile#^block1]]") %&gt;
+// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
 
-// File last modified date
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
+
+// 基本用法
 &lt;% tp.file.last_modified_date() %&gt;
-// File last modified date with format
+
+// 自定义格式
 &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
 
-// File move
-&lt;% await tp.file.move("/A/B/" + tp.file.title) %&gt;
-// File move and rename
-&lt;% await tp.file.move("/A/B/NewTitle") %&gt;
+// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
 
-// File path
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
+
+// 绝对路径
 &lt;% tp.file.path() %&gt;
-// File relative path (relative to vault root)
+
+// 相对路径
 &lt;% tp.file.path(true) %&gt;
 
-// File rename
-&lt;% await tp.file.rename("MyNewName") %&gt;
-// File append a 2 to the file name
-&lt;% await tp.file.rename(tp.file.title + "2") %&gt;
+// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
 
-// File selection
+// 基本用法
 &lt;% tp.file.selection() %&gt;
 
-// File tags
+// 基本用法
 &lt;% tp.file.tags %&gt;
 
-// File title
+// 基本用法
 &lt;% tp.file.title %&gt;
-// Strip the Zettelkasten ID of title (if space separated)
-&lt;% tp.file.title.split(" ")[1] %&gt;
 
+// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="frontmatter模块"><a class="header" href="#frontmatter模块">Frontmatter模块</a></h1>
 <p>这个模块允许您访问当前文件的frontmatter变量。</p>
-<p>This modules exposes all the frontmatter variables of a file as variables.</p>
 <ul>
 <li><a href="internal-functions/internal-modules/frontmatter-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -853,7 +819,7 @@ If you specify multiple tp.file.cursor with the same order, the editor will swit
 <p>如果您的frontmatter变量名称包含空格，可以使用方括号表示法引用它，如下所示：</p>
 <pre><code>&lt;% tp.frontmatter["包含空格的变量名"] %&gt;
 </code></pre>
-<h2 id="示例-26"><a class="header" href="#示例-26">示例</a></h2>
+<h2 id="示例-25"><a class="header" href="#示例-25">示例</a></h2>
 <p>假设您有以下文件：</p>
 <pre><code>---
 alias: myfile
@@ -875,26 +841,26 @@ categories:
 </code></pre>
 <pre><code>&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
 </code></pre>
+<p>`</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hooks模块"><a class="header" href="#hooks模块">Hooks模块</a></h1>
 <p>Hooks模块允许您在特定事件发生时注册回调函数。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/hooks-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
-<li><a href="internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></li>
+<li><a href="internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></li>
 </ul>
 </li>
 <li><a href="internal-functions/internal-modules/hooks-module.html#%E7%A4%BA%E4%BE%8B">示例</a></li>
 </ul>
 <h2 id="文档-4"><a class="header" href="#文档-4">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tphookson_all_templates_executedcallback_function---any"><a class="header" href="#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></h3>
-<p>Hooks into when all actively running templates have finished executing. Most of the time this will be a single template, unless you are using <code>tp.file.include</code> or <code>tp.file.create_new</code>.</p>
-<p>Multiple invokations of this method will have their callback functions run in parallel.</p>
+<h3 id="tphookson_all_templates_executedcallback"><a class="header" href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></h3>
+<p>当当前活动文件中的所有模板都已执行完毕时调用。</p>
 <h5 id="参数-16"><a class="header" href="#参数-16">参数</a></h5>
 <ul>
-<li><code>callback_function</code>: Callback function that will be executed when all actively running templates have finished executing.</li>
+<li><code>callback</code>: 在所有模板执行完毕后要调用的回调函数。</li>
 </ul>
-<h2 id="示例-27"><a class="header" href="#示例-27">示例</a></h2>
+<h2 id="示例-26"><a class="header" href="#示例-26">示例</a></h2>
 <pre><code class="language-javascript">// 模板执行完成后更新frontmatter
 &lt;%*
 tp.hooks.on_all_templates_executed(async () =&gt; {
@@ -915,7 +881,7 @@ tp.hooks.on_all_templates_executed(() =&gt; {
 <p>Obsidian模块提供对Obsidian API的访问，允许您使用Obsidian的内部功能。</p>
 <p>这主要在编写脚本时有用。</p>
 <p>更多信息请参考Obsidian API的<a href="https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts">声明文件</a>。</p>
-<h2 id="示例-28"><a class="header" href="#示例-28">示例</a></h2>
+<h2 id="示例-27"><a class="header" href="#示例-27">示例</a></h2>
 <pre><code class="language-javascript">// 获取所有文件夹
 &lt;%
 tp.app.vault.getAllLoadedFiles()
@@ -941,8 +907,8 @@ tR += response.json.title;
 <li><a href="internal-functions/internal-modules/system-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="internal-functions/internal-modules/system-module.html#tpsystemclipboard"><code>tp.system.clipboard()</code></a></li>
-<li><a href="internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><code>tp.system.prompt(prompt_text?: string, default_value?: string, throw_on_cancel: boolean = false, multiline?: boolean = false)</code></a></li>
-<li><a href="internal-functions/internal-modules/system-module.html#tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><code>tp.system.suggester(text_items: string[] ⎮ ((item: T) =&gt; string), items: T[], throw_on_cancel: boolean = false, placeholder: string = "", limit?: number = undefined)</code></a></li>
+<li><a href="internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></li>
+<li><a href="internal-functions/internal-modules/system-module.html#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></li>
 </ul>
 </li>
 <li><a href="internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
@@ -950,86 +916,71 @@ tR += response.json.title;
 <h2 id="文档-5"><a class="header" href="#文档-5">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpsystemclipboard"><a class="header" href="#tpsystemclipboard"><code>tp.system.clipboard()</code></a></h3>
-<p>Retrieves the clipboard's content.</p>
-<h5 id="示例-29"><a class="header" href="#示例-29">示例</a></h5>
-<pre><code class="language-javascript">// Clipboard
+<p>返回剪贴板的内容。</p>
+<h5 id="示例-28"><a class="header" href="#示例-28">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.system.clipboard() %&gt;
 </code></pre>
-<h3 id="tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><a class="header" href="#tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><code>tp.system.prompt(prompt_text?: string, default_value?: string, throw_on_cancel: boolean = false, multiline?: boolean = false)</code></a></h3>
-<p>Spawns a prompt modal and returns the user's input.</p>
+<h3 id="tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><a class="header" href="#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></h3>
+<p>显示一个提示窗口，要求用户输入内容。</p>
 <h5 id="参数-17"><a class="header" href="#参数-17">参数</a></h5>
 <ul>
-<li>
-<p><code>prompt_text</code>: Text placed above the input field.</p>
-</li>
-<li>
-<p><code>default_value</code>: A default value for the input field.</p>
-</li>
-<li>
-<p><code>throw_on_cancel</code>: Throws an error if the prompt is canceled, instead of returning a <code>null</code> value.</p>
-</li>
-<li>
-<p><code>multiline</code>: If set to <code>true</code>, the input field will be a multiline textarea. Defaults to <code>false</code>.</p>
-</li>
+<li><code>prompt_text</code>: 显示给用户的提示文本。</li>
+<li><code>default_value</code>: 提示中的默认值。默认为空字符串。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消提示时抛出错误。默认为false。</li>
+<li><code>multiline</code>: 如果为true，显示多行输入框。默认为false。</li>
 </ul>
-<h5 id="示例-30"><a class="header" href="#示例-30">示例</a></h5>
-<pre><code class="language-javascript">// Prompt
-&lt;% tp.system.prompt("Please enter a value") %&gt;
-// Prompt with default value
-&lt;% tp.system.prompt("What is your mood today?", "happy") %&gt;
-// Multiline prompt
-&lt;% tp.system.prompt("What is your mood today?", null, false, true) %&gt;
+<h5 id="示例-29"><a class="header" href="#示例-29">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
+
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
+
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
 </code></pre>
-<h3 id="tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><a class="header" href="#tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><code>tp.system.suggester(text_items: string[] ⎮ ((item: T) =&gt; string), items: T[], throw_on_cancel: boolean = false, placeholder: string = "", limit?: number = undefined)</code></a></h3>
-<p>Spawns a suggester prompt and returns the user's chosen item.</p>
+<h3 id="tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><a class="header" href="#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></h3>
+<p>显示一个带有自动完成功能的建议器，让用户从列表中选择一个项目。</p>
 <h5 id="参数-18"><a class="header" href="#参数-18">参数</a></h5>
 <ul>
-<li>
-<p><code>text_items</code>: Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.</p>
-</li>
-<li>
-<p><code>items</code>: Array containing the values of each item in the correct order.</p>
-</li>
-<li>
-<p><code>throw_on_cancel</code>: Throws an error if the prompt is canceled, instead of returning a <code>null</code> value.</p>
-</li>
-<li>
-<p><code>placeholder</code>: Placeholder string of the prompt.</p>
-</li>
-<li>
-<p><code>limit</code>: Limit the number of items rendered at once (useful to improve performance when displaying large lists).</p>
-</li>
+<li><code>text_items</code>: 要向用户显示的文本项目数组。</li>
+<li><code>items</code>: 选择相应文本项目时返回的值数组。默认为<code>text_items</code>。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消建议器时抛出错误。默认为false。</li>
+<li><code>placeholder</code>: 建议器的占位符文本。默认为空字符串。</li>
+<li><code>limit</code>: 要显示的项目数量限制。默认为无限制。</li>
 </ul>
-<h5 id="示例-31"><a class="header" href="#示例-31">示例</a></h5>
-<pre><code class="language-javascript">// Suggester
-&lt;% tp.system.suggester(["Happy", "Sad", "Confused"], ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester with mapping function (same as above example)
-&lt;% tp.system.suggester((item) =&gt; item, ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester for files
-[[&lt;% (await tp.system.suggester((item) =&gt; item.basename, app.vault.getMarkdownFiles())).basename %&gt;]]
-// Suggester for tags
-&lt;% tp.system.suggester(item =&gt; item, Object.keys(app.metadataCache.getTags()).map(x =&gt; x.replace("#", ""))) %&gt;
+<h5 id="示例-30"><a class="header" href="#示例-30">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
 </code></pre>
-<h2 id="示例-32"><a class="header" href="#示例-32">示例</a></h2>
-<pre><code class="language-javascript">// Clipboard
+<h2 id="示例-31"><a class="header" href="#示例-31">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.system.clipboard() %&gt;
 
-// Prompt
-&lt;% tp.system.prompt("Please enter a value") %&gt;
-// Prompt with default value
-&lt;% tp.system.prompt("What is your mood today?", "happy") %&gt;
-// Multiline prompt
-&lt;% tp.system.prompt("What is your mood today?", null, false, true) %&gt;
+// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
 
-// Suggester
-&lt;% tp.system.suggester(["Happy", "Sad", "Confused"], ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester with mapping function (same as above example)
-&lt;% tp.system.suggester((item) =&gt; item, ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester for files
-[[&lt;% (await tp.system.suggester((item) =&gt; item.basename, app.vault.getMarkdownFiles())).basename %&gt;]]
-// Suggester for tags
-&lt;% tp.system.suggester(item =&gt; item, Object.keys(app.metadataCache.getTags()).map(x =&gt; x.replace("#", ""))) %&gt;
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
 
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
+
+// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="web模块"><a class="header" href="#web模块">Web模块</a></h1>
 <p>Web模块提供与网络资源交互的功能，允许您获取网页内容或生成URL。</p>
@@ -1037,75 +988,49 @@ tR += response.json.title;
 <li><a href="internal-functions/internal-modules/web-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></li>
-<li><a href="internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code>tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></li>
-<li><a href="internal-functions/internal-modules/web-module.html#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></li>
+<li><a href="internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></li>
 </ul>
 </li>
-<li><a href="internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
+<li><a href="internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-2">示例</a></li>
 </ul>
 <h2 id="文档-6"><a class="header" href="#文档-6">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpwebdaily_quote"><a class="header" href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
-<p>Retrieves and parses the daily quote from <code>https://github.com/Zachatoo/quotes-database</code> as a callout.</p>
-<h5 id="示例-33"><a class="header" href="#示例-33">示例</a></h5>
-<pre><code class="language-javascript">// Daily quote
+<p>从https://api.quotable.io/random获取每日名言。</p>
+<h5 id="示例-32"><a class="header" href="#示例-32">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.daily_quote() %&gt;
 </code></pre>
-<h3 id="tpwebrandom_picturesize-string-query-string-include_size-boolean"><a class="header" href="#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code>tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></h3>
-<p>Gets a random image from <code>https://unsplash.com/</code>.</p>
+<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
+<p>从Unsplash获取随机图片。</p>
 <h5 id="参数-19"><a class="header" href="#参数-19">参数</a></h5>
 <ul>
-<li>
-<p><code>size</code>: Image size in the format <code>&lt;width&gt;x&lt;height&gt;</code>.</p>
-</li>
-<li>
-<p><code>query</code>: Limits selection to photos matching a search term. Multiple search terms can be passed separated by a comma.</p>
-</li>
-<li>
-<p><code>include_size</code>: Optional argument to include the specified size in the image link markdown. Defaults to false.</p>
-</li>
+<li><code>size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
+<li><code>query</code>: 搜索查询，以获取特定类型的图片。</li>
+<li><code>provider</code>: 提供商，目前只支持"unsplash"。</li>
 </ul>
-<h5 id="示例-34"><a class="header" href="#示例-34">示例</a></h5>
-<pre><code class="language-javascript">// Random picture
+<h5 id="示例-33"><a class="header" href="#示例-33">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.random_picture() %&gt;
-// Random picture with size
+
+// 指定尺寸
 &lt;% tp.web.random_picture("200x200") %&gt;
-// Random picture with size and query
-&lt;% tp.web.random_picture("200x200", "landscape,water") %&gt;
+
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
 </code></pre>
-<h3 id="tpwebrequesturl-string-path-string"><a class="header" href="#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></h3>
-<p>Makes a HTTP request to the specified URL. Optionally, you can specify a path to extract specific data from the response.</p>
-<h5 id="参数-20"><a class="header" href="#参数-20">参数</a></h5>
-<ul>
-<li>
-<p><code>url</code>: The URL to which the HTTP request will be made.</p>
-</li>
-<li>
-<p><code>path</code>: A path within the response JSON to extract specific data.</p>
-</li>
-</ul>
-<h5 id="示例-35"><a class="header" href="#示例-35">示例</a></h5>
-<pre><code class="language-javascript">// Simple request
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos/1") %&gt;
-// Request with path
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos", "0.title") %&gt;
-</code></pre>
-<h2 id="示例-36"><a class="header" href="#示例-36">示例</a></h2>
-<pre><code class="language-javascript">// Daily quote
+<h2 id="示例-34"><a class="header" href="#示例-34">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.web.daily_quote() %&gt;
 
-// Random picture
+// 基本用法
 &lt;% tp.web.random_picture() %&gt;
-// Random picture with size
+
+// 指定尺寸
 &lt;% tp.web.random_picture("200x200") %&gt;
-// Random picture with size and query
-&lt;% tp.web.random_picture("200x200", "landscape,water") %&gt;
 
-// Simple request
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos/1") %&gt;
-// Request with path
-&lt;% tp.web.request("https://jsonplaceholder.typicode.com/todos", "0.title") %&gt;
-
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="贡献-1"><a class="header" href="#贡献-1">贡献</a></h1>
 <p>您可以通过开发新的内置函数/变量来为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献。</p>
@@ -1281,7 +1206,7 @@ module.exports = doSomething;
 <p>例如，以下命令：<code>&lt;%* tR += "测试" %&gt;</code>将输出<code>测试</code>。</p>
 <h3 id="建议器和提示"><a class="header" href="#建议器和提示">建议器和提示</a></h3>
 <p>重要的是要注意<code>tp.system.prompt()</code>和<code>tp.system.suggester()</code>都需要<code>await</code>语句才能将值保存到变量中</p>
-<h2 id="示例-37"><a class="header" href="#示例-37">示例</a></h2>
+<h2 id="示例-35"><a class="header" href="#示例-35">示例</a></h2>
 <p>以下是使用JavaScript执行命令可以做的一些事情的示例：</p>
 <pre><code class="language-javascript">&lt;%* if (tp.file.title.startsWith("Hello")) { %&gt;
 这是一个hello文件！

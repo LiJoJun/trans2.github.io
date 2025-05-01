@@ -160,10 +160,10 @@
 <ul>
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
-<li><a href="#tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number⎮string, reference?: string, reference_format?: string)</code></a></li>
-<li><a href="#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></li>
-<li><a href="#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></li>
-<li><a href="#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></li>
+<li><a href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></li>
+<li><a href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></li>
+<li><a href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></li>
+<li><a href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></li>
 </ul>
 </li>
 <li><a href="#momentjs">Moment.js</a></li>
@@ -171,139 +171,134 @@
 </ul>
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><a class="header" href="#tpdatenowformat-string--yyyy-mm-dd-offset-numberstring-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number⎮string, reference?: string, reference_format?: string)</code></a></h3>
-<p>Retrieves the date.</p>
+<h3 id="tpdatenowformat-offset-reference-reference_format"><a class="header" href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></h3>
+<p>返回当前日期和时间。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li>
-<p><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
-<li>
-<p><code>offset</code>: Duration to offset the date from. If a number is provided, duration will be added to the date in days. You can also specify the offset as a string using the ISO 8601 format.</p>
-</li>
-<li>
-<p><code>reference</code>: The date referential, e.g. set this to the note's title.</p>
-</li>
-<li>
-<p><code>reference_format</code>: The format for the reference date. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>offset</code>: 从当前日期开始的偏移量（可以是正数或负数）。默认为0。</li>
+<li><code>reference</code>: 参考日期，偏移量将从该日期计算而不是当前日期。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
 </ul>
 <h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// Date now
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.now() %&gt;
-// Date now with format
+
+// 自定义格式
 &lt;% tp.date.now("Do MMMM YYYY") %&gt;
-// Last week
-&lt;% tp.date.now("YYYY-MM-DD", -7) %&gt;
-// Next week
-&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;
-// Last month
-&lt;% tp.date.now("YYYY-MM-DD", "P-1M") %&gt;
-// Next year
-&lt;% tp.date.now("YYYY-MM-DD", "P1Y") %&gt;
-// File's title date + 1 day (tomorrow)
-&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title date - 1 day (yesterday)
-&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;
+
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
+
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
+
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
 </code></pre>
-<h3 id="tpdatetomorrowformat-string--yyyy-mm-dd"><a class="header" href="#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></h3>
-<p>Retrieves tomorrow's date.</p>
+<h3 id="tpdatetomorrowformat"><a class="header" href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></h3>
+<p>返回明天的日期。</p>
 <h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
 <h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// Date tomorrow
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.tomorrow() %&gt;
-// Date tomorrow with format
+
+// 自定义格式
 &lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
 </code></pre>
-<h3 id="tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><a class="header" href="#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></h3>
+<h3 id="tpdateweekdayformat-weekday-reference-reference_format"><a class="header" href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></h3>
+<p>返回特定的工作日。</p>
 <h5 id="参数-2"><a class="header" href="#参数-2">参数</a></h5>
 <ul>
-<li>
-<p><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
-<li>
-<p><code>weekday</code>: Week day number. If the locale assigns Monday as the first day of the week, <code>0</code> will be Monday, <code>-7</code> will be last week's day.</p>
-</li>
-<li>
-<p><code>reference</code>: The date referential, e.g. set this to the note's title.</p>
-</li>
-<li>
-<p><code>reference_format</code>: The format for the reference date. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</p>
-</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code>reference</code>: 参考日期，将返回最接近参考日期的工作日。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
 </ul>
 <h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
-<pre><code class="language-javascript">// This week's Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0) %&gt;
-// Next Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 7) %&gt;
-// File's title Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title previous Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", -7, tp.file.title, "YYYY-MM-DD") %&gt;
+<pre><code class="language-javascript">// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
 </code></pre>
-<h3 id="tpdateyesterdayformat-string--yyyy-mm-dd"><a class="header" href="#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></h3>
-<p>Retrieves yesterday's date.</p>
+<h3 id="tpdateyesterdayformat"><a class="header" href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></h3>
+<p>返回昨天的日期。</p>
 <h5 id="参数-3"><a class="header" href="#参数-3">参数</a></h5>
 <ul>
-<li><code>format</code>: The format for the date. Defaults to <code>"YYYY-MM-DD"</code>. Refer to <a href="https://momentjs.com/docs/#/displaying/format/">format reference</a>.</li>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
 </ul>
 <h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
-<pre><code class="language-javascript">// Date yesterday
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.yesterday() %&gt;
-// Date yesterday with format
+
+// 自定义格式
 &lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
 </code></pre>
 <h2 id="momentjs"><a class="header" href="#momentjs">Moment.js</a></h2>
 <p>Templater提供了对<code>moment</code>对象的访问，可以使用它的所有功能。</p>
 <p>关于moment.js的更多信息<a href="https://momentjs.com/docs/#/displaying/">在此</a>。</p>
 <h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
-<pre><code class="language-javascript">// Date now
-&lt;% moment(tp.file.title, "YYYY-MM-DD").format("YYYY-MM-DD") %&gt;
-// Get start of month from note title
-&lt;% moment(tp.file.title, "YYYY-MM-DD").startOf("month").format("YYYY-MM-DD") %&gt;
-// Get end of month from note title
-&lt;% moment(tp.file.title, "YYYY-MM-DD").endOf("month").format("YYYY-MM-DD") %&gt;
+<pre><code class="language-javascript">// 当前日期，格式为YYYY-MM-DD
+&lt;% moment().format("YYYY-MM-DD") %&gt;
+
+// 当前日期，使用"星期几，月份+日 年份"的格式
+&lt;% moment().format("dddd, MMMM Do YYYY") %&gt;
+
+// 7天前的日期
+&lt;% moment().subtract(7, 'days').format("YYYY-MM-DD") %&gt;
+
+// 一个月后的日期，使用自定义格式
+&lt;% moment().add(1, 'month').format("YYYY-MM-DD") %&gt;
 </code></pre>
 <h2 id="示例-5"><a class="header" href="#示例-5">示例</a></h2>
-<pre><code class="language-javascript">// Date now
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.date.now() %&gt;
-// Date now with format
+
+// 自定义格式
 &lt;% tp.date.now("Do MMMM YYYY") %&gt;
-// Last week
-&lt;% tp.date.now("YYYY-MM-DD", -7) %&gt;
-// Next week
-&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;
-// Last month
-&lt;% tp.date.now("YYYY-MM-DD", "P-1M") %&gt;
-// Next year
-&lt;% tp.date.now("YYYY-MM-DD", "P1Y") %&gt;
-// File's title date + 1 day (tomorrow)
-&lt;% tp.date.now("YYYY-MM-DD", 1, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title date - 1 day (yesterday)
-&lt;% tp.date.now("YYYY-MM-DD", -1, tp.file.title, "YYYY-MM-DD") %&gt;
 
-// Date tomorrow
-&lt;% tp.date.tomorrow() %&gt;
-// Date tomorrow with format
-&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
 
-// This week's Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0) %&gt;
-// Next Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 7) %&gt;
-// File's title Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, tp.file.title, "YYYY-MM-DD") %&gt;
-// File's title previous Monday
-&lt;% tp.date.weekday("YYYY-MM-DD", -7, tp.file.title, "YYYY-MM-DD") %&gt;
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
 
-// Date yesterday
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法
 &lt;% tp.date.yesterday() %&gt;
-// Date yesterday with format
+
+// 自定义格式
 &lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
 
+// 基本用法
+&lt;% tp.date.tomorrow() %&gt;
+
+// 自定义格式
+&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
 </code></pre>
 
                     </main>

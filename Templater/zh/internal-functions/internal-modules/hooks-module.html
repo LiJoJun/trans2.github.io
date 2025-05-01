@@ -160,19 +160,18 @@
 <ul>
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
-<li><a href="#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></li>
+<li><a href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></li>
 </ul>
 </li>
 <li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
 </ul>
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tphookson_all_templates_executedcallback_function---any"><a class="header" href="#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></h3>
-<p>Hooks into when all actively running templates have finished executing. Most of the time this will be a single template, unless you are using <code>tp.file.include</code> or <code>tp.file.create_new</code>.</p>
-<p>Multiple invokations of this method will have their callback functions run in parallel.</p>
+<h3 id="tphookson_all_templates_executedcallback"><a class="header" href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></h3>
+<p>当当前活动文件中的所有模板都已执行完毕时调用。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li><code>callback_function</code>: Callback function that will be executed when all actively running templates have finished executing.</li>
+<li><code>callback</code>: 在所有模板执行完毕后要调用的回调函数。</li>
 </ul>
 <h2 id="示例"><a class="header" href="#示例">示例</a></h2>
 <pre><code class="language-javascript">// 模板执行完成后更新frontmatter

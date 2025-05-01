@@ -161,8 +161,8 @@
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
 <li><a href="#tpsystemclipboard"><code>tp.system.clipboard()</code></a></li>
-<li><a href="#tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><code>tp.system.prompt(prompt_text?: string, default_value?: string, throw_on_cancel: boolean = false, multiline?: boolean = false)</code></a></li>
-<li><a href="#tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><code>tp.system.suggester(text_items: string[] ⎮ ((item: T) =&gt; string), items: T[], throw_on_cancel: boolean = false, placeholder: string = "", limit?: number = undefined)</code></a></li>
+<li><a href="#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></li>
+<li><a href="#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></li>
 </ul>
 </li>
 <li><a href="#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
@@ -170,86 +170,71 @@
 <h2 id="文档"><a class="header" href="#文档">文档</a></h2>
 <p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
 <h3 id="tpsystemclipboard"><a class="header" href="#tpsystemclipboard"><code>tp.system.clipboard()</code></a></h3>
-<p>Retrieves the clipboard's content.</p>
+<p>返回剪贴板的内容。</p>
 <h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// Clipboard
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.system.clipboard() %&gt;
 </code></pre>
-<h3 id="tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><a class="header" href="#tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false"><code>tp.system.prompt(prompt_text?: string, default_value?: string, throw_on_cancel: boolean = false, multiline?: boolean = false)</code></a></h3>
-<p>Spawns a prompt modal and returns the user's input.</p>
+<h3 id="tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><a class="header" href="#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></h3>
+<p>显示一个提示窗口，要求用户输入内容。</p>
 <h5 id="参数"><a class="header" href="#参数">参数</a></h5>
 <ul>
-<li>
-<p><code>prompt_text</code>: Text placed above the input field.</p>
-</li>
-<li>
-<p><code>default_value</code>: A default value for the input field.</p>
-</li>
-<li>
-<p><code>throw_on_cancel</code>: Throws an error if the prompt is canceled, instead of returning a <code>null</code> value.</p>
-</li>
-<li>
-<p><code>multiline</code>: If set to <code>true</code>, the input field will be a multiline textarea. Defaults to <code>false</code>.</p>
-</li>
+<li><code>prompt_text</code>: 显示给用户的提示文本。</li>
+<li><code>default_value</code>: 提示中的默认值。默认为空字符串。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消提示时抛出错误。默认为false。</li>
+<li><code>multiline</code>: 如果为true，显示多行输入框。默认为false。</li>
 </ul>
 <h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// Prompt
-&lt;% tp.system.prompt("Please enter a value") %&gt;
-// Prompt with default value
-&lt;% tp.system.prompt("What is your mood today?", "happy") %&gt;
-// Multiline prompt
-&lt;% tp.system.prompt("What is your mood today?", null, false, true) %&gt;
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
+
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
+
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
 </code></pre>
-<h3 id="tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><a class="header" href="#tpsystemsuggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-placeholder-string---limit-number--undefined"><code>tp.system.suggester(text_items: string[] ⎮ ((item: T) =&gt; string), items: T[], throw_on_cancel: boolean = false, placeholder: string = "", limit?: number = undefined)</code></a></h3>
-<p>Spawns a suggester prompt and returns the user's chosen item.</p>
+<h3 id="tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><a class="header" href="#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></h3>
+<p>显示一个带有自动完成功能的建议器，让用户从列表中选择一个项目。</p>
 <h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
 <ul>
-<li>
-<p><code>text_items</code>: Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.</p>
-</li>
-<li>
-<p><code>items</code>: Array containing the values of each item in the correct order.</p>
-</li>
-<li>
-<p><code>throw_on_cancel</code>: Throws an error if the prompt is canceled, instead of returning a <code>null</code> value.</p>
-</li>
-<li>
-<p><code>placeholder</code>: Placeholder string of the prompt.</p>
-</li>
-<li>
-<p><code>limit</code>: Limit the number of items rendered at once (useful to improve performance when displaying large lists).</p>
-</li>
+<li><code>text_items</code>: 要向用户显示的文本项目数组。</li>
+<li><code>items</code>: 选择相应文本项目时返回的值数组。默认为<code>text_items</code>。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消建议器时抛出错误。默认为false。</li>
+<li><code>placeholder</code>: 建议器的占位符文本。默认为空字符串。</li>
+<li><code>limit</code>: 要显示的项目数量限制。默认为无限制。</li>
 </ul>
 <h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
-<pre><code class="language-javascript">// Suggester
-&lt;% tp.system.suggester(["Happy", "Sad", "Confused"], ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester with mapping function (same as above example)
-&lt;% tp.system.suggester((item) =&gt; item, ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester for files
-[[&lt;% (await tp.system.suggester((item) =&gt; item.basename, app.vault.getMarkdownFiles())).basename %&gt;]]
-// Suggester for tags
-&lt;% tp.system.suggester(item =&gt; item, Object.keys(app.metadataCache.getTags()).map(x =&gt; x.replace("#", ""))) %&gt;
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
 </code></pre>
 <h2 id="示例-3"><a class="header" href="#示例-3">示例</a></h2>
-<pre><code class="language-javascript">// Clipboard
+<pre><code class="language-javascript">// 基本用法
 &lt;% tp.system.clipboard() %&gt;
 
-// Prompt
-&lt;% tp.system.prompt("Please enter a value") %&gt;
-// Prompt with default value
-&lt;% tp.system.prompt("What is your mood today?", "happy") %&gt;
-// Multiline prompt
-&lt;% tp.system.prompt("What is your mood today?", null, false, true) %&gt;
+// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
 
-// Suggester
-&lt;% tp.system.suggester(["Happy", "Sad", "Confused"], ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester with mapping function (same as above example)
-&lt;% tp.system.suggester((item) =&gt; item, ["Happy", "Sad", "Confused"]) %&gt;
-// Suggester for files
-[[&lt;% (await tp.system.suggester((item) =&gt; item.basename, app.vault.getMarkdownFiles())).basename %&gt;]]
-// Suggester for tags
-&lt;% tp.system.suggester(item =&gt; item, Object.keys(app.metadataCache.getTags()).map(x =&gt; x.replace("#", ""))) %&gt;
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
 
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
+
+// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
 </code></pre>
 
                     </main>
