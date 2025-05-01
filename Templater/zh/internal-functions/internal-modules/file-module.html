@@ -156,7 +156,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="file模块"><a class="header" href="#file模块">File模块</a></h1>
-<p>This module contains every internal function related to files.</p>
+<p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
 <ul>
 <li><a href="#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -496,22 +496,6 @@ If you specify multiple tp.file.cursor with the same order, the editor will swit
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

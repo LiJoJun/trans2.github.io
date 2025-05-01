@@ -189,6 +189,21 @@ modification date: Thursday 7th January 2021 17:20:43
 <p>您可以通过Obsidian内的社区插件标签页安装此插件。搜索"Templater"。</p>
 <p>安装<a href="https://github.com/SilentVoid13/Templater">Templater</a>后重启Obsidian应用是一个好习惯，以确保一切正常工作。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="术语"><a class="header" href="#术语">术语</a></h1>
+<p>在Templater中，我们使用以下术语：</p>
+<ul>
+<li>
+<p><strong>命令</strong>：一个由开始标签<code>&lt;%</code>和结束标签<code>%&gt;</code>包围的代码块，例如<code>&lt;% tp.date.now() %&gt;</code>。命令是用户与Templater交互的基本方式。</p>
+</li>
+<li>
+<p><strong>内置函数</strong>：Templater预定义的函数，用于执行特定任务，如<code>tp.date.now()</code>、<code>tp.file.title</code>等。这些函数按功能分组到不同的模块中。</p>
+</li>
+<li>
+<p><strong>用户函数</strong>：用户自定义的函数，可以是JavaScript脚本或系统命令。</p>
+</li>
+<li>
+<p><strong>变量</strong>：存储值的容器，如<code>tp</code>（Templater的主对象）或<code>tR</code>（模板结果）。</p>
+</li>
+</ul>
 <h3 id="示例"><a class="header" href="#示例">示例</a></h3>
 <p>以下模板包含2个命令，调用2个不同的内置函数：</p>
 <pre><code>昨天: &lt;% tp.date.yesterday("YYYY-MM-DD") %&gt;
@@ -256,6 +271,9 @@ modification date: Thursday 7th January 2021 17:20:43
 <ul>
 <li><code>tp.date.now(format: string = "YYYY-MM-DD")</code></li>
 <li><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: 0)</code></li>
+<li><code>tp.date.now(format = "YYYY-MM-DD")</code></li>
+<li><code>tp.date.now(offset: 7)</code></li>
+<li><code>tp.date.now(tp.file.title)</code></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="设置"><a class="header" href="#设置">设置</a></h1>
 <h2 id="常规设置"><a class="header" href="#常规设置">常规设置</a></h2>
@@ -337,8 +355,7 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="config模块"><a class="header" href="#config模块">Config模块</a></h1>
-<p>This module exposes Templater's running configuration.</p>
-<p>This is mostly useful when writing scripts requiring some context information.</p>
+<p>Config模块允许您访问和更新Templater的配置设置。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/config-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -359,7 +376,7 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 <h3 id="tpconfigtemplate_file"><a class="header" href="#tpconfigtemplate_file"><code>tp.config.template_file</code></a></h3>
 <p>The <code>TFile</code> object representing the template file.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="date模块"><a class="header" href="#date模块">Date模块</a></h1>
-<p>This module contains every internal function related to dates.</p>
+<p>日期模块包含与日期和时间相关的函数。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/date-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -509,7 +526,7 @@ await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file模块"><a class="header" href="#file模块">File模块</a></h1>
-<p>This module contains every internal function related to files.</p>
+<p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/file-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -820,6 +837,7 @@ If you specify multiple tp.file.cursor with the same order, the editor will swit
 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="frontmatter模块"><a class="header" href="#frontmatter模块">Frontmatter模块</a></h1>
+<p>这个模块允许您访问当前文件的frontmatter变量。</p>
 <p>This modules exposes all the frontmatter variables of a file as variables.</p>
 <ul>
 <li><a href="internal-functions/internal-modules/frontmatter-module.html#%E6%96%87%E6%A1%A3">文档</a>
@@ -858,7 +876,7 @@ categories:
 <pre><code>&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hooks模块"><a class="header" href="#hooks模块">Hooks模块</a></h1>
-<p>This module exposes hooks that allow you to execute code when a Templater event occurs.</p>
+<p>Hooks模块允许您在特定事件发生时注册回调函数。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/hooks-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -894,7 +912,7 @@ tp.hooks.on_all_templates_executed(() =&gt; {
 -%&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="obsidian模块"><a class="header" href="#obsidian模块">Obsidian模块</a></h1>
-<p>This module exposes all the functions and classes from the Obsidian API.</p>
+<p>Obsidian模块提供对Obsidian API的访问，允许您使用Obsidian的内部功能。</p>
 <p>这主要在编写脚本时有用。</p>
 <p>更多信息请参考Obsidian API的<a href="https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts">声明文件</a>。</p>
 <h2 id="示例-28"><a class="header" href="#示例-28">示例</a></h2>
@@ -918,7 +936,7 @@ tR += response.json.title;
 %&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="system模块"><a class="header" href="#system模块">System模块</a></h1>
-<p>This module contains system related functions.</p>
+<p>System模块包含与系统交互相关的函数，例如复制到剪贴板、显示提示或创建建议器。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/system-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -1014,7 +1032,7 @@ tR += response.json.title;
 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="web模块"><a class="header" href="#web模块">Web模块</a></h1>
-<p>This modules contains every internal function related to the web (making web requests).</p>
+<p>Web模块提供与网络资源交互的功能，允许您获取网页内容或生成URL。</p>
 <ul>
 <li><a href="internal-functions/internal-modules/web-module.html#%E6%96%87%E6%A1%A3">文档</a>
 <ul>
@@ -1347,22 +1365,6 @@ function log(msg) {
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 
