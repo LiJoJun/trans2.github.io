@@ -156,23 +156,23 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="简介"><a class="header" href="#简介">简介</a></h1>
-<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 是一种模板语言，允许你在笔记中插入<strong>变量</strong>和<strong>函数</strong>的结果。它还允许你执行JavaScript代码来操作这些变量和函数。</p>
-<p>通过 <a href="https://github.com/SilentVoid13/Templater">Templater</a>，你将能够创建强大的模板来自动化手动任务。</p>
-<h2 id="快速示例"><a class="header" href="#快速示例">快速示例</a></h2>
-<p>以下是使用 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 语法的模板文件：</p>
-<pre><code class="language-javascript">---
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a>是一种模板语言，，允许您在笔记中插入 <strong>变量</strong> 和 <strong>函数</strong> 的结果。 它还支持执行 JavaScript 代码来操作这些变量和函数。</p>
+<p>借助 <a href="https://github.com/SilentVoid13/Templater">Templater</a>, 你可以创建功能强大的模板，从而实现手动任务的自动化。</p>
+<h2 id="quick-example"><a class="header" href="https://silentvoid13.github.io/Templater/introduction.html#quick-example">简短示例</a></h2>
+<p>以下是使用 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 语法的模板文件:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">---
 creation date: &lt;% tp.file.creation_date() %&gt;
-modification date: &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm:ss") %&gt;
+modification date: &lt;% tp.file.last_modified_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm:ss"</span>) %&gt;
 ---
 
-&lt;&lt; [[&lt;% tp.date.now("YYYY-MM-DD", -1) %&gt;]] | [[&lt;% tp.date.now("YYYY-MM-DD", 1) %&gt;]] &gt;&gt;
+&lt;&lt; [[&lt;% tp.date.now(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">-1</span>) %&gt;]] | [[&lt;% tp.date.now(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">1</span>) %&gt;]] &gt;&gt;
 
 # &lt;% tp.file.title %&gt;
 
 &lt;% tp.web.daily_quote() %&gt;
 </code></pre>
-<p>插入后将产生以下结果：</p>
-<pre><code>---
+<p>插入后将产生以下结果:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
 creation date: 2021-01-07 17:20
 modification date: Thursday 7th January 2021 17:20:43
 ---
