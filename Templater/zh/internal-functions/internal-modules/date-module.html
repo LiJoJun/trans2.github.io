@@ -155,150 +155,154 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="date模块"><a class="header" href="#date模块">Date模块</a></h1>
-<p>日期模块包含与日期和时间相关的函数。</p>
+                        <h1 id="date-module"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#date-module">Date 模块</a></h1>
+<p>该模块包含与日期时间相关的函数。</p>
 <ul>
-<li><a href="#%E6%96%87%E6%A1%A3">文档</a>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a>
 <ul>
-<li><a href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></li>
-<li><a href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></li>
-<li><a href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></li>
-<li><a href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code class="hljs">tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code class="hljs">tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code class="hljs">tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code class="hljs">tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></li>
 </ul>
 </li>
-<li><a href="#momentjs">Moment.js</a></li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-5">示例</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></li>
 </ul>
-<h2 id="文档"><a class="header" href="#文档">文档</a></h2>
-<p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tpdatenowformat-offset-reference-reference_format"><a class="header" href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></h3>
-<p>返回当前日期和时间。</p>
-<h5 id="参数"><a class="header" href="#参数">参数</a></h5>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">syntax 文档</a>。</p>
+<h3 id="tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></h3>
+<p>返回日期。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments">参数</a></h5>
 <ul>
-<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
-<li><code>offset</code>: 从当前日期开始的偏移量（可以是正数或负数）。默认为0。</li>
-<li><code>reference</code>: 参考日期，偏移量将从该日期计算而不是当前日期。默认为null。</li>
-<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
+<li>
+<p><code class="hljs">format</code>: 按照此参数的格式，设定输出日期的格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
+<li>
+<p><code class="hljs">offset</code>: 日期偏移量(可以是正数或负数)，输入的数字将以天为单位加(负数等效为减)在参考日期上。 你还可以输入按照 ISO 8601 格式输入字符串。</p>
+</li>
+<li>
+<p><code class="hljs">reference</code>: 参考日期，默认为今天日期。你也可以把文件名作为参考日期。</p>
+</li>
+<li>
+<p><code class="hljs">reference_format</code>: 参考日期的格式。详见 <a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
 </ul>
-<h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法
+<h5 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按照默认格式返回今天的日期</span></span>
 &lt;% tp.date.now() %&gt;
-
-// 自定义格式
-&lt;% tp.date.now("Do MMMM YYYY") %&gt;
-
-// 带偏移量
-&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
-
-// 使用参考日期
-&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
-
-// 使用参考日期和格式
-&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回今天的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周前(七天前)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周后(七天后)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一个月前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P-1M"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一年后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P1Y"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
 </code></pre>
-<h3 id="tpdatetomorrowformat"><a class="header" href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></h3>
-<p>返回明天的日期。</p>
-<h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
+<h3 id="tpdatetomorrowformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回明天的日期。</p>
+<h5 id="arguments-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-1">参数</a></h5>
 <ul>
-<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
 </ul>
-<h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法
+<h5 id="examples-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-1">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// Date tomorrow</span></span>
 &lt;% tp.date.tomorrow() %&gt;
-
-// 自定义格式
-&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// Date tomorrow with format</span></span>
+&lt;% tp.date.tomorrow(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
 </code></pre>
-<h3 id="tpdateweekdayformat-weekday-reference-reference_format"><a class="header" href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></h3>
-<p>返回特定的工作日。</p>
-<h5 id="参数-2"><a class="header" href="#参数-2">参数</a></h5>
+<h3 id="tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></h3><p>返回特定的日期。</p>
+<h5 id="arguments-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-2">参数</a></h5>
 <ul>
-<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
-<li><code>weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
-<li><code>reference</code>: 参考日期，将返回最接近参考日期的工作日。默认为null。</li>
-<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code class="hljs">weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code class="hljs">reference</code>: 参考日期，找到参考日期所在的周，根据
+<code class="hljs">weekday</code>
+确定是星期几的日期。默认为今天。</li>
+<li><code class="hljs">reference_format</code>: 参考日期的输入格式。默认为null。</li>
 </ul>
-<h5 id="示例-2"><a class="header" href="#示例-2">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法（默认星期一）
-&lt;% tp.date.weekday() %&gt;
-
-// 星期三
-&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
-
-// 从参考日期开始的星期一
-&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
-
-// 从参考日期开始的星期天
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+<h5 id="examples-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出本周星期一的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下周星期天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment">// 按设定格式输出参考日期所在周的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按格式输出参考日期所在周的上周天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
 </code></pre>
-<h3 id="tpdateyesterdayformat"><a class="header" href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></h3>
-<p>返回昨天的日期。</p>
-<h5 id="参数-3"><a class="header" href="#参数-3">参数</a></h5>
+<h3 id="tpdateyesterdayformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回昨天的日期。</p>
+<h5 id="arguments-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-3">参数</a></h5>
 <ul>
-<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
 </ul>
-<h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法
+<h5 id="examples-3"><h5 id="示例-3"><a class="header" href="file:///D:/Download/edgedownload/Templater-ZH/tp.date%20-%20Templater.html#%E7%A4%BA%E4%BE%8B-3">示例</a></h5></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
 &lt;% tp.date.yesterday() %&gt;
 
-// 自定义格式
-&lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
 </code></pre>
-<h2 id="momentjs"><a class="header" href="#momentjs">Moment.js</a></h2>
-<p>Templater提供了对<code>moment</code>对象的访问，可以使用它的所有功能。</p>
-<p>关于moment.js的更多信息<a href="https://momentjs.com/docs/#/displaying/">在此</a>。</p>
-<h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
-<pre><code class="language-javascript">// 当前日期，格式为YYYY-MM-DD
-&lt;% moment().format("YYYY-MM-DD") %&gt;
-
-// 当前日期，使用"星期几，月份+日 年份"的格式
-&lt;% moment().format("dddd, MMMM Do YYYY") %&gt;
-
-// 7天前的日期
-&lt;% moment().subtract(7, 'days').format("YYYY-MM-DD") %&gt;
-
-// 一个月后的日期，使用自定义格式
-&lt;% moment().add(1, 'month').format("YYYY-MM-DD") %&gt;
+<h2 id="momentjs"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></h2>
+<p>Templater 允许你访问 <code class="hljs">moment</code>对象，并使用该对象的所有功能。</p>
+<p>详见 moment.js <a href="https://momentjs.com/docs/#/displaying/">文档</a>.</p>
+<h5 id="examples-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-4">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出文件名(如果文件以日期命名)</span></span>
+&lt;% moment(tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).startOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的最后一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).endOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下个月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).add(<span class="hljs-number">1</span>, <span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
 </code></pre>
-<h2 id="示例-5"><a class="header" href="#示例-5">示例</a></h2>
-<pre><code class="language-javascript">// 基本用法
+<h2 id="examples-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
 &lt;% tp.date.now() %&gt;
 
-// 自定义格式
-&lt;% tp.date.now("Do MMMM YYYY") %&gt;
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
 
-// 带偏移量
-&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
+<span class="hljs-comment">// 带偏移量</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">7</span>) %&gt;
 
-// 使用参考日期
-&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
+<span class="hljs-comment">// 使用参考日期</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
 
-// 使用参考日期和格式
-&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+<span class="hljs-comment">// 使用参考日期和格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
 
-// 基本用法（默认星期一）
+<span class="hljs-comment">// 基本用法（默认星期一）</span>
 &lt;% tp.date.weekday() %&gt;
 
-// 星期三
-&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+<span class="hljs-comment">// 星期三</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">3</span>) %&gt;
 
-// 从参考日期开始的星期一
-&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+<span class="hljs-comment">// 从参考日期开始的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
 
-// 从参考日期开始的星期天
-&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+<span class="hljs-comment">// 从参考日期开始的星期天</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
 
-// 基本用法
+<span class="hljs-comment">// 基本用法</span>
 &lt;% tp.date.yesterday() %&gt;
 
-// 自定义格式
-&lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
 
-// 基本用法
+<span class="hljs-comment">// 基本用法</span>
 &lt;% tp.date.tomorrow() %&gt;
 
-// 自定义格式
-&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.tomorrow(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
 </code></pre>
 
                     </main>
