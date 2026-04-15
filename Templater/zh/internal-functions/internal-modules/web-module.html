@@ -155,57 +155,90 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="web模块"><a class="header" href="#web模块">Web模块</a></h1>
+                        <h1 id="web模块"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#web%E6%A8%A1%E5%9D%97">Web模块</a></h1>
 <p>Web模块提供与网络资源交互的功能，允许您获取网页内容或生成URL。</p>
 <ul>
-<li><a href="#%E6%96%87%E6%A1%A3">文档</a>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#documentation">文档</a>
 <ul>
-<li><a href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></li>
-<li><a href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code class="hljs">tp.web.daily_quote()</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code class="hljs">tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrequesturl-string-path-string"><code class="hljs">tp.web.request(url: string, path?: string)</code></a></li>
 </ul>
 </li>
-<li><a href="#%E7%A4%BA%E4%BE%8B-2">示例</a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-3">示例</a></li>
 </ul>
-<h2 id="文档"><a class="header" href="#文档">文档</a></h2>
-<p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tpwebdaily_quote"><a class="header" href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
+<h2 id="文档"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E6%96%87%E6%A1%A3">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://fjie.github.io/Templater/zh/syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">此处</a>。</p>
+<h3 id="tpwebdaily_quote"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
 <p>从https://api.quotable.io/random获取每日名言。</p>
-<h5 id="示例"><a class="header" href="#示例">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法
+<h5 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
 &lt;% tp.web.daily_quote() %&gt;
 </code></pre>
-<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
+<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
 <p>从Unsplash获取随机图片。</p>
-<h5 id="参数"><a class="header" href="#参数">参数</a></h5>
+<h5 id="参数"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E5%8F%82%E6%95%B0">参数</a></h5>
 <ul>
-<li><code>size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
-<li><code>query</code>: 搜索查询，以获取特定类型的图片。</li>
-<li><code>provider</code>: 提供商，目前只支持"unsplash"。</li>
+<li><code class="hljs">size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
+<li><code class="hljs">query</code>: 搜索查询，以获取特定类型的图片。</li>
+<li><code class="hljs">provider</code>: 提供商，目前只支持"unsplash"。</li>
 </ul>
-<h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
-<pre><code class="language-javascript">// 基本用法
+<h5 id="示例-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-1">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
 &lt;% tp.web.random_picture() %&gt;
 
-// 指定尺寸
-&lt;% tp.web.random_picture("200x200") %&gt;
+<span class="hljs-comment">// 指定尺寸</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
 
-// 使用查询
-&lt;% tp.web.random_picture("200x200", "nature") %&gt;
+<span class="hljs-comment">// 使用查询</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"nature"</span>) %&gt;
 </code></pre>
-<h2 id="示例-2"><a class="header" href="#示例-2">示例</a></h2>
-<pre><code class="language-javascript">// 基本用法
+<h2 id="示例-2"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-2">示例</a></h2>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
 &lt;% tp.web.daily_quote() %&gt;
 
-// 基本用法
+<span class="hljs-comment">// 基本用法</span>
 &lt;% tp.web.random_picture() %&gt;
 
-// 指定尺寸
-&lt;% tp.web.random_picture("200x200") %&gt;
+<span class="hljs-comment">// 指定尺寸</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
 
-// 使用查询
-&lt;% tp.web.random_picture("200x200", "nature") %&gt;
+<span class="hljs-comment">// 使用查询</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"nature"</span>) %&gt;
 </code></pre>
+<h3 id="tpwebrequesturl-string-path-string"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></h3>
+<p>向指定的 URL 发送 HTTP 请求。此外，您还可以指定路径，以便从响应中提取特定数据。</p>
+<h5 id="arguments-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#arguments-1">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">url</code>: 将向该 URL 发起 HTTP 请求。</p>
+</li>
+<li>
+<p><code class="hljs">path</code>: 响应 JSON 中用于提取特定数据的路径。</p>
+</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Simple request</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos/1"</span>) %&gt;
+<span class="hljs-comment">// Request with path</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos"</span>, <span class="hljs-string">"0.title"</span>) %&gt;
+</code></pre>
+<h2 id="examples-3"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-3">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Daily quote</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.daily_quote() %&gt;
 
+<span class="hljs-comment">// Random picture</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture() %&gt;
+<span class="hljs-comment">// Random picture with size</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
+<span class="hljs-comment">// Random picture with size and query</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"landscape,water"</span>) %&gt;
+
+<span class="hljs-comment">// Simple request</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos/1"</span>) %&gt;
+<span class="hljs-comment">// Request with path</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos"</span>, <span class="hljs-string">"0.title"</span>) %&gt;
+</code></pre>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
