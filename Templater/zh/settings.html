@@ -156,42 +156,42 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="设置"><a class="header" href="#设置">设置</a></h1>
-<h2 id="常规设置"><a class="header" href="#常规设置">常规设置</a></h2>
+<h2 id="general-settings"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#general-settings">常规设置</a></h2>
 <ul>
-<li><code>模板文件夹位置</code>：此文件夹中的文件将作为模板可用。</li>
-<li><code>桌面端语法高亮</code> 在编辑模式下为 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 命令添加语法高亮。</li>
-<li><code>移动端语法高亮</code> 在移动端编辑模式下为 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 命令添加语法高亮。谨慎使用：这可能会破坏移动平台上的实时预览。</li>
-<li><code>自动跳转到光标位置</code> 在插入模板后自动触发 <code>tp.file.cursor</code>。您也可以设置热键手动触发 <code>tp.file.cursor</code>。</li>
-<li><code>在新建文件时触发Templater</code>：<a href="https://github.com/SilentVoid13/Templater">Templater</a> 将监听新文件创建事件，如果匹配您设置的规则，将替换在新文件内容中找到的每个命令。这使 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 与其他插件兼容，如每日笔记核心插件、日历插件、复习插件、笔记重构插件等。
+<li><code class="hljs">Template folder location</code>模板文件夹路径: 此路径下文件夹中的文件将作为可用的模板。</li>
+<li><code class="hljs">Syntax Highlighting on Desktop</code>桌面端的语法高亮: 在编辑模式下为<a href="https://github.com/SilentVoid13/Templater">Templater</a>命令添加语法高亮。</li>
+<li><code class="hljs">Syntax Highlighting on Mobile</code>移动端的语法高亮: 在移动端编辑模式下为<a href="https://github.com/SilentVoid13/Templater">Templater</a>命令添加语法高亮。请谨慎使用：这可能会导致移动平台上的实时预览无法正常显示。</li>
+<li><code class="hljs">Automatic jump to cursor</code>自动跳转到光标位置: 会在插入模板后触发<code class="hljs">tp.file.cursor</code>。还可以设置快捷键来手动触发<code class="hljs">tp.file.cursor</code></li>
+<li><code class="hljs">Trigger Templater on new file creation</code>在新文件创建时触发模板生成器: <a href="https://github.com/SilentVoid13/Templater">Templater</a>会监听新文件创建事件，如果文件内容符合您设定的规则，它就会替换新文件中找到的所有命令。这使得<a href="https://github.com/SilentVoid13/Templater">Templater</a>能与“每日笔记核心插件”、“日历插件”、“回顾插件”、“笔记重构插件”等其他插件兼容。
 <ul>
-<li>确保在下面的文件夹模板或文件正则表达式模板中设置规则。</li>
-<li><strong>警告：</strong> 如果您在创建时创建具有未知/不安全内容的新文件，这可能会很危险。确保每个新文件在创建时的内容都是安全的。</li>
+<li>请务必在下方“文件夹模板”或“文件正则表达式模板”下设置规则。</li>
+<li><strong>警告:</strong>如果在创建新文件时，文件内容未知或不安全，可能会带来风险。请确保每个新文件在创建时的内容都是安全的。</li>
 </ul>
 </li>
 </ul>
-<h2 id="模板热键"><a class="header" href="#模板热键">模板热键</a></h2>
-<p>模板热键允许您将模板绑定到热键。</p>
-<h2 id="文件夹模板"><a class="header" href="#文件夹模板">文件夹模板</a></h2>
-<p><strong>注意</strong>：默认情况下，此设置是隐藏的。要查看它，首先启用 <code>在新建文件时触发模板</code> 设置。由于它与文件正则表达式模板互斥，启用一个将禁用另一个。</p>
-<p>您可以使用 <code>文件夹模板</code> 功能为选定的文件夹和子文件夹指定将自动使用的模板。将使用最深层的匹配，因此规则的顺序无关紧要。</p>
-<p>如果需要全部捕获，可以为 "<code>/</code>" 添加规则。</p>
-<h2 id="文件正则表达式模板"><a class="header" href="#文件正则表达式模板">文件正则表达式模板</a></h2>
-<p><strong>注意</strong>：默认情况下，此设置是隐藏的。要查看它，首先启用 <code>在新建文件时触发模板</code> 设置。由于它与文件夹模板互斥，启用一个将禁用另一个。</p>
-<p>您可以指定新文件路径将测试的正则表达式声明。如果正则表达式匹配，将自动使用关联的模板。规则按从上到下的顺序测试，并使用第一个匹配项。</p>
-<p>如果需要全部捕获，最后添加一个 "<code>.*</code>" 规则。</p>
-<p>使用 <a href="https://regex101.com/">Regex101</a> 等工具验证您的正则表达式。</p>
-<h2 id="启动模板"><a class="header" href="#启动模板">启动模板</a></h2>
-<p>启动模板是Templater启动时将执行一次的模板。</p>
-<p>这些模板不会输出任何内容。</p>
-<p>这对于设置添加到Obsidian事件的钩子的模板非常有用。</p>
-<h2 id="用户脚本函数"><a class="header" href="#用户脚本函数">用户脚本函数</a></h2>
-<p>此文件夹中的所有JavaScript文件将作为CommonJS模块加载，以导入自定义<a href="./user-functions/overview.html">用户函数</a>。</p>
-<p>该文件夹需要从保管库访问。</p>
-<p>查看<a href="./user-functions/script-user-functions.html">文档</a>了解更多信息。</p>
-<h2 id="用户系统命令函数"><a class="header" href="#用户系统命令函数">用户系统命令函数</a></h2>
-<p>允许您创建与系统命令关联的<a href="./user-functions/overview.html">用户函数</a>。</p>
-<p>查看<a href="./user-functions/system-user-functions.html">文档</a>了解更多信息。</p>
-<p><strong>警告：</strong> 从不受信任的来源执行任意系统命令可能很危险。只运行您理解的、来自可信来源的系统命令。</p>
+<h2 id="template-hotkeys"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#template-hotkeys">Template 快捷键</a></h2>
+<p>Template快捷键功能允许您将模板绑定到快捷键上。</p>
+<h2 id="folder-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#folder-templates">文件夹模板</a></h2>
+<p><strong>注意</strong>: 此设置默认处于隐藏状态。要查看它，请先开启<code class="hljs">Trigger Template on new file creation</code>在新文件创建时触发模板。由于该设置与“文件正则表达式模板”互斥，启用其中一个将自动禁用另一个。</p>
+<p>通过<code class="hljs">Folder Templates</code>文件夹模板功能，你可以给文件夹指定一个模板，所选文件夹及其子文件夹将自动应用该模板。系统将采用匹配层级最深的规则，因此规则的排列顺序无关紧要。</p>
+<p>如果需要添加一个通配规则，请对<code class="hljs">/</code>根路径添加一条规则。</p>
+<h2 id="file-regex-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#file-regex-templates">文件正则表达式模板</a></h2>
+<p><strong>注意</strong>: 此设置默认处于隐藏状态。要查看该设置，请先启用<code class="hljs">Trigger Template on new file creation</code>在新文件创建时触发模板。由于该设置与“文件夹模板”互斥，启用其中一项将自动禁用另一项。</p>
+<p>您可以指定正则表达式，用于检测新文件的路径是否符合这些规则。如果正则表达式匹配，系统将自动使用相应的模板。规则将从上到下依次检测，并采用第一个匹配项。</p>
+<p>如果需要添加一个通配规则，规则请以<code class="hljs">.*</code>结尾。</p>
+<p>使用<a href="https://regex101.com/">Regex101</a>之类的工具来验证您的正则表达式。</p>
+<h2 id="startup-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#startup-templates">启动模板</a></h2>
+<p>启动模板是 Templater 在启动时执行一次的模板。</p>
+<p>这些模板不会输出任何内容</p>
+<p>它们在设置模板时可能很有用，例如为 Obsidian 事件添加钩子。</p>
+<h2 id="user-script-functions"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#user-script-functions">脚本用户函数</a></h2>
+<p>此文件夹中的所有JavaScript文件将作为CommonJS模块加载，用来导入自定义<a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a>.</p>
+<p>该文件夹必须能在保管库中访问。</p>
+<p>查看<a href="https://silentvoid13.github.io/Templater/user-functions/script-user-functions.html">用户脚本函数文档</a> for more information.</p>
+<h2 id="user-system-command-functions"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#user-system-command-functions">用户系统命令函数</a></h2>
+<p>允许您创建与系统命令关联的<a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a></p>
+<p>查看<a href="https://silentvoid13.github.io/Templater/user-functions/system-user-functions.html">用户系统命令函数文档</a>了解更多内容</p>
+<p><strong>警告:</strong>执行来自不可信来源的任何系统命令都可能存在风险。请仅运行您理解且来自可信来源的系统命令。</p>
 
                     </main>
 
