@@ -157,14 +157,14 @@
                     <main>
                         <h1 id="动态命令"><a class="header" href="#动态命令">动态命令</a></h1>
 <p>通过这个命令工具，您可以将命令声明为"动态的"，这意味着此命令将在进入预览模式时解析。</p>
-<p>要声明动态命令，请在命令开始标签后添加加号<code>+</code>：<code>&lt;%+</code></p>
-<p>就是这样，您的命令现在将只在预览模式下执行。</p>
-<p>这对于像<code>tp.file.last_modified_date</code>这样的内置函数很有用，例如：</p>
-<pre><code class="language-javascript">最后修改日期：&lt;%+ tp.file.last_modified_date() %&gt;
+<p>要声明动态命令，请在命令开始标签后添加加号<code class="hljs">+</code>如：<code class="hljs">&lt;%+</code></p>
+<p>这样，您的命令现在将只在预览模式下执行。</p>
+<p>这对于像<code class="hljs">tp.file.last_modified_date</code>这样的内置函数很有用，例如：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">最后修改日期：&lt;%+ tp.file.last_modified_date() %&gt;
 </code></pre>
 <p><strong>注意</strong>：动态命令存在已知问题，并且可能不会在未来继续维护（有关更多详细信息，请参阅<a href="https://github.com/SilentVoid13/Templater/issues/913">此问题</a>）。在大多数情况下，建议使用<a href="https://github.com/blacksmithgu/obsidian-dataview">Dataview</a>插件作为替代方案。</p>
-<h2 id="刷新问题"><a class="header" href="#刷新问题">刷新问题</a></h2>
-<p>预览模式的一个"缺点"是它将渲染后的笔记放入缓存中，以加快速度。</p>
+<h2 id="刷新问题"><a class="header" href="https://fjie.github.io/Templater/zh/commands/dynamic-command.html#%E5%88%B7%E6%96%B0%E9%97%AE%E9%A2%98">刷新问题</a></h2>
+<p>预览模式的一个“缺点”是，为了加快速度，它会将渲染后的笔记保存在缓存中。</p>
 <p>这意味着您的动态命令将只在您打开笔记时渲染一次，但之后不会刷新。</p>
 <p>如果您想刷新它，必须关闭笔记以清除缓存，然后再次打开它。</p>
 
