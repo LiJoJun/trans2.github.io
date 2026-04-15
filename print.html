@@ -1,0 +1,2521 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Templater</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Templater</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="简介"><a class="header" href="#简介">简介</a></h1>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 是一种模板语言，允许你在笔记中插入<strong>变量</strong>和<strong>函数</strong>的结果。它还允许你执行JavaScript代码来操作这些变量和函数。</p>
+<p>通过 <a href="https://github.com/SilentVoid13/Templater">Templater</a>，你将能够创建强大的模板来自动化手动任务。</p>
+<h2 id="快速示例"><a class="header" href="#快速示例">快速示例</a></h2>
+<p>以下是使用 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 语法的模板文件：</p>
+<pre><code class="language-javascript">---
+creation date: &lt;% tp.file.creation_date() %&gt;
+modification date: &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm:ss") %&gt;
+---
+
+&lt;&lt; [[&lt;% tp.date.now("YYYY-MM-DD", -1) %&gt;]] | [[&lt;% tp.date.now("YYYY-MM-DD", 1) %&gt;]] &gt;&gt;
+
+# &lt;% tp.file.title %&gt;
+
+&lt;% tp.web.daily_quote() %&gt;
+</code></pre>
+<p>插入后将产生以下结果：</p>
+<pre><code>---
+creation date: 2021-01-07 17:20
+modification date: Thursday 7th January 2021 17:20:43
+---
+
+&lt;&lt; [[2021-04-08]] | [[2021-04-10]] &gt;&gt;
+
+# Test Test
+
+&gt; Do the best you can until you know better. Then when you know better, do better.
+&gt; &amp;mdash; &lt;cite&gt;Maya Angelou&lt;/cite&gt;
+</code></pre>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 是一种模板语言，允许你在笔记中插入<strong>变量</strong>和<strong>函数</strong>的结果。它还允许你执行JavaScript代码来操作这些变量和函数。</p>
+<p>通过 <a href="https://github.com/SilentVoid13/Templater">Templater</a>，你将能够创建强大的模板来自动化手动任务。</p>
+<h2 id="快速示例"><a class="header" href="#快速示例">快速示例</a></h2>
+<p>以下是使用 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 语法的模板文件：</p>
+<pre><code class="language-javascript">---
+creation date: &lt;% tp.file.creation_date() %&gt;
+modification date: &lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm:ss") %&gt;
+---
+
+&lt;&lt; [[&lt;% tp.date.now("YYYY-MM-DD", -1) %&gt;]] | [[&lt;% tp.date.now("YYYY-MM-DD", 1) %&gt;]] &gt;&gt;
+
+# &lt;% tp.file.title %&gt;
+
+&lt;% tp.web.daily_quote() %&gt;
+</code></pre>
+<p>插入后将产生以下结果：</p>
+<pre><code>---
+creation date: 2021-01-07 17:20
+modification date: Thursday 7th January 2021 17:20:43
+---
+
+&lt;&lt; [[2021-04-08]] | [[2021-04-10]] &gt;&gt;
+
+# Test Test
+
+&gt; Do the best you can until you know better. Then when you know better, do better.
+&gt; &amp;mdash; &lt;cite&gt;Maya Angelou&lt;/cite&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安装"><a class="header" href="#安装">安装</a></h1>
+<p>你可以在 Obsidian 的“社区插件”选项卡中安装此插件。搜索“Templater”。</p>
+<p>安装完<a href="https://github.com/SilentVoid13/Templater"> Templater </a>后，建议重启 Obsidian 应用，以确保一切运行正常。 </p>
+<p>您可以通过Obsidian内的社区插件标签页安装此插件。搜索"Templater"。</p>
+<p>安装<a href="https://github.com/SilentVoid13/Templater">Templater</a>后重启Obsidian应用是一个好习惯，以确保一切正常工作。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="术语"><a class="header" href="#术语">术语</a></h1>
+<p>为了理解 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 的工作原理, 我们先第一几个术语</p>
+<ul>
+<li>一个包含 <strong><a href="https://silentvoid13.github.io/Templater/commands/overview.html">commands</a></strong> 的文件 <strong>模板</strong> 。</li>
+<li>以开始标签 <code class="hljs">&lt;%</code> 开头、以结束标签 <code class="hljs">%&gt;</code> 结尾的文本片段，我们将称之为 <strong><a href="https://silentvoid13.github.io/Templater/commands/overview.html">命令</a></strong>。</li>
+<li><strong>函数</strong> 是一种对象，它可以在 <strong>命令</strong> 中被我们调用，并返回一个值(用于替换的字符串)</li>
+</ul>
+<p>你可以使用的函数分为两种类型:</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/overview.html">内部函数</a>。它们是插件内部内置的 <strong>预定义</strong> 函数。例如， <code class="hljs">tp.date.now</code> 是一个内部函数，它将返回当前日期。</li>
+<li><a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a>。用户可以定义自己的函数。这些函数可以是<a href="https://silentvoid13.github.io/Templater/user-functions/system-user-functions.html">系统命令</a> 或 <a href="https://silentvoid13.github.io/Templater/user-functions/script-user-functions.html">用户脚本</a>。</li>
+</ul>
+<h3 id="example"><a class="header" href="https://silentvoid13.github.io/Templater/terminology.html#example">示例</a></h3>
+<p>以下模板包含2个命令，调用2个不同的内部函数:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">Yesterday: &lt;% tp.date.yesterday("YYYY-MM-DD") %&gt;
+Tomorrow: &lt;% tp.date.tomorrow("YYYY-MM-DD") %&gt;
+</code></pre>
+<p>我们将在下一部分看到编写一些命令所需的语法。</p>
+<p>在Templater中，我们使用以下术语：</p>
+<ul>
+<li>
+<p><strong>命令</strong>：一个由开始标签<code>&lt;%</code>和结束标签<code>%&gt;</code>包围的代码块，例如<code>&lt;% tp.date.now() %&gt;</code>。命令是用户与Templater交互的基本方式。</p>
+</li>
+<li>
+<p><strong>内置函数</strong>：Templater预定义的函数，用于执行特定任务，如<code>tp.date.now()</code>、<code>tp.file.title</code>等。这些函数按功能分组到不同的模块中。</p>
+</li>
+<li>
+<p><strong>用户函数</strong>：用户自定义的函数，可以是JavaScript脚本或系统命令。</p>
+</li>
+<li>
+<p><strong>变量</strong>：存储值的容器，如<code>tp</code>（Templater的主对象）或<code>tR</code>（模板结果）。</p>
+</li>
+</ul>
+<h3 id="示例"><a class="header" href="#示例">示例</a></h3>
+<p>以下模板包含2个命令，调用2个不同的内置函数：</p>
+<pre><code>昨天: &lt;% tp.date.yesterday("YYYY-MM-DD") %&gt;
+明天: &lt;% tp.date.tomorrow("YYYY-MM-DD") %&gt;
+</code></pre>
+<p>我们将在下一部分看到编写命令所需的语法。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="语法"><a class="header" href="#语法">语法</a></h1>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 使用了一个自定义模板引擎 (<a href="https://github.com/SilentVoid13/rusty_engine">rusty_engine</a>) 的语法来声明命令。你可能需要一点时间来适应，但只要掌握了要领，这个语法其实并不难。</p>
+<p>Templater 的所有函数都是可通过<strong>命令</strong>来调用的 JavaScript 对象。</p>
+<h2 id="command-syntax"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#command-syntax">命令语法</a></h2>
+<p>一条命令 <strong>必须</strong> 同时包含开始标签 <code class="hljs">&lt;%</code> 和结束标签 <code class="hljs">%&gt;</code>。</p>
+<p>使用 <code class="hljs">tp.date.now</code> 内部函数的完整命令如下: <code class="hljs">&lt;% tp.date.now() %&gt;</code></p>
+<h2 id="function-syntax"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#function-syntax">函数语法</a></h2>
+<h3 id="objects-hierarchy"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#objects-hierarchy">对象层次结构</a></h3>
+<p>Templater 中的所有函数，无论是内部函数还是用户函数，都可以在<code class="hljs">tp</code>对象下访问。可以说，我们所有的函数都是<code class="hljs">tp</code>对象的"子项"。对象的"子项"。要访问一个对象的“子项”，我们必须使用点表示法:<code class="hljs">.</code></p>
+<p>这意味着对 Templater 函数的调用总是以<code class="hljs">tp.&lt;something&gt;</code>开头。</p>
+<h4 id="function-invocation"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#function-invocation">函数调用</a></h4>
+<p>要调用一个函数，我们需要使用函数调用的特定语法：在函数名后加一个左括号和一个右括号。</p>
+<p>例如，我们会使用<code class="hljs">tp.date.now()</code>来调用<code class="hljs">tp.date.now</code>这个内部函数。</p>
+<p>函数可以有参数和可选参数。它们位于左括号和右括号之间，如下所示:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">tp.date.now(arg1_value, arg2_value, arg3_value, ...)
+</code></pre>
+<p>所有参数必须按正确顺序传入。</p>
+<p>函数的参数有不同的<strong>类型</strong>。以下是函数可能类型的一个不完整列表:</p>
+<ul>
+<li><code class="hljs">string</code> 表示一个字符串类型，参数值必须用单引号或双引号括起来 (<code class="hljs">"value"</code>或<code class="hljs">'value'</code>)</li>
+<li><code class="hljs">number</code> 表示一个整数类型，参数值必须是整数 (如<code class="hljs">15</code>, <code class="hljs">-5</code>等)</li>
+<li><code class="hljs">boolean</code> 该表示一个布尔类型，参数值必须是 <code class="hljs">true</code> 或 <code class="hljs">false</code> （全部小写），除此之外别无其他。</li>
+</ul>
+<p>调用函数时必须遵守参数的类型规则，否则函数将无法正常运行。</p>
+<h3 id="function-documentation-syntax"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">函数文档语法</a></h3>
+<p>Templater 内部函数的文档采用以下语法:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">tp.&lt;my_function&gt;(arg1_name: type, arg2_name?: type, <span class="hljs-attr">arg3_name</span>: type = <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">default_value</span>&gt;</span>, arg4_name: type1|type2, ...)
+</span></code></pre>
+<p>其中:</p>
+<ul>
+<li><code class="hljs">arg_name</code> 表示该参数的 <strong>符号</strong> 名称，用于标识和理解参数的具体含义。</li>
+<li><code class="hljs">type</code> 表示函数要求的参数类型。调用内部函数时必须遵守该类型的规则，否则会引发错误。</li>
+</ul>
+<p>如果某个参数是可选的，则会在其后添加一个问号<code class="hljs">?</code>，例如<code class="hljs">arg2_name?: type</code></p>
+<p>如果一个参数有默认值，则使用等号<code class="hljs">=</code>指定类型，例如<code class="hljs">arg3_name: type = &lt;default_value&gt;</code></p>
+<p>如果一个参数可以有不同的类型，则使用竖线<code class="hljs">|</code>进行分隔，例如<code class="hljs">arg4_name: type1|type2</code></p>
+<h4 id="syntax-warning"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#syntax-warning">语法警告</a></h4>
+<p>请注意，此语法仅用于文档说明，以便理解该函数要求接收哪些参数。</p>
+<p>调用函数时，不得指定参数的名称、类型或默认值。只需提供如上<a href="https://silentvoid13.github.io/Templater/syntax.html#function-invocation">所述</a>参数的值即可。</p>
+<h5 id="example"><a class="header" href="https://silentvoid13.github.io/Templater/syntax.html#example">示例</a></h5>
+<p>我们以 <code class="hljs">tp.date.now</code> 这个内部函数的文档为例:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">tp.date.now(format?: string = "YYYY-MM-DD", offset?: number|string, reference?: string, reference_format?: string)
+</code></pre>
+<p>这个内部函数有4个可选参数:
+</p>
+<ul>
+<li>a format of type <code class="hljs">string</code>, with a default value of <code class="hljs">"YYYY-MM-DD"</code>.</li>
+<li>an offset of type <code class="hljs">number</code> or of type <code class="hljs">string</code>.</li>
+<li>a reference of type <code class="hljs">string</code> .</li>
+<li>a reference_format of type <code class="hljs">string</code> .</li>
+</ul>
+<p>这意味着该内部函数的<strong>有效调用</strong>可以是:</p>
+<ul>
+<li><code class="hljs">&lt;% tp.date.now() %&gt;</code></li>
+<li><code class="hljs">&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;</code></li>
+<li><code class="hljs">&lt;% tp.date.now("YYYY-MM-DD", 7, "2021-04-09", "YYYY-MM-DD") %&gt;</code></li>
+<li><code class="hljs">&lt;% tp.date.now("dddd, MMMM Do YYYY", 0, tp.file.title, "YYYY-MM-DD") %&gt;</code> *假设文件名的格式是 <code class="hljs">string</code> :"YYYY-MM-DD"</li>
+</ul>
+<p>另一方面，<strong>无效调用</strong>是指:</p>
+<ul>
+<li><code class="hljs">tp.date.now(format: string = "YYYY-MM-DD")</code></li>
+<li><code class="hljs">tp.date.now(format: string = "YYYY-MM-DD", offset?: 0)</code></li>
+</ul>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 使用自定义模板引擎（<a href="https://github.com/SilentVoid13/rusty_engine">rusty_engine</a>）语法来声明命令。您可能需要一些时间来适应它，但一旦理解了基本概念，这种语法并不难掌握。</p>
+<p>Templater的所有函数都是JavaScript对象，通过<strong>命令</strong>调用。</p>
+<h2 id="命令语法"><a class="header" href="#命令语法">命令语法</a></h2>
+<p>命令<strong>必须</strong>同时包含开始标签<code>&lt;%</code>和结束标签<code>%&gt;</code>。</p>
+<p>使用<code>tp.date.now</code>内置函数的完整命令示例：<code>&lt;% tp.date.now() %&gt;</code></p>
+<h2 id="函数语法"><a class="header" href="#函数语法">函数语法</a></h2>
+<h3 id="对象层次结构"><a class="header" href="#对象层次结构">对象层次结构</a></h3>
+<p>Templater的所有函数，无论是内置函数还是用户函数，都在<code>tp</code>对象下可用。可以说所有函数都是<code>tp</code>对象的子对象。要访问对象的"子对象"，我们需要使用点表示法<code>.</code>。</p>
+<p>这意味着Templater函数调用总是以<code>tp.&lt;something&gt;</code>开始。</p>
+<h4 id="函数调用"><a class="header" href="#函数调用">函数调用</a></h4>
+<p>要调用函数，我们需要使用函数调用的特定语法：在函数名后附加一个开括号和一个闭括号。</p>
+<p>例如，我们使用<code>tp.date.now()</code>来调用<code>tp.date.now</code>内置函数。</p>
+<p>函数可以有参数和可选参数。它们放在开括号和闭括号之间，如下所示：</p>
+<pre><code class="language-javascript">tp.date.now(arg1_value, arg2_value, arg3_value, ...)
+</code></pre>
+<p>所有参数必须按正确顺序传递。</p>
+<p>函数的参数可以有不同的<strong>类型</strong>。以下是函数可能的类型的非详尽列表：</p>
+<ul>
+<li><code>string</code>类型表示值必须放在单引号或双引号内（<code>"value"</code>或<code>'value'</code>）</li>
+<li><code>number</code>类型表示值必须是整数（<code>15</code>、<code>-5</code>等）</li>
+<li><code>boolean</code>类型表示值必须是<code>true</code>或<code>false</code>（完全小写），不能是其他值。</li>
+</ul>
+<p>调用函数时必须遵守参数的类型，否则函数将无法正常工作。</p>
+<h3 id="函数文档语法"><a class="header" href="#函数文档语法">函数文档语法</a></h3>
+<p>Templater内置函数的文档使用以下语法：</p>
+<pre><code class="language-javascript">tp.&lt;my_function&gt;(arg1_name: type, arg2_name?: type, arg3_name: type = &lt;default_value&gt;, arg4_name: type1|type2, ...)
+</code></pre>
+<p>其中：</p>
+<ul>
+<li><code>arg_name</code>表示参数的<strong>符号性</strong>名称，以便理解其用途。</li>
+<li><code>type</code>表示参数的预期类型。调用内置函数时必须遵守此类型，否则会抛出错误。</li>
+</ul>
+<p>如果参数是可选的，它将附加一个问号<code>?</code>，例如<code>arg2_name?: type</code></p>
+<p>如果参数有默认值，它将使用等号<code>=</code>指定，例如<code>arg3_name: type = &lt;default_value&gt;</code>。</p>
+<p>如果参数可以有不同的类型，它将使用管道符号<code>|</code>指定，例如<code>arg4_name: type1|type2</code></p>
+<h4 id="语法警告"><a class="header" href="#语法警告">语法警告</a></h4>
+<p>请注意，此语法仅用于文档目的，以便能够理解函数期望的参数。</p>
+<p>调用函数时，您不必指定参数的名称、类型或默认值。如<a href="./syntax.html#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8">此处</a>所述，只需要参数的值。</p>
+<h5 id="示例-1"><a class="header" href="#示例-1">示例</a></h5>
+<p>以<code>tp.date.now</code>内置函数文档为例：</p>
+<pre><code>tp.date.now(format?: string = "YYYY-MM-DD", offset?: number|string, reference?: string, reference_format?: string)
+</code></pre>
+<p>这个内置函数有4个可选参数：</p>
+<ul>
+<li>类型为<code>string</code>的format，默认值为<code>"YYYY-MM-DD"</code>。</li>
+<li>类型为<code>number</code>或<code>string</code>的offset。</li>
+<li>类型为<code>string</code>的reference。</li>
+<li>类型为<code>string</code>的reference_format。</li>
+</ul>
+<p>这意味着该内置函数的<strong>有效调用</strong>包括：</p>
+<ul>
+<li><code>&lt;% tp.date.now() %&gt;</code></li>
+<li><code>&lt;% tp.date.now("YYYY-MM-DD", 7) %&gt;</code></li>
+<li><code>&lt;% tp.date.now("YYYY-MM-DD", 7, "2021-04-09", "YYYY-MM-DD") %&gt;</code></li>
+<li><code>&lt;% tp.date.now("dddd, MMMM Do YYYY", 0, tp.file.title, "YYYY-MM-DD") %&gt;</code> *假设文件名格式为："YYYY-MM-DD"</li>
+</ul>
+<p>另一方面，<strong>无效调用</strong>包括：</p>
+<ul>
+<li><code>tp.date.now(format: string = "YYYY-MM-DD")</code></li>
+<li><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: 0)</code></li>
+<li><code>tp.date.now(format = "YYYY-MM-DD")</code></li>
+<li><code>tp.date.now(offset: 7)</code></li>
+<li><code>tp.date.now(tp.file.title)</code></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="设置"><a class="header" href="#设置">设置</a></h1>
+<h2 id="general-settings"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#general-settings">常规设置</a></h2>
+<ul>
+<li><code class="hljs">Template folder location</code>模板文件夹路径: 此路径下文件夹中的文件将作为可用的模板。</li>
+<li><code class="hljs">Syntax Highlighting on Desktop</code>桌面端的语法高亮: 在编辑模式下为<a href="https://github.com/SilentVoid13/Templater">Templater</a>命令添加语法高亮。</li>
+<li><code class="hljs">Syntax Highlighting on Mobile</code>移动端的语法高亮: 在移动端编辑模式下为<a href="https://github.com/SilentVoid13/Templater">Templater</a>命令添加语法高亮。请谨慎使用：这可能会导致移动平台上的实时预览无法正常显示。</li>
+<li><code class="hljs">Automatic jump to cursor</code>自动跳转到光标位置: 会在插入模板后触发<code class="hljs">tp.file.cursor</code>。还可以设置快捷键来手动触发<code class="hljs">tp.file.cursor</code></li>
+<li><code class="hljs">Trigger Templater on new file creation</code>在新文件创建时触发模板生成器: <a href="https://github.com/SilentVoid13/Templater">Templater</a>会监听新文件创建事件，如果文件内容符合您设定的规则，它就会替换新文件中找到的所有命令。这使得<a href="https://github.com/SilentVoid13/Templater">Templater</a>能与“每日笔记核心插件”、“日历插件”、“回顾插件”、“笔记重构插件”等其他插件兼容。
+<ul>
+<li>请务必在下方“文件夹模板”或“文件正则表达式模板”下设置规则。</li>
+<li><strong>警告:</strong>如果在创建新文件时，文件内容未知或不安全，可能会带来风险。请确保每个新文件在创建时的内容都是安全的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="template-hotkeys"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#template-hotkeys">Template 快捷键</a></h2>
+<p>Template快捷键功能允许您将模板绑定到快捷键上。</p>
+<h2 id="folder-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#folder-templates">文件夹模板</a></h2>
+<p><strong>注意</strong>: 此设置默认处于隐藏状态。要查看它，请先开启<code class="hljs">Trigger Template on new file creation</code>在新文件创建时触发模板。由于该设置与“文件正则表达式模板”互斥，启用其中一个将自动禁用另一个。</p>
+<p>通过<code class="hljs">Folder Templates</code>文件夹模板功能，你可以给文件夹指定一个模板，所选文件夹及其子文件夹将自动应用该模板。系统将采用匹配层级最深的规则，因此规则的排列顺序无关紧要。</p>
+<p>如果需要添加一个通配规则，请对<code class="hljs">/</code>根路径添加一条规则。</p>
+<h2 id="file-regex-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#file-regex-templates">文件正则表达式模板</a></h2>
+<p><strong>注意</strong>: 此设置默认处于隐藏状态。要查看该设置，请先启用<code class="hljs">Trigger Template on new file creation</code>在新文件创建时触发模板。由于该设置与“文件夹模板”互斥，启用其中一项将自动禁用另一项。</p>
+<p>您可以指定正则表达式，用于检测新文件的路径是否符合这些规则。如果正则表达式匹配，系统将自动使用相应的模板。规则将从上到下依次检测，并采用第一个匹配项。</p>
+<p>如果需要添加一个通配规则，规则请以<code class="hljs">.*</code>结尾。</p>
+<p>使用<a href="https://regex101.com/">Regex101</a>之类的工具来验证您的正则表达式。</p>
+<h2 id="startup-templates"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#startup-templates">启动模板</a></h2>
+<p>启动模板是 Templater 在启动时执行一次的模板。</p>
+<p>这些模板不会输出任何内容</p>
+<p>它们在设置模板时可能很有用，例如为 Obsidian 事件添加钩子。</p>
+<h2 id="user-script-functions"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#user-script-functions">脚本用户函数</a></h2>
+<p>此文件夹中的所有JavaScript文件将作为CommonJS模块加载，用来导入自定义<a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a>.</p>
+<p>该文件夹必须能在保管库中访问。</p>
+<p>查看<a href="https://silentvoid13.github.io/Templater/user-functions/script-user-functions.html">用户脚本函数文档</a> for more information.</p>
+<h2 id="user-system-command-functions"><a class="header" href="https://silentvoid13.github.io/Templater/settings.html#user-system-command-functions">用户系统命令函数</a></h2>
+<p>允许您创建与系统命令关联的<a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a></p>
+<p>查看<a href="https://silentvoid13.github.io/Templater/user-functions/system-user-functions.html">用户系统命令函数文档</a>了解更多内容</p>
+<p><strong>警告:</strong>执行来自不可信来源的任何系统命令都可能存在风险。请仅运行您理解且来自可信来源的系统命令。</p>
+<h2 id="常规设置"><a class="header" href="#常规设置">常规设置</a></h2>
+<ul>
+<li><code>模板文件夹位置</code>：此文件夹中的文件将作为模板可用。</li>
+<li><code>桌面端语法高亮</code> 在编辑模式下为 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 命令添加语法高亮。</li>
+<li><code>移动端语法高亮</code> 在移动端编辑模式下为 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 命令添加语法高亮。谨慎使用：这可能会破坏移动平台上的实时预览。</li>
+<li><code>自动跳转到光标位置</code> 在插入模板后自动触发 <code>tp.file.cursor</code>。您也可以设置热键手动触发 <code>tp.file.cursor</code>。</li>
+<li><code>在新建文件时触发Templater</code>：<a href="https://github.com/SilentVoid13/Templater">Templater</a> 将监听新文件创建事件，如果匹配您设置的规则，将替换在新文件内容中找到的每个命令。这使 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 与其他插件兼容，如每日笔记核心插件、日历插件、复习插件、笔记重构插件等。
+<ul>
+<li>确保在下面的文件夹模板或文件正则表达式模板中设置规则。</li>
+<li><strong>警告：</strong> 如果您在创建时创建具有未知/不安全内容的新文件，这可能会很危险。确保每个新文件在创建时的内容都是安全的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="模板热键"><a class="header" href="#模板热键">模板热键</a></h2>
+<p>模板热键允许您将模板绑定到热键。</p>
+<h2 id="文件夹模板"><a class="header" href="#文件夹模板">文件夹模板</a></h2>
+<p><strong>注意</strong>：默认情况下，此设置是隐藏的。要查看它，首先启用 <code>在新建文件时触发模板</code> 设置。由于它与文件正则表达式模板互斥，启用一个将禁用另一个。</p>
+<p>您可以使用 <code>文件夹模板</code> 功能为选定的文件夹和子文件夹指定将自动使用的模板。将使用最深层的匹配，因此规则的顺序无关紧要。</p>
+<p>如果需要全部捕获，可以为 "<code>/</code>" 添加规则。</p>
+<h2 id="文件正则表达式模板"><a class="header" href="#文件正则表达式模板">文件正则表达式模板</a></h2>
+<p><strong>注意</strong>：默认情况下，此设置是隐藏的。要查看它，首先启用 <code>在新建文件时触发模板</code> 设置。由于它与文件夹模板互斥，启用一个将禁用另一个。</p>
+<p>您可以指定新文件路径将测试的正则表达式声明。如果正则表达式匹配，将自动使用关联的模板。规则按从上到下的顺序测试，并使用第一个匹配项。</p>
+<p>如果需要全部捕获，最后添加一个 "<code>.*</code>" 规则。</p>
+<p>使用 <a href="https://regex101.com/">Regex101</a> 等工具验证您的正则表达式。</p>
+<h2 id="启动模板"><a class="header" href="#启动模板">启动模板</a></h2>
+<p>启动模板是Templater启动时将执行一次的模板。</p>
+<p>这些模板不会输出任何内容。</p>
+<p>这对于设置添加到Obsidian事件的钩子的模板非常有用。</p>
+<h2 id="用户脚本函数"><a class="header" href="#用户脚本函数">用户脚本函数</a></h2>
+<p>此文件夹中的所有JavaScript文件将作为CommonJS模块加载，以导入自定义<a href="./user-functions/overview.html">用户函数</a>。</p>
+<p>该文件夹需要从保管库访问。</p>
+<p>查看<a href="./user-functions/script-user-functions.html">文档</a>了解更多信息。</p>
+<h2 id="用户系统命令函数"><a class="header" href="#用户系统命令函数">用户系统命令函数</a></h2>
+<p>允许您创建与系统命令关联的<a href="./user-functions/overview.html">用户函数</a>。</p>
+<p>查看<a href="./user-functions/system-user-functions.html">文档</a>了解更多信息。</p>
+<p><strong>警告：</strong> 从不受信任的来源执行任意系统命令可能很危险。只运行您理解的、来自可信来源的系统命令。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="常见问题"><a class="header" href="#常见问题">常见问题</a></h1>
+<h2 id="unicode-characters-emojis--are-not-working-on-windows-"><a class="header" href="https://silentvoid13.github.io/Templater/faq.html#unicode-characters-emojis--are-not-working-on-windows-">Unicode 字符（emojis表情符号等）在 Windows 上无法正常显示？</a></h2>
+<p>众所周知，Windows 系统中的<code class="hljs">cmd.exe</code>和<code class="hljs">powershell</code>在处理 Unicode 字符时存在问题。</p>
+<p>您可以查看 https://github.com/SilentVoid13/Templater/issues/15#issuecomment-824067020 寻找解决方案。</p>
+<p>另一个不错的解决方案（可能是最好的）是使用<a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701">Windows Terminal</a>，并在 Templater 的设置中将其设为默认终端。</p>
+<p>另一个提供可行解决方案的资源:<a href="https://stackoverflow.com/questions/49476326/displaying-unicode-in-powershell">https://stackoverflow.com/questions/49476326/displaying-unicode-in-powershell</a></p>
+<h2 id="windows系统下unicode字符表情符号等无法正常工作"><a class="header" href="#windows系统下unicode字符表情符号等无法正常工作">Windows系统下Unicode字符（表情符号等）无法正常工作？</a></h2>
+<p>Windows上的<code>cmd.exe</code>和<code>powershell</code>已知存在Unicode字符问题。</p>
+<p>您可以查看 https://github.com/SilentVoid13/Templater/issues/15#issuecomment-824067020 寻找解决方案。</p>
+<p>另一个好的解决方案（可能是最佳方案）是使用 <a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701">Windows Terminal</a> 并在Templater的设置中将其设置为默认shell。</p>
+<p>另一个包含可能适合您的解决方案的资源：<a href="https://stackoverflow.com/questions/49476326/displaying-unicode-in-powershell">https://stackoverflow.com/questions/49476326/displaying-unicode-in-powershell</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="内置函数"><a class="header" href="#内置函数">内置函数</a></h1>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a>提供的各种内部变量和函数被归类到不同的<strong>模块</strong>中以便于管理。现有的<strong>内部模块</strong>包括:</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/app-module.html">App module</a>: <code class="hljs">tp.app</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html">Config module</a>: <code class="hljs">tp.config</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html">Date module</a>: <code class="hljs">tp.date</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html">File module</a>: <code class="hljs">tp.file</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html">Frontmatter module</a>: <code class="hljs">tp.frontmatter</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html">Hooks module</a>: <code class="hljs">tp.hooks</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/obsidian-module.html">Obsidian module</a>: <code class="hljs">tp.obsidian</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html">System module</a>: <code class="hljs">tp.system</code></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/web-module.html">Web module</a>: <code class="hljs">tp.web</code></li>
+</ul>
+<p>基于正确的<a href="https://silentvoid13.github.io/Templater/syntax.html#objects-hierarchy">对象层次结构</a>，典型的内部函数调用通常如下所示:<code class="hljs"> &lt;% tp.&lt;module_name&gt;.&lt;internal_function_name&gt; %&gt;</code></p>
+<h2 id="contribution"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/overview.html#contribution">支持</a></h2>
+<p>欢迎大家通过添加新的内部函数，共同参与该插件的开发。更多信息请点击<a href="https://silentvoid13.github.io/Templater/internal-functions/contribute.html">此处</a>.</p>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 提供的不同内置变量和函数分布在不同的<strong>模块</strong>中，以便对它们进行分类。现有的<strong>内置模块</strong>有：</p>
+<ul>
+<li><a href="internal-functions/./internal-modules/app-module.html">App模块</a>: <code>tp.app</code></li>
+<li><a href="internal-functions/./internal-modules/config-module.html">Config模块</a>: <code>tp.config</code></li>
+<li><a href="internal-functions/./internal-modules/date-module.html">Date模块</a>: <code>tp.date</code></li>
+<li><a href="internal-functions/./internal-modules/file-module.html">File模块</a>: <code>tp.file</code></li>
+<li><a href="internal-functions/./internal-modules/frontmatter-module.html">Frontmatter模块</a>: <code>tp.frontmatter</code></li>
+<li><a href="internal-functions/./internal-modules/hooks-module.html">Hooks模块</a>: <code>tp.hooks</code></li>
+<li><a href="internal-functions/./internal-modules/obsidian-module.html">Obsidian模块</a>: <code>tp.obsidian</code></li>
+<li><a href="internal-functions/./internal-modules/system-module.html">System模块</a>: <code>tp.system</code></li>
+<li><a href="internal-functions/./internal-modules/web-module.html">Web模块</a>: <code>tp.web</code></li>
+</ul>
+<p>如果您正确理解了<a href="internal-functions/../syntax.html#%E5%AF%B9%E8%B1%A1%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84">对象层次结构</a>，这意味着一个典型的内置函数调用看起来像这样：<code>&lt;% tp.&lt;模块名&gt;.&lt;内置函数名&gt; %&gt;</code></p>
+<h2 id="贡献"><a class="header" href="#贡献">贡献</a></h2>
+<p>我邀请每个人通过添加新的内置函数来为这个插件的开发做出贡献。更多信息请点击<a href="internal-functions/./contribute.html">这里</a>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="app模块"><a class="header" href="#app模块">App模块</a></h1>
+<p>App模块用于联系Obsidian实例，从而可以访问Obsidian的具体功能和文件。建议优先使用该实例，而非全局应用程序实例。</p>
+<p>它们在编写脚本时尤其有用。</p>
+<p>更多详情请参阅<a href="https://docs.obsidian.md/Reference/TypeScript+API/App">Obsidian 开发者文档</a>。</p>
+<h2 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/app-module.html#examples">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment"><span class="hljs-comment">// 获取全部文件夹</span></span></span>
+&lt;%
+tp.app.vault.getAllLoadedFiles()
+  .filter(<span class="hljs-function"><span class="hljs-params"><span class="hljs-function"><span class="hljs-params"><span class="hljs-function"><span class="hljs-params">x</span></span></span></span></span><span class="hljs-function"><span class="hljs-function"> =&gt;</span></span></span> x <span class="hljs-keyword"><span class="hljs-keyword"><span class="hljs-keyword">instanceof</span></span></span> tp.obsidian.TFolder)
+  .map(<span class="hljs-function"><span class="hljs-params"><span class="hljs-function"><span class="hljs-params"><span class="hljs-function"><span class="hljs-params">x</span></span></span></span></span><span class="hljs-function"><span class="hljs-function"> =&gt;</span></span></span> x.name)
+%&gt;
+
+<span class="hljs-comment"><span class="hljs-comment"><span class="hljs-comment">// 更新现有文件的frontmatter</span></span></span>
+&lt;%*
+<span class="hljs-keyword"><span class="hljs-keyword"><span class="hljs-keyword">const</span></span></span> file = tp.file.find_tfile(<span class="hljs-string"><span class="hljs-string"><span class="hljs-string">"path/to/file"</span></span></span>);
+<span class="hljs-keyword"><span class="hljs-keyword"><span class="hljs-keyword">await</span></span></span> tp.app.fileManager.processFrontMatter(file, <span class="hljs-function"><span class="hljs-function"><span class="hljs-function">(</span></span><span class="hljs-params"><span class="hljs-function"><span class="hljs-params"><span class="hljs-function"><span class="hljs-params">frontmatter</span></span></span></span></span><span class="hljs-function"><span class="hljs-function">) =&gt;</span></span></span> {
+  frontmatter[<span class="hljs-string"><span class="hljs-string"><span class="hljs-string">"key"</span></span></span>] = <span class="hljs-string"><span class="hljs-string"><span class="hljs-string">"value"</span></span></span>;
+});
+%&gt;
+</code></pre>
+<p>App模块提供对Obsidian App对象的访问，允许您使用Obsidian的核心功能。</p>
+<p>这主要在编写脚本时有用。</p>
+<p>更多信息请参考Obsidian的<a href="https://docs.obsidian.md/Reference/TypeScript+API/App">开发者文档</a>。</p>
+<h2 id="示例-2"><a class="header" href="#示例-2">示例</a></h2>
+<pre><code class="language-javascript">// 获取所有文件夹
+&lt;%
+tp.app.vault.getAllLoadedFiles()
+  .filter(x =&gt; x instanceof tp.obsidian.TFolder)
+  .map(x =&gt; x.name)
+%&gt;
+
+// 更新现有文件的frontmatter
+&lt;%*
+const file = tp.file.find_tfile("path/to/file");
+await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
+  frontmatter["key"] = "value";
+});
+%&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="config模块"><a class="header" href="#config模块">Config模块</a></h1>
+<p>该模块用于提供 Templater 运行时的配置信息。</p>
+<p>它们编写需要某些上下文信息的脚本时尤为有用。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigactive_file"><code class="hljs">tp.config.active_file?</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigrun_mode"><code class="hljs">tp.config.run_mode</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtarget_file"><code class="hljs">tp.config.target_file</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtemplate_file"><code class="hljs">tp.config.template_file</code></a></li><li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtr"><code class="hljs">tp.config.tR</code></a></li>
+
+</ul>
+</li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#documentation">文档</a></h2>
+<h3 id="tpconfigactive_file"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigactive_file"><code>tp.config.active_file?</code></a></h3>
+<p>用于获取当前打开的活动文件（如果存在）的相对路径。
+</p>
+<h3 id="tpconfigrun_mode"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigrun_mode"><code>tp.config.run_mode</code></a></h3>
+<p>从模板创建新文件、追加到当前文件等。<code class="hljs">RunMode</code>表示 Templater 的启动方式。</p>
+<h3 id="tpconfigtarget_file"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtarget_file"><code>tp.config.target_file</code></a></h3>
+<p><code class="hljs">TFile</code>对象，用于获取想要插入模板的目标文件的相对路径。</p>
+<h3 id="tpconfigtemplate_file"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtemplate_file"><code>tp.config.template_file</code></a></h3><p>用于获取当前模板文件的相对路径。</p>
+<h3 id="tpconfigtr"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/config-module.html#tpconfigtr"><code>tp.config.tR</code></a></h3>
+<p>检索与当前上下文相关的模板结果对象（tR）。</p>
+<p>Config模块允许您访问和更新Templater的配置设置。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/config-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigactive_file_template"><code>tp.config.active_file_template</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtemplate_file"><code>tp.config.template_file</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtarget_file"><code>tp.config.target_file</code></a></li>
+<li><a href="internal-functions/internal-modules/config-module.html#tpconfigtr"><code>tp.config.tR</code></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="文档"><a class="header" href="#文档">文档</a></h2>
+<h3 id="tpconfigactive_file_template"><a class="header" href="#tpconfigactive_file_template"><code>tp.config.active_file_template</code></a></h3>
+<p>获取当前活动文件模板的相对路径。</p>
+<h3 id="tpconfigtemplate_file"><a class="header" href="#tpconfigtemplate_file"><code>tp.config.template_file</code></a></h3>
+<p>获取当前执行模板文件的相对路径。</p>
+<h3 id="tpconfigtarget_file"><a class="header" href="#tpconfigtarget_file"><code>tp.config.target_file</code></a></h3>
+<p>获取目标文件的相对路径（模板将应用到该文件）。</p>
+<h3 id="tpconfigtr"><a class="header" href="#tpconfigtr"><code>tp.config.tR</code></a></h3>
+<p>检索与当前上下文相关的模板结果对象（tR）。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="date模块"><a class="header" href="#date模块">Date模块</a></h1>
+<p>该模块包含与日期时间相关的函数。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code class="hljs">tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code class="hljs">tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code class="hljs">tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code class="hljs">tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">syntax 文档</a>。</p>
+<h3 id="tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></h3>
+<p>返回日期。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">format</code>: 按照此参数的格式，设定输出日期的格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
+<li>
+<p><code class="hljs">offset</code>: 日期偏移量(可以是正数或负数)，输入的数字将以天为单位加(负数等效为减)在参考日期上。 你还可以输入按照 ISO 8601 格式输入字符串。</p>
+</li>
+<li>
+<p><code class="hljs">reference</code>: 参考日期，默认为今天日期。你也可以把文件名作为参考日期。</p>
+</li>
+<li>
+<p><code class="hljs">reference_format</code>: 参考日期的格式。详见 <a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
+</ul>
+<h5 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按照默认格式返回今天的日期</span></span>
+&lt;% tp.date.now() %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回今天的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周前(七天前)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周后(七天后)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一个月前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P-1M"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一年后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P1Y"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdatetomorrowformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回明天的日期。</p>
+<h5 id="arguments-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-1">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
+</ul>
+<h5 id="examples-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-1">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// Date tomorrow</span></span>
+&lt;% tp.date.tomorrow() %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// Date tomorrow with format</span></span>
+&lt;% tp.date.tomorrow(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></h3><p>返回特定的日期。</p>
+<h5 id="arguments-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-2">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code class="hljs">weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code class="hljs">reference</code>: 参考日期，找到参考日期所在的周，根据
+<code class="hljs">weekday</code>
+确定是星期几的日期。默认为今天。</li>
+<li><code class="hljs">reference_format</code>: 参考日期的输入格式。默认为null。</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出本周星期一的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下周星期天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment">// 按设定格式输出参考日期所在周的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按格式输出参考日期所在周的上周天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdateyesterdayformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回昨天的日期。</p>
+<h5 id="arguments-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-3">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
+</ul>
+<h5 id="examples-3"><h5 id="示例-3"><a class="header" href="file:///D:/Download/edgedownload/Templater-ZH/tp.date%20-%20Templater.html#%E7%A4%BA%E4%BE%8B-3">示例</a></h5></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.yesterday() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+</code></pre>
+<h2 id="momentjs"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></h2>
+<p>Templater 允许你访问 <code class="hljs">moment</code>对象，并使用该对象的所有功能。</p>
+<p>详见 moment.js <a href="https://momentjs.com/docs/#/displaying/">文档</a>.</p>
+<h5 id="examples-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-4">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出文件名(如果文件以日期命名)</span></span>
+&lt;% moment(tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).startOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的最后一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).endOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下个月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).add(<span class="hljs-number">1</span>, <span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h2 id="examples-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.now() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+
+<span class="hljs-comment">// 带偏移量</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">7</span>) %&gt;
+
+<span class="hljs-comment">// 使用参考日期</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
+
+<span class="hljs-comment">// 使用参考日期和格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法（默认星期一）</span>
+&lt;% tp.date.weekday() %&gt;
+
+<span class="hljs-comment">// 星期三</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">3</span>) %&gt;
+
+<span class="hljs-comment">// 从参考日期开始的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
+
+<span class="hljs-comment">// 从参考日期开始的星期天</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.yesterday() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.tomorrow() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.tomorrow(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+</code></pre>
+<p>日期模块包含与日期和时间相关的函数。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/date-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></li>
+<li><a href="internal-functions/internal-modules/date-module.html#%E7%A4%BA%E4%BE%8B-5">示例</a></li>
+</ul>
+<h2 id="文档-1"><a class="header" href="#文档-1">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tpdatenowformat-offset-reference-reference_format"><a class="header" href="#tpdatenowformat-offset-reference-reference_format"><code>tp.date.now(format, offset, reference, reference_format)</code></a></h3>
+<p>返回当前日期和时间。</p>
+<h5 id="参数"><a class="header" href="#参数">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>offset</code>: 从当前日期开始的偏移量（可以是正数或负数）。默认为0。</li>
+<li><code>reference</code>: 参考日期，偏移量将从该日期计算而不是当前日期。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
+</ul>
+<h5 id="示例-3"><a class="header" href="#示例-3">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.date.now() %&gt;
+
+// 自定义格式
+&lt;% tp.date.now("Do MMMM YYYY") %&gt;
+
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
+
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
+
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+</code></pre>
+<h3 id="tpdatetomorrowformat"><a class="header" href="#tpdatetomorrowformat"><code>tp.date.tomorrow(format)</code></a></h3>
+<p>返回明天的日期。</p>
+<h5 id="参数-1"><a class="header" href="#参数-1">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="示例-4"><a class="header" href="#示例-4">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.date.tomorrow() %&gt;
+
+// 自定义格式
+&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+</code></pre>
+<h3 id="tpdateweekdayformat-weekday-reference-reference_format"><a class="header" href="#tpdateweekdayformat-weekday-reference-reference_format"><code>tp.date.weekday(format, weekday, reference, reference_format)</code></a></h3>
+<p>返回特定的工作日。</p>
+<h5 id="参数-2"><a class="header" href="#参数-2">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code>weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code>reference</code>: 参考日期，将返回最接近参考日期的工作日。默认为null。</li>
+<li><code>reference_format</code>: 参考日期的输入格式。默认为null。</li>
+</ul>
+<h5 id="示例-5"><a class="header" href="#示例-5">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+</code></pre>
+<h3 id="tpdateyesterdayformat"><a class="header" href="#tpdateyesterdayformat"><code>tp.date.yesterday(format)</code></a></h3>
+<p>返回昨天的日期。</p>
+<h5 id="参数-3"><a class="header" href="#参数-3">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="示例-6"><a class="header" href="#示例-6">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.date.yesterday() %&gt;
+
+// 自定义格式
+&lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
+</code></pre>
+<h2 id="momentjs"><a class="header" href="#momentjs">Moment.js</a></h2>
+<p>Templater提供了对<code>moment</code>对象的访问，可以使用它的所有功能。</p>
+<p>关于moment.js的更多信息<a href="https://momentjs.com/docs/#/displaying/">在此</a>。</p>
+<h5 id="示例-7"><a class="header" href="#示例-7">示例</a></h5>
+<pre><code class="language-javascript">// 当前日期，格式为YYYY-MM-DD
+&lt;% moment().format("YYYY-MM-DD") %&gt;
+
+// 当前日期，使用"星期几，月份+日 年份"的格式
+&lt;% moment().format("dddd, MMMM Do YYYY") %&gt;
+
+// 7天前的日期
+&lt;% moment().subtract(7, 'days').format("YYYY-MM-DD") %&gt;
+
+// 一个月后的日期，使用自定义格式
+&lt;% moment().add(1, 'month').format("YYYY-MM-DD") %&gt;
+</code></pre>
+<h2 id="示例-8"><a class="header" href="#示例-8">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.date.now() %&gt;
+
+// 自定义格式
+&lt;% tp.date.now("Do MMMM YYYY") %&gt;
+
+// 带偏移量
+&lt;% tp.date.now("dddd Do MMMM YYYY", 7) %&gt;
+
+// 使用参考日期
+&lt;% tp.date.now("dddd Do MMMM YYYY", 0, "2021-04-09") %&gt;
+
+// 使用参考日期和格式
+&lt;% tp.date.now("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法（默认星期一）
+&lt;% tp.date.weekday() %&gt;
+
+// 星期三
+&lt;% tp.date.weekday("YYYY-MM-DD", 3) %&gt;
+
+// 从参考日期开始的星期一
+&lt;% tp.date.weekday("YYYY-MM-DD", 1, "2021-04-09") %&gt;
+
+// 从参考日期开始的星期天
+&lt;% tp.date.weekday("YYYY-MM-DD", 0, "2021-04-09", "YYYY-MM-DD") %&gt;
+
+// 基本用法
+&lt;% tp.date.yesterday() %&gt;
+
+// 自定义格式
+&lt;% tp.date.yesterday("Do MMMM YYYY") %&gt;
+
+// 基本用法
+&lt;% tp.date.tomorrow() %&gt;
+
+// 自定义格式
+&lt;% tp.date.tomorrow("Do MMMM YYYY") %&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="file模块"><a class="header" href="#file模块">File模块</a></h1>
+<p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecontent"><code class="hljs">tp.file.content</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><code class="hljs">tp.file.create_new(template: TFile | string, filename: string = 'Untitled', open_new: boolean = false, folder?: TFolder | string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code class="hljs">tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursororder-number"><code class="hljs">tp.file.cursor(order?: number)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent-string"><code class="hljs">tp.file.cursor_append(content: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileexistsfilepath-string"><code class="hljs">tp.file.exists(filepath: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename-string"><code class="hljs">tp.file.find_tfile(filename: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefolderabsolute-boolean--false"><code class="hljs">tp.file.folder(absolute: boolean = false)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link-string--tfile"><code class="hljs">tp.file.include(include_link: string | TFile)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code class="hljs">tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilemovenew_path-string-file_to_move-tfile"><code class="hljs">tp.file.move(new_path: string, file_to_move?: TFile)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilepathrelative-boolean--false"><code class="hljs">tp.file.path(relative: boolean = false)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilerenamenew_title-string"><code class="hljs">tp.file.rename(new_title: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileselection"><code class="hljs">tp.file.selection()</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletags"><code class="hljs">tp.file.tags</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletitle"><code class="hljs">tp.file.title</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-16">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#documentation">文档</a></h2>
+<p>函数文档采用特定的语法。详见参见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">此处</a>。</p>
+<h3 id="tpfilecontent"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecontent"><code>tp.file.content</code></a></h3>
+<p>以字符串格式返回当前文件的全部内容。 修改此字符串 <em>不会</em> 反馈到当前文件。</p>
+<h5 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Retrieve file content</span>
+&lt;% tp.file.content %&gt;
+</code></pre>
+<h3 id="tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile | string, filename: string = 'Untitled', open_new: boolean = false, folder?: TFolder | string)</code></a></h3>
+<p>使用指定的模板创建一个新文件。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments">Arguments</a></h5>
+<ul>
+<li><code class="hljs">template</code>: 要使用的模板路径（相对于模板文件夹）。</li>
+<li><code class="hljs">filename</code>: 新文件的文件名。</li>
+<li><code class="hljs">open_new</code>: 创建后是否打开新文件。默认为true。</li>
+<li><code class="hljs">folder</code>: 存放新文件的目标文件夹（相对于保险库根目录）。可以使用<code class="hljs">"PATH/TO/FOLDERNAME"</code> 或 <code class="hljs">tp.app.vault.getAbstractFileByPath("PATH/TO/FOLDERNAME")</code>指定。默认为当前文件所在文件夹。</li>
+<p></p>
+</ul>
+<h5 id="examples-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-1">Examples</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File creation</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>) %&gt;
+<span class="hljs-comment">// File creation with template</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(tp.file.find_tfile(<span class="hljs-string">"MyTemplate"</span>), <span class="hljs-string">"MyFilename"</span>) %&gt;
+<span class="hljs-comment">// File creation and open created note</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">true</span>) %&gt;
+<span class="hljs-comment">// File creation in current folder</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, tp.file.folder(<span class="hljs-literal">true</span>)) %&gt;
+<span class="hljs-comment">// File creation in specified folder with string path</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, <span class="hljs-string">"Path/To/MyFolder"</span>) %&gt;
+<span class="hljs-comment">// File creation in specified folder with TFolder</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, tp.app.vault.getAbstractFileByPath(<span class="hljs-string">"MyFolder"</span>)) %&gt;
+<span class="hljs-comment">// File creation and append link to current note</span>
+[[&lt;% (<span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>)).basename %&gt;]]
+</code></pre>
+<h3 id="tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
+<p>获取文件的创建日期。</p>
+<h5 id="arguments-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-1">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File creation date</span>
+&lt;% tp.file.creation_date() %&gt;
+<span class="hljs-comment">// File creation date with format</span>
+&lt;% tp.file.creation_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilecursororder-number"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></h3>
+<p>在插入模板后，将光标定位到此处。
+</p>
+<p>可以通过在 Obsidian 设置中配置的快捷键在不同的光标之间切换。</p>
+<h5 id="arguments-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-2">参数</a></h5>
+<ul>
+<li><code class="hljs">order</code>: 决定光标放置的顺序（如果有多个光标）。默认为1。如果你指定了多个具有相同顺序的 tp.file.cursor，编辑器将切换到多光标模式。</li>
+</ul>
+<h5 id="examples-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-3">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File cursor</span>
+&lt;% tp.file.cursor() %&gt;
+<span class="hljs-comment">// File multi-cursor</span>
+&lt;% tp.file.cursor(<span class="hljs-number">1</span>) %&gt;Content&lt;% tp.file.cursor(<span class="hljs-number">1</span>) %&gt;
+</code></pre>
+<h3 id="tpfilecursor_appendcontent-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></h3>
+<p>在光标位置追加内容。</p>
+<h5 id="arguments-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-3">参数</a></h5>
+<ul>
+<li><code class="hljs">content</code>: 要追加的内容。</li>
+</ul>
+<h5 id="examples-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-4">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File cursor append</span>
+&lt;% tp.file.cursor_append(<span class="hljs-string">"Some text"</span>) %&gt;
+</code></pre>
+<h3 id="tpfileexistsfilepath-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></h3>
+<p>通过文件路径检查文件是否存在。必须提供文件的完整路径，该路径应以 Vault 为基准，并包含文件扩展名。</p>
+<h5 id="arguments-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-4">参数</a></h5>
+<ul>
+<li><code class="hljs">filepath</code>: The full file path of the file we want to check existence for.</li>
+</ul>
+<h5 id="examples-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-5">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File existence</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.exists(<span class="hljs-string">"MyFolder/MyFile.md"</span>) %&gt;
+<span class="hljs-comment">// File existence of current file</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.exists(tp.file.folder(<span class="hljs-literal">true</span>) + <span class="hljs-string">"/"</span> + tp.file.title + <span class="hljs-string">".md"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilefind_tfilefilename-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></h3>
+<p>通过名称查找一个<code class="hljs">TFile</code> 对象。</p>
+<h5 id="arguments-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-5">参数</a></h5>
+<ul>
+<li><code class="hljs">filename</code>: 文件名（绝对路径或相对于保险库根目录的路径）。</li>
+</ul>
+<h5 id="examples-6"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-6">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File find TFile</span>
+&lt;% tp.file.find_tfile(<span class="hljs-string">"MyFile"</span>).basename %&gt;
+</code></pre>
+<h3 id="tpfilefolderabsolute-boolean--false"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></h3>
+<p>获取文件所在的文件路径。</p>
+<h5 id="arguments-6"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-6">参数</a></h5>
+<ul>
+<li><code class="hljs">absolute</code>: 参数输入 <code class="hljs">true</code>，则返回相对于保险库根目录的路径。 输入 <code class="hljs">false</code>，则返回路径的最后一部分。默认为 <code class="hljs">false</code>。</li>
+</ul>
+<h5 id="examples-7"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-7">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File folder (Folder)</span>
+&lt;% tp.file.folder() %&gt;
+<span class="hljs-comment">// File folder with vault-absolute path (Path/To/Folder)</span>
+&lt;% tp.file.folder(<span class="hljs-literal">true</span>) %&gt;
+</code></pre>
+<h3 id="tpfileincludeinclude_link-string--tfile"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string | TFile)</code></a></h3>
+<p>包含另一个文件的内容。</p>
+<h5 id="arguments-7"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-7">参数</a></h5>
+<ul>
+<li><code class="hljs">include_link</code>: 要包含的文件的链接（可以是文件名、相对路径或Wiki链接）。 例如 <code class="hljs">"[[MyFile]]"</code>，或一个 TFile 对象，同时也支持章节或代码块。</li>
+</ul>
+<h5 id="examples-8"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-8">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File include</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[Template1]]"</span>) %&gt;
+<span class="hljs-comment">// File include TFile</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(tp.file.find_tfile(<span class="hljs-string">"MyFile"</span>)) %&gt;
+<span class="hljs-comment">// File include section</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[MyFile#Section1]]"</span>) %&gt;
+<span class="hljs-comment">// File include block</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[MyFile#^block1]]"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
+<p>获取文件的最后修改日期。</p>
+<h5 id="arguments-8"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-8">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="examples-9"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-9">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File last modified date</span>
+&lt;% tp.file.last_modified_date() %&gt;
+<span class="hljs-comment">// File last modified date with format</span>
+&lt;% tp.file.last_modified_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilemovenew_path-string-file_to_move-tfile"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></h3>
+<p>将文件移动到新位置。</p>
+<h5 id="arguments-9"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-9">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">new_path</code>该文件在存储库中的新相对路径（不包含文件扩展名）。注意：新路径必须包含文件夹和文件名，例如：<code class="hljs">"/Notes/MyNote"</code>。</p>
+</li>
+<li>
+<p><code class="hljs">file_to_move</code>: 要移动的文件（TFile对象）。如果未提供，默认移动当前文件。</p>
+</li>
+</ul>
+<h5 id="examples-10"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-10">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File move</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.move(<span class="hljs-string">"/A/B/"</span> + tp.file.title) %&gt;
+<span class="hljs-comment">// File move and rename</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.move(<span class="hljs-string">"/A/B/NewTitle"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilepathrelative-boolean--false"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></h3>
+<p>获取该文件的路径。</p>
+<h5 id="arguments-10"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-10">参数</a></h5>
+<ul>
+<li><code class="hljs">relative</code>: 该参数如果输入<code class="hljs">true</code>，则返回相对于保险库根目录的路径。默认为false。</li>
+</ul>
+<h5 id="examples-11"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-11">Examples</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File path</span>
+&lt;% tp.file.path() %&gt;
+<span class="hljs-comment">// File relative path (relative to vault root)</span>
+&lt;% tp.file.path(<span class="hljs-literal">true</span>) %&gt;
+</code></pre>
+<h3 id="tpfilerenamenew_title-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></h3>
+<p>重命名当前文件(扩展名不变)。</p>
+<h5 id="arguments-11"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-11">参数</a></h5>
+<ul>
+<li><code class="hljs">new_title</code>: 新文件名。</li>
+</ul>
+<h5 id="examples-12"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-12">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File rename</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.rename(<span class="hljs-string">"MyNewName"</span>) %&gt;
+<span class="hljs-comment">// 在原文件名后加个2</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.rename(tp.file.title + <span class="hljs-string">"2"</span>) %&gt;
+</code></pre>
+<h3 id="tpfileselection"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileselection"><code>tp.file.selection()</code></a></h3>
+<p>返回当前选择的文本。</p>
+<h5 id="examples-13"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-13">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File selection</span>
+&lt;% tp.file.selection() %&gt;
+</code></pre>
+<h3 id="tpfiletags"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletags"><code>tp.file.tags</code></a></h3>
+<p>返回文件的标签列表(以数组或字符串形式)</p>
+<h5 id="examples-14"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-14">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File tags</span>
+&lt;% tp.file.tags %&gt;
+</code></pre>
+<h3 id="tpfiletitle"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletitle"><code>tp.file.title</code></a></h3>
+<p>获取当前文件的标题（不带扩展名）。</p>
+<h5 id="examples-15"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-15">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File title</span>
+&lt;% tp.file.title %&gt;
+<span class="hljs-comment">// Strip the Zettelkasten ID of title (if space separated)</span>
+&lt;% tp.file.title.split(<span class="hljs-string">" "</span>)[<span class="hljs-number">1</span>] %&gt;
+</code></pre>
+<h2 id="examples-16"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-16">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.creation_date() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.file.creation_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.cursor() %&gt;
+
+<span class="hljs-comment">// 指定顺序</span>
+&lt;% tp.file.cursor(<span class="hljs-number">2</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.cursor_append(<span class="hljs-string">"追加的内容"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.exists(<span class="hljs-string">"MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 使用绝对路径</span>
+&lt;% tp.file.exists(<span class="hljs-string">"C:\\Path\\To\\MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.find_tfile(<span class="hljs-string">"MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 绝对路径</span>
+&lt;% tp.file.folder() %&gt;
+
+<span class="hljs-comment">// 相对路径</span>
+&lt;% tp.file.folder(<span class="hljs-literal">true</span>) %&gt;
+
+<span class="hljs-comment">// 使用文件名</span>
+&lt;% tp.file.include(<span class="hljs-string">"MyFile"</span>) %&gt;
+
+<span class="hljs-comment">// 使用Wiki链接</span>
+&lt;% tp.file.include(<span class="hljs-string">"[[MyFile]]"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.last_modified_date() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.file.last_modified_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+
+<span class="hljs-comment">// 移动当前文件</span>
+&lt;% tp.file.move(<span class="hljs-string">"target_folder/new_name"</span>) %&gt;
+
+<span class="hljs-comment">// 移动指定文件</span>
+&lt;% tp.file.move(<span class="hljs-string">"target_folder/new_name"</span>, tp.file.find_tfile(<span class="hljs-string">"MyFile.md"</span>)) %&gt;
+
+<span class="hljs-comment">// 绝对路径</span>
+&lt;% tp.file.path() %&gt;
+
+<span class="hljs-comment">// 相对路径</span>
+&lt;% tp.file.path(<span class="hljs-literal">true</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.rename(<span class="hljs-string">"新文件名"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.selection() %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.tags %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.title %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>) %&gt;
+
+<span class="hljs-comment">// 不打开新文件</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">false</span>) %&gt;
+
+<span class="hljs-comment">// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">"target_folder"</span>) %&gt;
+
+<span class="hljs-comment">// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">"./target_folder"</span>) %&gt;
+</code></pre>
+<p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/file-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecontent"><code>tp.file.content</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursororder"><code>tp.file.cursor(order)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilepathrelative"><code>tp.file.path(relative)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfileselection"><code>tp.file.selection()</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfiletags"><code>tp.file.tags</code></a></li>
+<li><a href="internal-functions/internal-modules/file-module.html#tpfiletitle"><code>tp.file.title</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/file-module.html#%E7%A4%BA%E4%BE%8B-15">示例</a></li>
+</ul>
+<h2 id="文档-2"><a class="header" href="#文档-2">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tpfilecontent"><a class="header" href="#tpfilecontent"><code>tp.file.content</code></a></h3>
+<p>获取当前文件的全部内容。</p>
+<h3 id="tpfilecreate_newtemplate-filename-open_new-folder"><a class="header" href="#tpfilecreate_newtemplate-filename-open_new-folder"><code>tp.file.create_new(template, filename, open_new, folder)</code></a></h3>
+<p>使用指定的模板创建一个新文件。</p>
+<h5 id="参数-4"><a class="header" href="#参数-4">参数</a></h5>
+<ul>
+<li><code>template</code>: 要使用的模板路径（相对于模板文件夹）。</li>
+<li><code>filename</code>: 新文件的文件名。</li>
+<li><code>open_new</code>: 创建后是否打开新文件。默认为true。</li>
+<li><code>folder</code>: 新文件的目标文件夹（相对于保险库根目录）。默认为当前文件所在文件夹。</li>
+</ul>
+<h5 id="示例-9"><a class="header" href="#示例-9">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
+</code></pre>
+<h3 id="tpfilecreation_dateformat"><a class="header" href="#tpfilecreation_dateformat"><code>tp.file.creation_date(format)</code></a></h3>
+<p>获取文件的创建日期。</p>
+<h5 id="参数-5"><a class="header" href="#参数-5">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="示例-10"><a class="header" href="#示例-10">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.creation_date() %&gt;
+
+// 自定义格式
+&lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
+</code></pre>
+<h3 id="tpfilecursororder"><a class="header" href="#tpfilecursororder"><code>tp.file.cursor(order)</code></a></h3>
+<p>在渲染后将光标放置在特定位置。</p>
+<h5 id="参数-6"><a class="header" href="#参数-6">参数</a></h5>
+<ul>
+<li><code>order</code>: 决定光标放置的顺序（如果有多个光标）。默认为1。</li>
+</ul>
+<h5 id="示例-11"><a class="header" href="#示例-11">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.cursor() %&gt;
+
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
+</code></pre>
+<h3 id="tpfilecursor_appendcontent"><a class="header" href="#tpfilecursor_appendcontent"><code>tp.file.cursor_append(content)</code></a></h3>
+<p>在光标位置追加内容。</p>
+<h5 id="参数-7"><a class="header" href="#参数-7">参数</a></h5>
+<ul>
+<li><code>content</code>: 要追加的内容。</li>
+</ul>
+<h5 id="示例-12"><a class="header" href="#示例-12">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
+</code></pre>
+<h3 id="tpfileexistsfilename"><a class="header" href="#tpfileexistsfilename"><code>tp.file.exists(filename)</code></a></h3>
+<p>检查文件是否存在。</p>
+<h5 id="参数-8"><a class="header" href="#参数-8">参数</a></h5>
+<ul>
+<li><code>filename</code>: 要检查的文件名（绝对路径或相对于保险库根目录的路径）。</li>
+</ul>
+<h5 id="示例-13"><a class="header" href="#示例-13">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
+
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
+</code></pre>
+<h3 id="tpfilefind_tfilefilename"><a class="header" href="#tpfilefind_tfilefilename"><code>tp.file.find_tfile(filename)</code></a></h3>
+<p>通过名称查找一个TFile对象。</p>
+<h5 id="参数-9"><a class="header" href="#参数-9">参数</a></h5>
+<ul>
+<li><code>filename</code>: 文件名（绝对路径或相对于保险库根目录的路径）。</li>
+</ul>
+<h5 id="示例-14"><a class="header" href="#示例-14">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
+</code></pre>
+<h3 id="tpfilefolderrelative"><a class="header" href="#tpfilefolderrelative"><code>tp.file.folder(relative)</code></a></h3>
+<p>获取文件所在的文件夹路径。</p>
+<h5 id="参数-10"><a class="header" href="#参数-10">参数</a></h5>
+<ul>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
+</ul>
+<h5 id="示例-15"><a class="header" href="#示例-15">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
+&lt;% tp.file.folder() %&gt;
+
+// 相对路径
+&lt;% tp.file.folder(true) %&gt;
+</code></pre>
+<h3 id="tpfileincludeinclude_link"><a class="header" href="#tpfileincludeinclude_link"><code>tp.file.include(include_link)</code></a></h3>
+<p>包含另一个文件的内容。</p>
+<h5 id="参数-11"><a class="header" href="#参数-11">参数</a></h5>
+<ul>
+<li><code>include_link</code>: 要包含的文件链接（可以是文件名、相对路径或Wiki链接）。</li>
+</ul>
+<h5 id="示例-16"><a class="header" href="#示例-16">示例</a></h5>
+<pre><code class="language-javascript">// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
+
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
+</code></pre>
+<h3 id="tpfilelast_modified_dateformat"><a class="header" href="#tpfilelast_modified_dateformat"><code>tp.file.last_modified_date(format)</code></a></h3>
+<p>获取文件的最后修改日期。</p>
+<h5 id="参数-12"><a class="header" href="#参数-12">参数</a></h5>
+<ul>
+<li><code>format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="示例-17"><a class="header" href="#示例-17">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.last_modified_date() %&gt;
+
+// 自定义格式
+&lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
+</code></pre>
+<h3 id="tpfilemovenew_path-file_to_move"><a class="header" href="#tpfilemovenew_path-file_to_move"><code>tp.file.move(new_path, file_to_move)</code></a></h3>
+<p>将文件移动到新位置。</p>
+<h5 id="参数-13"><a class="header" href="#参数-13">参数</a></h5>
+<ul>
+<li><code>new_path</code>: 新的文件路径（相对于保险库根目录）。</li>
+<li><code>file_to_move</code>: 要移动的文件（TFile对象）。如果未提供，则使用当前文件。</li>
+</ul>
+<h5 id="示例-18"><a class="header" href="#示例-18">示例</a></h5>
+<pre><code class="language-javascript">// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
+
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
+</code></pre>
+<h3 id="tpfilepathrelative"><a class="header" href="#tpfilepathrelative"><code>tp.file.path(relative)</code></a></h3>
+<p>获取文件的路径。</p>
+<h5 id="参数-14"><a class="header" href="#参数-14">参数</a></h5>
+<ul>
+<li><code>relative</code>: 是否返回相对于保险库根目录的路径。默认为false。</li>
+</ul>
+<h5 id="示例-19"><a class="header" href="#示例-19">示例</a></h5>
+<pre><code class="language-javascript">// 绝对路径
+&lt;% tp.file.path() %&gt;
+
+// 相对路径
+&lt;% tp.file.path(true) %&gt;
+</code></pre>
+<h3 id="tpfilerenamenew_title"><a class="header" href="#tpfilerenamenew_title"><code>tp.file.rename(new_title)</code></a></h3>
+<p>重命名当前文件。</p>
+<h5 id="参数-15"><a class="header" href="#参数-15">参数</a></h5>
+<ul>
+<li><code>new_title</code>: 文件的新标题/名称。</li>
+</ul>
+<h5 id="示例-20"><a class="header" href="#示例-20">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
+</code></pre>
+<h3 id="tpfileselection"><a class="header" href="#tpfileselection"><code>tp.file.selection()</code></a></h3>
+<p>获取当前选择的文本。</p>
+<h5 id="示例-21"><a class="header" href="#示例-21">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.selection() %&gt;
+</code></pre>
+<h3 id="tpfiletags"><a class="header" href="#tpfiletags"><code>tp.file.tags</code></a></h3>
+<p>获取文件的标签列表。</p>
+<h5 id="示例-22"><a class="header" href="#示例-22">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.tags %&gt;
+</code></pre>
+<h3 id="tpfiletitle"><a class="header" href="#tpfiletitle"><code>tp.file.title</code></a></h3>
+<p>获取当前文件的标题（不带扩展名）。</p>
+<h5 id="示例-23"><a class="header" href="#示例-23">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.title %&gt;
+</code></pre>
+<h2 id="示例-24"><a class="header" href="#示例-24">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.file.creation_date() %&gt;
+
+// 自定义格式
+&lt;% tp.file.creation_date("dddd Do MMMM YYYY HH:mm") %&gt;
+
+// 基本用法
+&lt;% tp.file.cursor() %&gt;
+
+// 指定顺序
+&lt;% tp.file.cursor(2) %&gt;
+
+// 基本用法
+&lt;% tp.file.cursor_append("追加的内容") %&gt;
+
+// 基本用法
+&lt;% tp.file.exists("MyFile.md") %&gt;
+
+// 使用绝对路径
+&lt;% tp.file.exists("C:\\Path\\To\\MyFile.md") %&gt;
+
+// 基本用法
+&lt;% tp.file.find_tfile("MyFile.md") %&gt;
+
+// 绝对路径
+&lt;% tp.file.folder() %&gt;
+
+// 相对路径
+&lt;% tp.file.folder(true) %&gt;
+
+// 使用文件名
+&lt;% tp.file.include("MyFile") %&gt;
+
+// 使用Wiki链接
+&lt;% tp.file.include("[[MyFile]]") %&gt;
+
+// 基本用法
+&lt;% tp.file.last_modified_date() %&gt;
+
+// 自定义格式
+&lt;% tp.file.last_modified_date("dddd Do MMMM YYYY HH:mm") %&gt;
+
+// 移动当前文件
+&lt;% tp.file.move("target_folder/new_name") %&gt;
+
+// 移动指定文件
+&lt;% tp.file.move("target_folder/new_name", tp.file.find_tfile("MyFile.md")) %&gt;
+
+// 绝对路径
+&lt;% tp.file.path() %&gt;
+
+// 相对路径
+&lt;% tp.file.path(true) %&gt;
+
+// 基本用法
+&lt;% tp.file.rename("新文件名") %&gt;
+
+// 基本用法
+&lt;% tp.file.selection() %&gt;
+
+// 基本用法
+&lt;% tp.file.tags %&gt;
+
+// 基本用法
+&lt;% tp.file.title %&gt;
+
+// 基本用法
+&lt;% tp.file.create_new("my_template", "MyFile") %&gt;
+
+// 不打开新文件
+&lt;% tp.file.create_new("my_template", "MyFile", false) %&gt;
+
+// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "target_folder") %&gt;
+
+// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）
+&lt;% tp.file.create_new("my_template", "MyFile", true, "./target_folder") %&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="frontmatter模块"><a class="header" href="#frontmatter模块">Frontmatter模块</a></h1>
+<p>通过这个模块你可以访问文件的frontmatter(前置信息)。
+
+</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#tpfrontmatterfrontmatter_variable_name"><code class="hljs">tp.frontmatter.&lt;frontmatter_variable_name&gt;</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#examples">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#documentation">文档</a></h2>
+<h3 id="tpfrontmatterfrontmatter_variable_name"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#tpfrontmatterfrontmatter_variable_name"><code>tp.frontmatter.&lt;frontmatter_variable_name&gt;</code></a></h3>
+<p>获取文件frontmatter变量的值。</p>
+<p>如果文件的frontmatter变量名称包含空格，可以使用方括号表示法引用它，如下所示：</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;% tp.frontmatter["variable name with spaces"] %&gt;
+</code></pre>
+<h2 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#examples">示例</a></h2>
+<p>假设你有如下文件: </p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+alias: myfile
+note type: seedling
+---
+
+file content
+</code></pre>
+<p>那么你可以使用以下模板:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">File's metadata alias: &lt;% tp.frontmatter.alias %&gt;
+Note's type: &lt;% tp.frontmatter["note type"] %&gt;
+</code></pre>
+<p>对于frontmatter中的列表，您可以使用JavaScript数组原型方法来操作该列表的显示方式。
+
+</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+categories:
+  - book
+  - movie
+---
+</code></pre>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
+</code></pre>
+<p>这个模块允许您访问当前文件的frontmatter变量。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/frontmatter-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/frontmatter-module.html#tpfrontmatterfrontmatter%E5%8F%98%E9%87%8F%E5%90%8D"><code>tp.frontmatter.&lt;frontmatter变量名&gt;</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/frontmatter-module.html#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+<h2 id="文档-3"><a class="header" href="#文档-3">文档</a></h2>
+<h3 id="tpfrontmatterfrontmatter变量名"><a class="header" href="#tpfrontmatterfrontmatter变量名"><code>tp.frontmatter.&lt;frontmatter变量名&gt;</code></a></h3>
+<p>获取文件frontmatter变量的值。</p>
+<p>如果您的frontmatter变量名称包含空格，可以使用方括号表示法引用它，如下所示：</p>
+<pre><code>&lt;% tp.frontmatter["包含空格的变量名"] %&gt;
+</code></pre>
+<h2 id="示例-25"><a class="header" href="#示例-25">示例</a></h2>
+<p>假设您有以下文件：</p>
+<pre><code>---
+alias: myfile
+note type: seedling
+---
+
+文件内容
+</code></pre>
+<p>那么您可以使用以下模板：</p>
+<pre><code>文件元数据别名：&lt;% tp.frontmatter.alias %&gt;
+笔记类型：&lt;% tp.frontmatter["note type"] %&gt;
+</code></pre>
+<p>对于frontmatter中的列表，您可以使用JavaScript数组原型方法来操作数据的显示方式。</p>
+<pre><code>---
+categories:
+  - book
+  - movie
+---
+</code></pre>
+<pre><code>&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
+</code></pre>
+<p>`</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hooks模块"><a class="header" href="#hooks模块">Hooks模块</a></h1>
+<p>Hooks模块允许您在特定事件发生时调用回调函数。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback_function---any"><code class="hljs">tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#examples">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#documentation">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">此处</a>。</p>
+<h3 id="tphookson_all_templates_executedcallback_function---any"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></h3>
+<p>在所有正在运行的模板执行完毕时触发。大多数情况下，这将是一个单一模板，除非您使用了 
+<code class="hljs">tp.file.include</code> 或 <code class="hljs">tp.file.create_new</code>.</p>
+<p>多次调用此方法时，其回调函数将并行执行。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#arguments">参数</a></h5>
+<ul>
+<li><code class="hljs">callback_function</code>在所有模板执行完毕后要调用的回调函数。</li>
+</ul>
+<h2 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#examples">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Update frontmatter after template finishes executing</span>
+&lt;%*
+tp.hooks.on_all_templates_executed(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> file = tp.file.find_tfile(tp.file.path(<span class="hljs-literal">true</span>));
+  <span class="hljs-keyword">await</span> tp.app.fileManager.processFrontMatter(file, <span class="hljs-function">(<span class="hljs-params">frontmatter</span>) =&gt;</span> {
+    frontmatter[<span class="hljs-string">"key"</span>] = <span class="hljs-string">"value"</span>;
+  });
+});
+%&gt;
+<span class="hljs-comment">// Run a command from another plugin that modifies the current file, after Templater has updated the file</span>
+&lt;%*
+tp.hooks.on_all_templates_executed(<span class="hljs-function">() =&gt;</span> {
+  tp.app.commands.executeCommandById(<span class="hljs-string">"obsidian-linter:lint-file"</span>);
+});
+-%&gt;
+</code></pre>
+<p>Hooks模块允许您在特定事件发生时注册回调函数。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/hooks-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/hooks-module.html#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+<h2 id="文档-4"><a class="header" href="#文档-4">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tphookson_all_templates_executedcallback"><a class="header" href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></h3>
+<p>当当前活动文件中的所有模板都已执行完毕时调用。</p>
+<h5 id="参数-16"><a class="header" href="#参数-16">参数</a></h5>
+<ul>
+<li><code>callback</code>: 在所有模板执行完毕后要调用的回调函数。</li>
+</ul>
+<h2 id="示例-26"><a class="header" href="#示例-26">示例</a></h2>
+<pre><code class="language-javascript">// 模板执行完成后更新frontmatter
+&lt;%*
+tp.hooks.on_all_templates_executed(async () =&gt; {
+  const file = tp.file.find_tfile(tp.file.path(true));
+  await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
+    frontmatter["key"] = "value";
+  });
+});
+%&gt;
+// Templater更新文件后，从另一个插件运行修改当前文件的命令
+&lt;%*
+tp.hooks.on_all_templates_executed(() =&gt; {
+  tp.app.commands.executeCommandById("obsidian-linter:lint-file");
+});
+-%&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="obsidian模块"><a class="header" href="#obsidian模块">Obsidian模块</a></h1>
+<p>Obsidian模块提供对Obsidian API 函数和类的访问。通过它允许你使用Obsidian的内部功能。</p>
+<p>这主要在编写脚本时有用。</p>
+<p>更多信息请参考Obsidian API的<a href="https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts">声明文件</a>。</p>
+<h2 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/obsidian-module.html#%E7%A4%BA%E4%BE%8B">示例</a></h2>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 获取所有文件夹</span>
+&lt;%
+tp.app.vault.getAllLoadedFiles()
+  .filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x <span class="hljs-keyword">instanceof</span> tp.obsidian.TFolder)
+  .map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x.name)
+%&gt;
+
+<span class="hljs-comment">// 规范化路径</span>
+&lt;% tp.obsidian.normalizePath(<span class="hljs-string">"Path/to/file.md"</span>) %&gt;
+
+<span class="hljs-comment">// HTML转Markdown</span>
+&lt;% tp.obsidian.htmlToMarkdown(<span class="hljs-string">"\&lt;h1&gt;标题\&lt;/h1&gt;\&lt;p&gt;段落\&lt;/p&gt;"</span>) %&gt;
+
+<span class="hljs-comment">// HTTP请求</span>
+&lt;%*
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> tp.obsidian.requestUrl(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos/1"</span>);
+tR += response.json.title;
+%&gt;
+</code></pre>
+<p>Obsidian模块提供对Obsidian API的访问，允许您使用Obsidian的内部功能。</p>
+<p>这主要在编写脚本时有用。</p>
+<p>更多信息请参考Obsidian API的<a href="https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts">声明文件</a>。</p>
+<h2 id="示例-27"><a class="header" href="#示例-27">示例</a></h2>
+<pre><code class="language-javascript">// 获取所有文件夹
+&lt;%
+tp.app.vault.getAllLoadedFiles()
+  .filter(x =&gt; x instanceof tp.obsidian.TFolder)
+  .map(x =&gt; x.name)
+%&gt;
+
+// 规范化路径
+&lt;% tp.obsidian.normalizePath("Path/to/file.md") %&gt;
+
+// HTML转Markdown
+&lt;% tp.obsidian.htmlToMarkdown("\&lt;h1&gt;标题\&lt;/h1&gt;\&lt;p&gt;段落\&lt;/p&gt;") %&gt;
+
+// HTTP请求
+&lt;%*
+const response = await tp.obsidian.requestUrl("https://jsonplaceholder.typicode.com/todos/1");
+tR += response.json.title;
+%&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="system模块"><a class="header" href="#system模块">System模块</a></h1>
+<p>System模块包含与系统交互相关的函数，例如复制到剪贴板、显示提示或创建建议器。</p>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystemclipboard"><code class="hljs">tp.system.clipboard()</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code class="hljs">tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code class="hljs">tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></li>
+</ul>
+</li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
+</ul>
+<h2 id="文档"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E6%96%87%E6%A1%A3">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="https://fjie.github.io/Templater/zh/syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tpsystemclipboard"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystemclipboard"><code>tp.system.clipboard()</code></a></h3>
+<p>返回剪贴板的内容。</p>
+<h5 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.clipboard() %&gt;
+</code></pre><h3 id="tpsystemmulti_suggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-title-string---limit-number--undefined"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystemmulti_suggestertext_items-string--item-t--string-items-t-throw_on_cancel-boolean--false-title-string---limit-number--undefined"><code>tp.system.multi_suggester(text_items: string[] | ((item: T) =&gt; string), items: T[], throw_on_cancel: boolean = false, title: string = "", limit?: number = undefined)</code></a></h3><p>生成一个支持多选的建议提示框，并返回用户选择的项目。</p><h5 id="arguments"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#arguments">参数</a></h5><ul>
+<li>
+<p><code class="hljs">text_items</code>: 
+字符串数组，表示建议器提示中每个项目将显示的文本。这也可以是一个将项目映射为其文本表示形式的函数。
+</p>
+</li>
+<li>
+<p><code class="hljs">items</code>: 按正确顺序包含每个项目值的数组。</p>
+</li>
+<li>
+<p><code class="hljs">throw_on_cancel</code>如果提示框被取消，则抛出错误，而不是返回空值。<code class="hljs">null</code>空值。</p>
+</li>
+<li>
+<p><code class="hljs">title</code>: 
+模态框顶部的文本。
+</p>
+</li>
+<li>
+<p><code class="hljs">limit</code>: 限制一次渲染的项目数量（在显示大型列表时有助于提升性能）。</p>
+</li>
+</ul><h5 id="examples-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#examples-1">示例</a></h5><pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Multi-suggester</span>
+&lt;% <span class="hljs-keyword">await</span> tp.system.multi_suggester([<span class="hljs-string">"Happy"</span>, <span class="hljs-string">"Sad"</span>, <span class="hljs-string">"Confused"</span>], [<span class="hljs-string">"Happy"</span>, <span class="hljs-string">"Sad"</span>, <span class="hljs-string">"Confused"</span>]) %&gt;
+<span class="hljs-comment">// Multi-suggester with mapping function (same as above example)</span>
+&lt;% <span class="hljs-keyword">await</span> tp.system.multi_suggester(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item, [<span class="hljs-string">"Happy"</span>, <span class="hljs-string">"Sad"</span>, <span class="hljs-string">"Confused"</span>]) %&gt;
+<span class="hljs-comment">// Multi-suggester for files</span>
+&lt;% (<span class="hljs-keyword">await</span> tp.system.multi_suggester(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.basename, tp.app.vault.getMarkdownFiles())).map(<span class="hljs-function"><span class="hljs-params">f</span> =&gt;</span> <span class="hljs-string">`[[<span class="hljs-subst">${f.basename}</span>]]`</span>) %&gt;
+<span class="hljs-comment">// Multi-suggester for tags</span>
+&lt;% <span class="hljs-keyword">await</span> tp.system.multi_suggester(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item, <span class="hljs-built_in">Object</span>.keys(tp.app.metadataCache.getTags()).map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x.replace(<span class="hljs-string">"#"</span>, <span class="hljs-string">""</span>))) %&gt;
+<span class="hljs-comment">// Reuse value from multi-suggester</span>
+&lt;%*
+<span class="hljs-keyword">let</span> selectedValues = <span class="hljs-keyword">await</span> tp.system.multi_suggester([<span class="hljs-string">"Happy"</span>, <span class="hljs-string">"Sad"</span>, <span class="hljs-string">"Confused"</span>], [<span class="hljs-string">"Happy"</span>, <span class="hljs-string">"Sad"</span>, <span class="hljs-string">"Confused"</span>]);
+%&gt;
+# &lt;% selectedValues %&gt;
+selected values: &lt;% selectedValues %&gt;
+</code></pre>
+
+<h3 id="tpsystempromptprompt_text-default_value-throw_on_cancel-multiline">
+<a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></h3>
+<p>显示一个提示窗口，要求用户输入内容。</p>
+<h5 id="参数"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E5%8F%82%E6%95%B0">参数</a></h5>
+<ul>
+<li><code class="hljs">prompt_text</code>: 显示给用户的提示文本。</li>
+<li><code class="hljs">default_value</code>: 提示中的默认值。默认为空字符串。</li>
+<li><code class="hljs">throw_on_cancel</code>: 如果为true，当用户取消提示时抛出错误。默认为false。</li>
+<li><code class="hljs">multiline</code>: 如果为true，显示多行输入框。默认为false。</li>
+</ul>
+<h5 id="示例-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-1">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入文本"</span>) %&gt;
+
+<span class="hljs-comment">// 带默认值</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入文本"</span>, <span class="hljs-string">"默认值"</span>) %&gt;
+
+<span class="hljs-comment">// 多行输入</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入多行文本"</span>, <span class="hljs-string">""</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>) %&gt;
+</code></pre>
+<h3 id="tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></h3>
+<p>显示一个带有自动完成功能的建议器，让用户从列表中选择一个项目。</p>
+<h5 id="参数-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E5%8F%82%E6%95%B0-1">参数</a></h5>
+<ul>
+<li><code class="hljs">text_items</code>: 要向用户显示的文本项目数组。</li>
+<li><code class="hljs">items</code>: 选择相应文本项目时返回的值数组。默认为<code class="hljs">text_items</code>。</li>
+<li><code class="hljs">throw_on_cancel</code>: 如果为true，当用户取消建议器时抛出错误。默认为false。</li>
+<li><code class="hljs">placeholder</code>: 建议器的占位符文本。默认为空字符串。</li>
+<li><code class="hljs">limit</code>: 要显示的项目数量限制。默认为无限制。</li>
+</ul>
+<h5 id="示例-2"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-2">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"选项1"</span>, <span class="hljs-string">"选项2"</span>, <span class="hljs-string">"选项3"</span>], [<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>]) %&gt;
+
+<span class="hljs-comment">// 使用相同的文本和值</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>]) %&gt;
+
+<span class="hljs-comment">// 带有占位符</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"选项1"</span>, <span class="hljs-string">"选项2"</span>, <span class="hljs-string">"选项3"</span>], [<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>], <span class="hljs-literal">false</span>, <span class="hljs-string">"请选择一个选项"</span>) %&gt;
+</code></pre>
+<h2 id="示例-3"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-3">示例</a></h2>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.clipboard() %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入文本"</span>) %&gt;
+
+<span class="hljs-comment">// 带默认值</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入文本"</span>, <span class="hljs-string">"默认值"</span>) %&gt;
+
+<span class="hljs-comment">// 多行输入</span>
+&lt;% tp.system.prompt(<span class="hljs-string">"请输入多行文本"</span>, <span class="hljs-string">""</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"选项1"</span>, <span class="hljs-string">"选项2"</span>, <span class="hljs-string">"选项3"</span>], [<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>]) %&gt;
+
+<span class="hljs-comment">// 使用相同的文本和值</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>]) %&gt;
+
+<span class="hljs-comment">// 带有占位符</span>
+&lt;% tp.system.suggester([<span class="hljs-string">"选项1"</span>, <span class="hljs-string">"选项2"</span>, <span class="hljs-string">"选项3"</span>], [<span class="hljs-string">"值1"</span>, <span class="hljs-string">"值2"</span>, <span class="hljs-string">"值3"</span>], <span class="hljs-literal">false</span>, <span class="hljs-string">"请选择一个选项"</span>) %&gt;
+</code></pre>
+<p>System模块包含与系统交互相关的函数，例如复制到剪贴板、显示提示或创建建议器。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/system-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/system-module.html#tpsystemclipboard"><code>tp.system.clipboard()</code></a></li>
+<li><a href="internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></li>
+<li><a href="internal-functions/internal-modules/system-module.html#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/system-module.html#%E7%A4%BA%E4%BE%8B-3">示例</a></li>
+</ul>
+<h2 id="文档-5"><a class="header" href="#文档-5">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tpsystemclipboard"><a class="header" href="#tpsystemclipboard"><code>tp.system.clipboard()</code></a></h3>
+<p>返回剪贴板的内容。</p>
+<h5 id="示例-28"><a class="header" href="#示例-28">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.clipboard() %&gt;
+</code></pre>
+<h3 id="tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><a class="header" href="#tpsystempromptprompt_text-default_value-throw_on_cancel-multiline"><code>tp.system.prompt(prompt_text, default_value, throw_on_cancel, multiline)</code></a></h3>
+<p>显示一个提示窗口，要求用户输入内容。</p>
+<h5 id="参数-17"><a class="header" href="#参数-17">参数</a></h5>
+<ul>
+<li><code>prompt_text</code>: 显示给用户的提示文本。</li>
+<li><code>default_value</code>: 提示中的默认值。默认为空字符串。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消提示时抛出错误。默认为false。</li>
+<li><code>multiline</code>: 如果为true，显示多行输入框。默认为false。</li>
+</ul>
+<h5 id="示例-29"><a class="header" href="#示例-29">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
+
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
+
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
+</code></pre>
+<h3 id="tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><a class="header" href="#tpsystemsuggestertext_items-items-throw_on_cancel-placeholder-limit"><code>tp.system.suggester(text_items, items, throw_on_cancel, placeholder, limit)</code></a></h3>
+<p>显示一个带有自动完成功能的建议器，让用户从列表中选择一个项目。</p>
+<h5 id="参数-18"><a class="header" href="#参数-18">参数</a></h5>
+<ul>
+<li><code>text_items</code>: 要向用户显示的文本项目数组。</li>
+<li><code>items</code>: 选择相应文本项目时返回的值数组。默认为<code>text_items</code>。</li>
+<li><code>throw_on_cancel</code>: 如果为true，当用户取消建议器时抛出错误。默认为false。</li>
+<li><code>placeholder</code>: 建议器的占位符文本。默认为空字符串。</li>
+<li><code>limit</code>: 要显示的项目数量限制。默认为无限制。</li>
+</ul>
+<h5 id="示例-30"><a class="header" href="#示例-30">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
+</code></pre>
+<h2 id="示例-31"><a class="header" href="#示例-31">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.system.clipboard() %&gt;
+
+// 基本用法
+&lt;% tp.system.prompt("请输入文本") %&gt;
+
+// 带默认值
+&lt;% tp.system.prompt("请输入文本", "默认值") %&gt;
+
+// 多行输入
+&lt;% tp.system.prompt("请输入多行文本", "", false, true) %&gt;
+
+// 基本用法
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"]) %&gt;
+
+// 使用相同的文本和值
+&lt;% tp.system.suggester(["值1", "值2", "值3"]) %&gt;
+
+// 带有占位符
+&lt;% tp.system.suggester(["选项1", "选项2", "选项3"], ["值1", "值2", "值3"], false, "请选择一个选项") %&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="web模块"><a class="header" href="#web模块">Web模块</a></h1>
+<p>Web模块提供与网络资源交互的功能，允许您获取网页内容或生成URL。</p>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code class="hljs">tp.web.daily_quote()</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-string-query-string-include_size-boolean"><code class="hljs">tp.web.random_picture(size?: string, query?: string, include_size?: boolean)</code></a></li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrequesturl-string-path-string"><code class="hljs">tp.web.request(url: string, path?: string)</code></a></li>
+</ul>
+</li>
+<li><a href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-3">示例</a></li>
+</ul>
+<h2 id="文档"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E6%96%87%E6%A1%A3">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://fjie.github.io/Templater/zh/syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">此处</a>。</p>
+<h3 id="tpwebdaily_quote"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
+<p>从https://api.quotable.io/random获取每日名言。</p>
+<h5 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.web.daily_quote() %&gt;
+</code></pre>
+<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
+<p>从Unsplash获取随机图片。</p>
+<h5 id="参数"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E5%8F%82%E6%95%B0">参数</a></h5>
+<ul>
+<li><code class="hljs">size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
+<li><code class="hljs">query</code>: 搜索查询，以获取特定类型的图片。</li>
+<li><code class="hljs">provider</code>: 提供商，目前只支持"unsplash"。</li>
+</ul>
+<h5 id="示例-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-1">示例</a></h5>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.web.random_picture() %&gt;
+
+<span class="hljs-comment">// 指定尺寸</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
+
+<span class="hljs-comment">// 使用查询</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"nature"</span>) %&gt;
+</code></pre>
+<h2 id="示例-2"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-2">示例</a></h2>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.web.daily_quote() %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.web.random_picture() %&gt;
+
+<span class="hljs-comment">// 指定尺寸</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
+
+<span class="hljs-comment">// 使用查询</span>
+&lt;% tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"nature"</span>) %&gt;
+</code></pre>
+<h3 id="tpwebrequesturl-string-path-string"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#tpwebrequesturl-string-path-string"><code>tp.web.request(url: string, path?: string)</code></a></h3>
+<p>向指定的 URL 发送 HTTP 请求。此外，您还可以指定路径，以便从响应中提取特定数据。</p>
+<h5 id="arguments-1"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#arguments-1">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">url</code>: 将向该 URL 发起 HTTP 请求。</p>
+</li>
+<li>
+<p><code class="hljs">path</code>: 响应 JSON 中用于提取特定数据的路径。</p>
+</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Simple request</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos/1"</span>) %&gt;
+<span class="hljs-comment">// Request with path</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos"</span>, <span class="hljs-string">"0.title"</span>) %&gt;
+</code></pre>
+<h2 id="examples-3"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/internal-modules/web-module.html#examples-3">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Daily quote</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.daily_quote() %&gt;
+
+<span class="hljs-comment">// Random picture</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture() %&gt;
+<span class="hljs-comment">// Random picture with size</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture(<span class="hljs-string">"200x200"</span>) %&gt;
+<span class="hljs-comment">// Random picture with size and query</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.random_picture(<span class="hljs-string">"200x200"</span>, <span class="hljs-string">"landscape,water"</span>) %&gt;
+
+<span class="hljs-comment">// Simple request</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos/1"</span>) %&gt;
+<span class="hljs-comment">// Request with path</span>
+&lt;% <span class="hljs-keyword">await</span> tp.web.request(<span class="hljs-string">"https://jsonplaceholder.typicode.com/todos"</span>, <span class="hljs-string">"0.title"</span>) %&gt;
+</code></pre>
+<p>Web模块提供与网络资源交互的功能，允许您获取网页内容或生成URL。</p>
+<ul>
+<li><a href="internal-functions/internal-modules/web-module.html#%E6%96%87%E6%A1%A3">文档</a>
+<ul>
+<li><a href="internal-functions/internal-modules/web-module.html#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></li>
+<li><a href="internal-functions/internal-modules/web-module.html#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></li>
+</ul>
+</li>
+<li><a href="internal-functions/internal-modules/web-module.html#%E7%A4%BA%E4%BE%8B-2">示例</a></li>
+</ul>
+<h2 id="文档-6"><a class="header" href="#文档-6">文档</a></h2>
+<p>函数文档使用特定语法。更多信息<a href="internal-functions/internal-modules/../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
+<h3 id="tpwebdaily_quote"><a class="header" href="#tpwebdaily_quote"><code>tp.web.daily_quote()</code></a></h3>
+<p>从https://api.quotable.io/random获取每日名言。</p>
+<h5 id="示例-32"><a class="header" href="#示例-32">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.web.daily_quote() %&gt;
+</code></pre>
+<h3 id="tpwebrandom_picturesize-query-provider"><a class="header" href="#tpwebrandom_picturesize-query-provider"><code>tp.web.random_picture(size, query, provider)</code></a></h3>
+<p>从Unsplash获取随机图片。</p>
+<h5 id="参数-19"><a class="header" href="#参数-19">参数</a></h5>
+<ul>
+<li><code>size</code>: 图片尺寸，格式为"宽度x高度"，例如"200x300"。</li>
+<li><code>query</code>: 搜索查询，以获取特定类型的图片。</li>
+<li><code>provider</code>: 提供商，目前只支持"unsplash"。</li>
+</ul>
+<h5 id="示例-33"><a class="header" href="#示例-33">示例</a></h5>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.web.random_picture() %&gt;
+
+// 指定尺寸
+&lt;% tp.web.random_picture("200x200") %&gt;
+
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
+</code></pre>
+<h2 id="示例-34"><a class="header" href="#示例-34">示例</a></h2>
+<pre><code class="language-javascript">// 基本用法
+&lt;% tp.web.daily_quote() %&gt;
+
+// 基本用法
+&lt;% tp.web.random_picture() %&gt;
+
+// 指定尺寸
+&lt;% tp.web.random_picture("200x200") %&gt;
+
+// 使用查询
+&lt;% tp.web.random_picture("200x200", "nature") %&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="贡献-1"><a class="header" href="#贡献-1">贡献</a></h1>
+<p>您可以通过开发新的内部函数/变量来为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献。</p>
+<p>开发新功能的过程非常简单。</p>
+<p>请记住，只有相关的提交才会被接受，不要提交只有您自己会使用的非常特定的内部变量/函数。</p>
+<h2 id="布局"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/contribute.html#%E5%B8%83%E5%B1%80">布局</a></h2>
+<p>内部变量/函数按模块分类。每个模块在<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates">src/InternalTemplates</a>下都有专门的文件夹。</p>
+<p>让我们以<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates/date">date模块</a>为例。</p>
+<p>它包含一个<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/date/InternalModuleDate.ts">InternalModuleDate</a>文件，其中定义并注册了所有与日期相关的内部变量和函数：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-typescript hljs"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> InternalModuleDate <span class="hljs-keyword">extends</span> InternalModule {
+    name = <span class="hljs-string">"date"</span>;
+
+    <span class="hljs-keyword">async</span> createStaticTemplates() {
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"now"</span>, <span class="hljs-built_in">this</span>.generate_now());
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"tomorrow"</span>, <span class="hljs-built_in">this</span>.generate_tomorrow());
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"yesterday"</span>, <span class="hljs-built_in">this</span>.generate_yesterday());
+    }
+
+    <span class="hljs-keyword">async</span> updateTemplates() {}
+
+    generate_now() {
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span>, offset?: <span class="hljs-built_in">number</span>, reference?: <span class="hljs-built_in">string</span>, reference_format?: <span class="hljs-built_in">string</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span> (reference &amp;&amp; !<span class="hljs-built_in">window</span>.moment(reference, reference_format).isValid()) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Invalid title date format, try specifying one with the argument 'reference'"</span>);
+            }
+            <span class="hljs-keyword">return</span> get_date_string(format, offset, reference, reference_format);
+        }
+    }
+
+    generate_tomorrow() {
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> get_date_string(format, <span class="hljs-number">1</span>);
+        }
+    }
+
+    generate_yesterday() {
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> get_date_string(format, <span class="hljs-number">-1</span>);
+        }
+    }
+}
+</code></pre>
+<p>每个模块都继承自<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/InternalModule.ts">InternalModule</a>抽象类，这意味着它们包含以下属性和方法：</p>
+<ul>
+<li><code class="hljs">this.app</code>属性：Obsidian API的<code class="hljs">App</code>对象。</li>
+<li><code class="hljs">this.file</code>属性：模板将被插入的目标文件。</li>
+<li><code class="hljs">this.plugin</code>属性：Templater插件对象。</li>
+<li><code class="hljs">this.static_templates</code>属性：包含所有静态(名称；变量/函数)的映射。静态变量/函数意味着它在执行时不依赖于文件。每次插入新模板时，这类变量/函数不会更新，以节省开销。</li>
+<li><code class="hljs">this.dynamic_templates</code>属性：与<code class="hljs">static_templates</code>相同，只是它包含执行时依赖于文件的变量/函数。</li>
+<li><code class="hljs">this.createStaticTemplates()</code>方法：注册该模块的所有静态内置变量/函数。</li>
+<li><code class="hljs">this.updateTemplates()</code>方法：注册该模块的所有动态内置变量/函数。</li>
+</ul>
+<p>如果需要，您可以在新的内置变量/函数中使用这些属性。</p>
+<h2 id="注册新的内置变量函数"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/contribute.html#%E6%B3%A8%E5%86%8C%E6%96%B0%E7%9A%84%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F%E5%87%BD%E6%95%B0">注册新的内部变量/函数</a></h2>
+<p>以下是注册模块中新内置变量/函数的不同步骤。</p>
+<p><strong>第一步:</strong>在模块内创建一个名为<code class="hljs">generate_&lt;内置变量或函数名&gt;()</code>的方法，该方法将生成您的内置变量/函数，这意味着它将返回lambda函数（表示内置函数）或直接返回您想要暴露的内置变量。</p>
+<p>所有生成方法按照内置变量/函数名称的字母顺序排序。</p>
+<p>尝试为您的变量/函数提供一个好的、自解释的名称。</p>
+<p><strong>第二步:</strong>
+根据您的内置变量/函数在执行时是否依赖于文件，在<code class="hljs">static_templates</code>或<code class="hljs">dynamic_templates</code>映射中注册它。注册发生在<code class="hljs">createStaticTemplates</code>或<code class="hljs">updateTemplates</code>中。</p>
+<p>要注册您的变量/函数，请使用您之前定义的<code class="hljs">this.generate_&lt;内置变量或函数名&gt;()</code>方法：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-typescript hljs"><span class="hljs-built_in">this</span>.static_templates.set(&lt;内置变量或函数名&gt;, <span class="hljs-built_in">this</span>.generate_&lt;内置变量或函数名&gt;());
+或
+<span class="hljs-built_in">this</span>.dynamic_templates.set(&lt;内置变量或函数名&gt;, <span class="hljs-built_in">this</span>.generate_&lt;内置变量或函数名&gt;());
+</code></pre>
+<p>内置变量/函数注册也按变量/函数名称的字母顺序排序。</p>
+<p><strong>第三步:</strong>将您的内置变量/函数文档添加到Templater的<a href="https://github.com/SilentVoid13/Templater/tree/master/docs/docs/internal-variables-functions/internal-modules">文档</a>中。</p>
+<p>完成了！感谢您为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献！</p>
+<p>现在，只需在Github上提交一个<a href="https://github.com/SilentVoid13/Templater/pulls">拉取请求</a>，我会尽可能快地做出反应。</p>
+<p>您可以通过开发新的内置函数/变量来为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献。</p>
+<p>开发新功能的过程非常简单。</p>
+<p>请记住，只有相关的提交才会被接受，不要提交只有您自己会使用的非常特定的内置变量/函数。</p>
+<h2 id="布局"><a class="header" href="#布局">布局</a></h2>
+<p>内置变量/函数按模块分类。每个模块在<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates">src/InternalTemplates</a>下都有专门的文件夹。</p>
+<p>让我们以<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates/date">date模块</a>为例。</p>
+<p>它包含一个<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/date/InternalModuleDate.ts">InternalModuleDate</a>文件，其中定义并注册了所有与日期相关的内置变量和函数：</p>
+<pre><code class="language-typescript">export class InternalModuleDate extends InternalModule {
+    name = "date";
+
+    async createStaticTemplates() {
+        this.static_templates.set("now", this.generate_now());
+        this.static_templates.set("tomorrow", this.generate_tomorrow());
+        this.static_templates.set("yesterday", this.generate_yesterday());
+    }
+
+    async updateTemplates() {}
+
+    generate_now() {
+        return (format: string = "YYYY-MM-DD", offset?: number, reference?: string, reference_format?: string) =&gt; {
+            if (reference &amp;&amp; !window.moment(reference, reference_format).isValid()) {
+                throw new Error("Invalid title date format, try specifying one with the argument 'reference'");
+            }
+            return get_date_string(format, offset, reference, reference_format);
+        }
+    }
+
+    generate_tomorrow() {
+        return (format: string = "YYYY-MM-DD") =&gt; {
+            return get_date_string(format, 1);
+        }
+    }
+
+    generate_yesterday() {
+        return (format: string = "YYYY-MM-DD") =&gt; {
+            return get_date_string(format, -1);
+        }
+    }
+}
+</code></pre>
+<p>每个模块都继承自<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/InternalModule.ts">InternalModule</a>抽象类，这意味着它们包含以下属性和方法：</p>
+<ul>
+<li><code>this.app</code>属性：Obsidian API的<code>App</code>对象。</li>
+<li><code>this.file</code>属性：模板将被插入的目标文件。</li>
+<li><code>this.plugin</code>属性：Templater插件对象。</li>
+<li><code>this.static_templates</code>属性：包含所有静态(名称；变量/函数)的映射。静态变量/函数意味着它在执行时不依赖于文件。每次插入新模板时，这类变量/函数不会更新，以节省开销。</li>
+<li><code>this.dynamic_templates</code>属性：与<code>static_templates</code>相同，只是它包含执行时依赖于文件的变量/函数。</li>
+<li><code>this.createStaticTemplates()</code>方法：注册该模块的所有静态内置变量/函数。</li>
+<li><code>this.updateTemplates()</code>方法：注册该模块的所有动态内置变量/函数。</li>
+</ul>
+<p>如果需要，您可以在新的内置变量/函数中使用这些属性。</p>
+<h2 id="注册新的内置变量函数"><a class="header" href="#注册新的内置变量函数">注册新的内置变量/函数</a></h2>
+<p>以下是注册模块中新内置变量/函数的不同步骤。</p>
+<p>**第1步：**在模块内创建一个名为<code>generate_&lt;内置变量或函数名&gt;()</code>的方法，该方法将生成您的内置变量/函数，这意味着它将返回lambda函数（表示内置函数）或直接返回您想要暴露的内置变量。</p>
+<p>所有生成方法按照内置变量/函数名称的字母顺序排序。</p>
+<p>尝试为您的变量/函数提供一个好的、自解释的名称。</p>
+<p>**第2步：**根据您的内置变量/函数在执行时是否依赖于文件，在<code>static_templates</code>或<code>dynamic_templates</code>映射中注册它。注册发生在<code>createStaticTemplates</code>或<code>updateTemplates</code>中。</p>
+<p>要注册您的变量/函数，请使用您之前定义的<code>this.generate_&lt;内置变量或函数名&gt;()</code>方法：</p>
+<pre><code class="language-typescript">this.static_templates.set(&lt;内置变量或函数名&gt;, this.generate_&lt;内置变量或函数名&gt;());
+或
+this.dynamic_templates.set(&lt;内置变量或函数名&gt;, this.generate_&lt;内置变量或函数名&gt;());
+</code></pre>
+<p>内置变量/函数注册也按变量/函数名称的字母顺序排序。</p>
+<p>**第3步：**将您的内置变量/函数文档添加到Templater的<a href="https://github.com/SilentVoid13/Templater/tree/master/docs/docs/internal-variables-functions/internal-modules">文档</a>中。</p>
+<p>完成了！感谢您为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献！</p>
+<p>现在，只需在Github上提交一个<a href="https://github.com/SilentVoid13/Templater/pulls">拉取请求</a>，我会尽可能快地做出反应。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="用户函数"><a class="header" href="#用户函数">用户函数</a></h1>
+<p>您可以在Templater中定义自己的函数。</p>
+<p>您可以使用两种类型的用户函数：</p>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html">脚本用户函数</a></li>
+<li><a href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html">系统命令用户函数</a></li>
+</ul>
+<h2 id="调用用户函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/overview.html#%E8%B0%83%E7%94%A8%E7%94%A8%E6%88%B7%E5%87%BD%E6%95%B0">调用用户函数</a></h2>
+<p>您可以使用常规的函数调用语法调用用户函数：<code class="hljs">tp.user.&lt;用户函数名&gt;()</code>，其中<code class="hljs">&lt;用户函数名&gt;</code>是您定义的函数名。</p>
+<p>例如，如果您定义了一个名为<code class="hljs">echo</code>的系统命令用户函数，完整的命令调用将如下所示：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-js hljs javascript">&lt;% tp.user.echo() %&gt;
+</code></pre>
+<h2 id="无移动端支持"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/overview.html#%E6%97%A0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%94%AF%E6%8C%81">无移动端支持</a></h2>
+<p>目前，用户函数在Obsidian移动版上不可用。</p>
+<p>您可以在Templater中定义自己的函数。</p>
+<p>您可以使用两种类型的用户函数：</p>
+<ul>
+<li><a href="user-functions/./script-user-functions.html">脚本用户函数</a></li>
+<li><a href="user-functions/./system-user-functions.html">系统命令用户函数</a></li>
+</ul>
+<h2 id="调用用户函数"><a class="header" href="#调用用户函数">调用用户函数</a></h2>
+<p>您可以使用常规的函数调用语法调用用户函数：<code>tp.user.&lt;用户函数名&gt;()</code>，其中<code>&lt;用户函数名&gt;</code>是您定义的函数名。</p>
+<p>例如，如果您定义了一个名为<code>echo</code>的系统命令用户函数，完整的命令调用将如下所示：</p>
+<pre><code class="language-js">&lt;% tp.user.echo() %&gt;
+</code></pre>
+<h2 id="无移动端支持"><a class="header" href="#无移动端支持">无移动端支持</a></h2>
+<p>目前，用户函数在Obsidian移动版上不可用。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="脚本用户函数"><a class="header" href="#脚本用户函数">脚本用户函数</a></h1>
+<p>这种类型的用户函数允许您从JavaScript文件中调用JavaScript函数并获取其输出结果。</p>
+<p>要使用脚本用户函数，您需要在Templater的设置中指定一个脚本文件夹。该文件夹必须能在您的保管库找到。</p>
+<h2 id="定义脚本用户函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%AE%9A%E4%B9%89%E8%84%9A%E6%9C%AC%E7%94%A8%E6%88%B7%E5%87%BD%E6%95%B0">定义脚本用户函数</a></h2>
+<p>假设您在Templater的设置中将<code class="hljs">Scripts</code>文件夹指定为脚本文件夹。</p>
+<p>Templater将加载<code class="hljs">Scripts</code>文件夹中的所有JavaScript（<code class="hljs">.js</code>文件）脚本。</p>
+<p>然后您可以创建名为<code class="hljs">Scripts/my_script.js</code>的脚本（需要<code class="hljs">.js</code>扩展名）。您可能需要在Obsidian外部创建该文件，因为Obsidian只创建markdown(.md)文件。</p>
+<p>然后您将能够将您的脚本作为用户函数调用。函数名是对应的脚本文件名。</p>
+<p>脚本应遵循<a href="https://flaviocopes.com/commonjs/">CommonJS模块规范</a>，并导出单个函数。</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">my_function</span> (<span class="hljs-params">msg</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`来自我的脚本的消息: <span class="hljs-subst">${msg}</span>`</span>;
+}
+<span class="hljs-built_in">module</span>.exports = my_function;
+</code></pre>
+<p>在此示例中，完整的命令调用如下所示：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">&lt;% tp.user.my_script(<span class="hljs-string">"Hello World!"</span>) %&gt;
+</code></pre>
+<p>这将输出<code class="hljs">来自我的脚本的消息: Hello World!</code>。</p>
+<h2 id="全局命名空间"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%85%A8%E5%B1%80%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4">全局命名空间</a></h2>
+<p>在脚本用户函数中，您仍然可以访问全局命名空间变量，如<code class="hljs">app</code>或<code class="hljs">moment</code>。</p>
+<p>但是，您不能访问模板引擎作用域变量，如<code class="hljs">tp</code>或<code class="hljs">tR</code>。如果您想使用它们，必须将它们作为参数传递给您的函数。</p>
+<h2 id="函数参数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0">函数参数</a></h2>
+<p>您可以根据函数的定义方式向函数传递任意数量的参数。</p>
+<p>例如，您可以将<code class="hljs">tp</code>对象传递给您的函数，以便能够使用Templater的所有<a href="https://fjie.github.io/Templater/zh/internal-functions/overview.html">内部变量/函数</a>：<code class="hljs">&lt;% tp.user.&lt;用户函数名&gt;(tp) %&gt;</code></p>
+<h2 id="用户脚本文档"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC%E6%96%87%E6%A1%A3">用户脚本文档</a></h2>
+<p>您可以选择使用<a href="https://tsdoc.org/">TSDoc标准</a>在方法文件的<strong>顶部</strong>记录脚本的功能。如果使用该功能，这将为您的用户脚本提供类似intellisense(智能感知)的体验，类似于其他templater函数的体验。</p>
+<h3 id="带文档的用户脚本示例"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%B8%A6%E6%96%87%E6%A1%A3%E7%9A%84%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B">带文档的用户脚本示例</a></h3>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">/**
+ * 这会做一些很酷的事情
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doSomething</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'完成了某事'</span>)
+}
+
+<span class="hljs-built_in">module</span>.exports = doSomething;
+</code></pre>
+<p>这种类型的用户函数允许您从JavaScript文件中调用JavaScript函数并获取其输出。</p>
+<p>要使用脚本用户函数，您需要在Templater的设置中指定一个脚本文件夹。该文件夹需要可以从您的保管库访问。</p>
+<h2 id="定义脚本用户函数"><a class="header" href="#定义脚本用户函数">定义脚本用户函数</a></h2>
+<p>假设您在Templater的设置中将<code>Scripts</code>文件夹指定为脚本文件夹。</p>
+<p>Templater将加载<code>Scripts</code>文件夹中的所有JavaScript（<code>.js</code>文件）脚本。</p>
+<p>然后您可以创建名为<code>Scripts/my_script.js</code>的脚本（需要<code>.js</code>扩展名）。您可能需要在Obsidian外部创建该文件，因为Obsidian只创建markdown文件。</p>
+<p>然后您将能够将您的脚本作为用户函数调用。函数名对应于脚本文件名。</p>
+<p>脚本应遵循<a href="https://flaviocopes.com/commonjs/">CommonJS模块规范</a>，并导出单个函数。</p>
+<pre><code class="language-javascript">function my_function (msg) {
+    return `来自我的脚本的消息: ${msg}`;
+}
+module.exports = my_function;
+</code></pre>
+<p>在此示例中，完整的命令调用如下所示：</p>
+<pre><code class="language-javascript">&lt;% tp.user.my_script("Hello World!") %&gt;
+</code></pre>
+<p>这将输出<code>来自我的脚本的消息: Hello World!</code>。</p>
+<h2 id="全局命名空间"><a class="header" href="#全局命名空间">全局命名空间</a></h2>
+<p>在脚本用户函数中，您仍然可以访问全局命名空间变量，如<code>app</code>或<code>moment</code>。</p>
+<p>但是，您不能访问模板引擎作用域变量，如<code>tp</code>或<code>tR</code>。如果您想使用它们，必须将它们作为参数传递给您的函数。</p>
+<h2 id="函数参数"><a class="header" href="#函数参数">函数参数</a></h2>
+<p>您可以根据函数的定义方式向函数传递任意数量的参数。</p>
+<p>例如，您可以将<code>tp</code>对象传递给您的函数，以便能够使用Templater的所有<a href="user-functions/../internal-functions/overview.html">内置变量/函数</a>：<code>&lt;% tp.user.&lt;用户函数名&gt;(tp) %&gt;</code></p>
+<h2 id="用户脚本文档"><a class="header" href="#用户脚本文档">用户脚本文档</a></h2>
+<p>您可以选择使用<a href="https://tsdoc.org/">TSDoc标准</a>在方法文件的<strong>顶部</strong>记录脚本的功能。如果提供，这将为您的用户脚本提供类似intellisense的体验，类似于其他templater函数的体验。</p>
+<h3 id="带文档的用户脚本示例"><a class="header" href="#带文档的用户脚本示例">带文档的用户脚本示例</a></h3>
+<pre><code class="language-javascript">/**
+ * 这会做一些很酷的事情
+ */
+function doSomething() {
+    console.log('完成了某事')
+}
+
+module.exports = doSomething;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="系统命令用户函数"><a class="header" href="#系统命令用户函数">系统命令用户函数</a></h1>
+<p>这种类型的用户函数允许您执行系统命令并获取其输出结果。</p>
+<p>系统命令用户函数需要在Templater的设置中启用。</p>
+<h2 id="定义系统命令用户函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E7%94%A8%E6%88%B7%E5%87%BD%E6%95%B0">定义系统命令用户函数</a></h2>
+<p>要定义新的系统命令用户函数，您需要定义一个<strong>函数名</strong>，并与<strong>系统命令</strong>关联。</p>
+<p>为此，请转到插件设置并点击<code class="hljs">Add User Function</code>添加用户函数。</p>
+<p>完成后，<a href="https://github.com/SilentVoid13/Templater">Templater</a>将创建一个以您定义的名称命名的用户函数，该函数将执行您的系统命令并返回其输出。</p>
+<p>与内部函数一样，用户函数在<code class="hljs">tp</code> JavaScript对象下可用，更具体地说是在<code class="hljs">tp.user</code>对象下。</p>
+<p><img src="./系统命令 - Templater_files/templater_user_templates.png" alt="用户模板"></p>
+<h2 id="函数参数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0">函数参数</a></h2>
+<p>您可以向用户函数传递可选参数。它们必须作为单个JavaScript对象传递，该对象包含属性及其对应的值：<code class="hljs">{arg1: value1, arg2: value2, ...}</code>。</p>
+<p>这些参数将以<a href="https://en.wikipedia.org/wiki/Environment_variable">环境变量</a>的形式提供给您的程序/脚本。</p>
+<p>在我们之前的示例中，这将生成以下命令声明：<code class="hljs">&lt;% tp.user.echo({a: "值 1", b: "值 2"})&gt;</code>。</p>
+<p>如果我们的系统命令调用bash脚本，我们将能够使用<code class="hljs">$a</code>和<code class="hljs">$b</code>访问变量<code class="hljs">a</code>和<code class="hljs">b</code>。</p>
+<h2 id="系统命令中的内置函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E4%B8%AD%E7%9A%84%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0">系统命令中的内部函数</a></h2>
+<p>您可以在系统命令中使用内部函数。这些内部函数将在系统命令执行前被替换。</p>
+<p>例如，如果您配置了系统命令<code class="hljs">cat &lt;% tp.file.path() %&gt;</code>，在系统命令执行前，该表达式将被替换为<code class="hljs">cat /path/to/file</code>。</p>
+<p>这种类型的用户函数允许您执行系统命令并获取其输出。</p>
+<p>系统命令用户函数需要在Templater的设置中启用。</p>
+<h2 id="定义系统命令用户函数"><a class="header" href="#定义系统命令用户函数">定义系统命令用户函数</a></h2>
+<p>要定义新的系统命令用户函数，您需要定义一个<strong>函数名</strong>，并与<strong>系统命令</strong>关联。</p>
+<p>为此，请转到插件设置并点击<code>添加用户函数</code>。</p>
+<p>完成后，<a href="https://github.com/SilentVoid13/Templater">Templater</a>将创建一个以您定义的名称命名的用户函数，该函数将执行您的系统命令并返回其输出。</p>
+<p>与内置函数一样，用户函数在<code>tp</code> JavaScript对象下可用，更具体地说是在<code>tp.user</code>对象下。</p>
+<p><img src="user-functions/../imgs/templater_user_templates.png" alt="用户模板" /></p>
+<h2 id="函数参数-1"><a class="header" href="#函数参数-1">函数参数</a></h2>
+<p>您可以向用户函数传递可选参数。它们必须作为单个JavaScript对象传递，该对象包含属性及其对应的值：<code>{arg1: value1, arg2: value2, ...}</code>。</p>
+<p>这些参数将以<a href="https://en.wikipedia.org/wiki/Environment_variable">环境变量</a>的形式提供给您的程序/脚本。</p>
+<p>在我们之前的示例中，这将给出以下命令声明：<code>&lt;% tp.user.echo({a: "值 1", b: "值 2"})&gt;</code>。</p>
+<p>如果我们的系统命令调用bash脚本，我们将能够使用<code>$a</code>和<code>$b</code>访问变量<code>a</code>和<code>b</code>。</p>
+<h2 id="系统命令中的内置函数"><a class="header" href="#系统命令中的内置函数">系统命令中的内置函数</a></h2>
+<p>您可以在系统命令中使用内置函数。内置函数将在系统命令执行前被替换。</p>
+<p>例如，如果您配置了系统命令<code>cat &lt;% tp.file.path() %&gt;</code>，在系统命令执行前，它将被替换为<code>cat /path/to/file</code>。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="命令"><a class="header" href="#命令">命令</a></h1>
+<h2 id="命令类型"><a class="header" href="https://fjie.github.io/Templater/zh/commands/overview.html#%E5%91%BD%E4%BB%A4%E7%B1%BB%E5%9E%8B">命令类型</a></h2>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 定义了两种开始标签，它们定义了两种<strong>命令</strong>：</p>
+<ul>
+<li><code class="hljs">&lt;%</code>: 插值命令。它将输出其中表达式的结果。</li>
+<li><code class="hljs">&lt;%*</code>: <a href="https://fjie.github.io/Templater/zh/commands/execution-command.html">JavaScript执行命令</a>。它将执行其中的JavaScript代码。默认情况下不输出任何内容。</li>
+</ul>
+<p>两种命令的结束标签都使用：<code class="hljs">%&gt;</code></p>
+<h2 id="命令工具"><a class="header" href="https://fjie.github.io/Templater/zh/commands/overview.html#%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7">命令工具</a></h2>
+<p>除了不同类型的命令外，您还可以使用命令工具。它们也在命令的开始标签中声明。所有命令工具适用于所有命令类型。可用的命令工具有：</p>
+<ul>
+<li><a href="https://fjie.github.io/Templater/zh/commands/whitespace-control.html">空白控制</a></li>
+<li><a href="https://fjie.github.io/Templater/zh/commands/dynamic-command.html">动态命令</a></li>
+</ul>
+<h2 id="命令类型"><a class="header" href="#命令类型">命令类型</a></h2>
+<p><a href="https://github.com/SilentVoid13/Templater">Templater</a> 定义了2种开始标签，它们定义了2种<strong>命令</strong>：</p>
+<ul>
+<li><code>&lt;%</code>: 插值命令。它将输出其中表达式的结果。</li>
+<li><code>&lt;%*</code>: <a href="commands/./execution-command.html">JavaScript执行命令</a>。它将执行其中的JavaScript代码。默认情况下不输出任何内容。</li>
+</ul>
+<p>命令的结束标签始终相同：<code>%&gt;</code></p>
+<h2 id="命令工具"><a class="header" href="#命令工具">命令工具</a></h2>
+<p>除了不同类型的命令外，您还可以使用命令工具。它们也在命令的开始标签中声明。所有命令工具适用于所有命令类型。可用的命令工具有：</p>
+<ul>
+<li><a href="commands/./whitespace-control.html">空白控制</a></li>
+<li><a href="commands/./dynamic-command.html">动态命令</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="动态命令"><a class="header" href="#动态命令">动态命令</a></h1>
+<p>通过这个命令工具，您可以将命令声明为"动态的"，这意味着此命令将在进入预览模式时解析。</p>
+<p>要声明动态命令，请在命令开始标签后添加加号<code class="hljs">+</code>如：<code class="hljs">&lt;%+</code></p>
+<p>这样，您的命令现在将只在预览模式下执行。</p>
+<p>这对于像<code class="hljs">tp.file.last_modified_date</code>这样的内置函数很有用，例如：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">最后修改日期：&lt;%+ tp.file.last_modified_date() %&gt;
+</code></pre>
+<p><strong>注意</strong>：动态命令存在已知问题，并且可能不会在未来继续维护（有关更多详细信息，请参阅<a href="https://github.com/SilentVoid13/Templater/issues/913">此问题</a>）。在大多数情况下，建议使用<a href="https://github.com/blacksmithgu/obsidian-dataview">Dataview</a>插件作为替代方案。</p>
+<h2 id="刷新问题"><a class="header" href="https://fjie.github.io/Templater/zh/commands/dynamic-command.html#%E5%88%B7%E6%96%B0%E9%97%AE%E9%A2%98">刷新问题</a></h2>
+<p>预览模式的一个“缺点”是，为了加快速度，它会将渲染后的笔记保存在缓存中。</p>
+<p>这意味着您的动态命令将只在您打开笔记时渲染一次，但之后不会刷新。</p>
+<p>如果您想刷新它，必须关闭笔记以清除缓存，然后再次打开它。</p>
+<p>通过这个命令工具，您可以将命令声明为"动态的"，这意味着此命令将在进入预览模式时解析。</p>
+<p>要声明动态命令，请在命令开始标签后添加加号<code>+</code>：<code>&lt;%+</code></p>
+<p>就是这样，您的命令现在将只在预览模式下执行。</p>
+<p>这对于像<code>tp.file.last_modified_date</code>这样的内置函数很有用，例如：</p>
+<pre><code class="language-javascript">最后修改日期：&lt;%+ tp.file.last_modified_date() %&gt;
+</code></pre>
+<p><strong>注意</strong>：动态命令存在已知问题，并且可能不会在未来继续维护（有关更多详细信息，请参阅<a href="https://github.com/SilentVoid13/Templater/issues/913">此问题</a>）。在大多数情况下，建议使用<a href="https://github.com/blacksmithgu/obsidian-dataview">Dataview</a>插件作为替代方案。</p>
+<h2 id="刷新问题"><a class="header" href="#刷新问题">刷新问题</a></h2>
+<p>预览模式的一个"缺点"是它将渲染后的笔记放入缓存中，以加快速度。</p>
+<p>这意味着您的动态命令将只在您打开笔记时渲染一次，但之后不会刷新。</p>
+<p>如果您想刷新它，必须关闭笔记以清除缓存，然后再次打开它。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="javascript执行命令"><a class="header" href="#javascript执行命令">JavaScript执行命令</a></h1>
+<p>这种类型的命令允许我们执行JavaScript代码。</p>
+<p>通过JavaScript执行命令，我们几乎可以做JavaScript允许我们做的所有事情。下面给出了一些示例。</p>
+<p>我们仍然可以从这种类型的命令中访问<code class="hljs">tp</code>对象和所有内部变量/函数。</p>
+<p>JavaScript执行命令允许您访问全局命名空间变量。这意味着您可以访问诸如<code class="hljs">app</code>或<code class="hljs">moment</code>之类的内容。</p>
+<h2 id="异步函数"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0">异步函数</a></h2>
+<p>某些内部函数是异步的。在JavaScript执行命令中调用此类函数时，如有必要，不要忘记使用<code class="hljs">await</code>关键字。</p>
+<h2 id="如何从javascript执行命令输出值"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%A6%82%E4%BD%95%E4%BB%8Ejavascript%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%BE%93%E5%87%BA%E5%80%BC">如何从JavaScript执行命令输出值？</a></h2>
+<p>有时，您可能希望在使用JS执行命令时输出某些内容。</p>
+<p>当我们的模板引擎使用所有命令结果生成替换字符串时，该字符串会被存储在名为<code class="hljs">tR</code>的变量中。这个字符串将包含处理后的文件内容。您可以从JS执行命令访问该变量。</p>
+<p>这意味着，要从JS执行命令输出内容，您只需要将要输出的内容附加到那个<code class="hljs">tR</code>字符串变量中。</p>
+<p>例如，以下命令：<code class="hljs">&lt;%* tR += "测试" %&gt;</code>将输出<code class="hljs">测试</code>。</p><p>您还可以覆盖 <code class="hljs">tR</code> 变量，以忽略模板引擎截至该点生成的所有内容。如果您希望在模板中包含前置信息或其他内容，但不希望在应用模板时插入这些内容，此方法会很有用。</p>
+<p>例如，以下模板:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+type: template
+---
+This is a person template.
+
+&lt;%* tR = "" -%&gt;
+---
+type: person
+---
+# &lt;% tp.file.cursor() %&gt;
+</code></pre>
+<p>将会输出:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+type: person
+---
+# 
+</code></pre>
+<h3 id="建议器和提示"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%BB%BA%E8%AE%AE%E5%99%A8%E5%92%8C%E6%8F%90%E7%A4%BA">建议器和提示</a></h3>
+<p>重要的是要注意<code class="hljs">tp.system.prompt()</code>和<code class="hljs">tp.system.suggester()</code>都需要<code class="hljs">await</code>语句才能将值保存到变量中</p>
+<h2 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E7%A4%BA%E4%BE%8B">示例</a></h2>
+<p>以下是使用JavaScript执行命令可以做的一些事情的示例：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">&lt;%* <span class="hljs-keyword">if</span> (tp.file.title.startsWith(<span class="hljs-string">"Hello"</span>)) { %&gt;
+这是一个hello文件！
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
+这是一个普通文件！
+&lt;%* } %&gt;
+    
+&lt;%* <span class="hljs-keyword">if</span> (tp.frontmatter.type === <span class="hljs-string">"seedling"</span>) { %&gt;
+这是一个seedling文件！
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
+这是一个普通文件！
+&lt;%* } %&gt;
+    
+&lt;%* <span class="hljs-keyword">if</span> (tp.file.tags.contains(<span class="hljs-string">"#todo"</span>)) { %&gt;
+这是一个待办事项文件！
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
+这是一个已完成文件！
+&lt;%* } %&gt;
+
+&lt;%*
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">msg</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(msg);
+}
+%&gt;
+&lt;%* log(<span class="hljs-string">"标题: "</span> + tp.file.title) %&gt;
+    
+&lt;%* tR += tp.file.content.replace(<span class="hljs-regexp">/stuff/</span>, <span class="hljs-string">"things"</span>); %&gt;
+</code></pre>
+<p>这种类型的命令允许我们执行JavaScript代码。</p>
+<p>通过JavaScript执行命令，我们几乎可以做JavaScript允许我们做的所有事情。下面给出了一些示例。</p>
+<p>我们仍然可以从这种类型的命令中访问<code>tp</code>对象和所有内置变量/函数。</p>
+<p>JavaScript执行命令允许您访问全局命名空间变量。这意味着您可以访问诸如<code>app</code>或<code>moment</code>之类的内容。</p>
+<h2 id="异步函数"><a class="header" href="#异步函数">异步函数</a></h2>
+<p>某些内置函数是异步的。在JavaScript执行命令中调用此类函数时，如有必要，不要忘记使用<code>await</code>关键字。</p>
+<h2 id="如何从javascript执行命令输出值"><a class="header" href="#如何从javascript执行命令输出值">如何从JavaScript执行命令输出值？</a></h2>
+<p>有时，您可能希望在使用JS执行命令时输出某些内容。</p>
+<p>当我们的模板引擎使用所有命令结果生成替换字符串时，它存储在名为<code>tR</code>的变量中。这个字符串将包含处理后的文件内容。您可以从JS执行命令访问该变量。</p>
+<p>这意味着，要从JS执行命令输出内容，您只需要将要输出的内容附加到<code>tR</code>字符串变量上。</p>
+<p>例如，以下命令：<code>&lt;%* tR += "测试" %&gt;</code>将输出<code>测试</code>。</p>
+<h3 id="建议器和提示"><a class="header" href="#建议器和提示">建议器和提示</a></h3>
+<p>重要的是要注意<code>tp.system.prompt()</code>和<code>tp.system.suggester()</code>都需要<code>await</code>语句才能将值保存到变量中</p>
+<h2 id="示例-35"><a class="header" href="#示例-35">示例</a></h2>
+<p>以下是使用JavaScript执行命令可以做的一些事情的示例：</p>
+<pre><code class="language-javascript">&lt;%* if (tp.file.title.startsWith("Hello")) { %&gt;
+这是一个hello文件！
+&lt;%* } else { %&gt;
+这是一个普通文件！
+&lt;%* } %&gt;
+    
+&lt;%* if (tp.frontmatter.type === "seedling") { %&gt;
+这是一个seedling文件！
+&lt;%* } else { %&gt;
+这是一个普通文件！
+&lt;%* } %&gt;
+    
+&lt;%* if (tp.file.tags.contains("#todo")) { %&gt;
+这是一个待办事项文件！
+&lt;%* } else { %&gt;
+这是一个已完成文件！
+&lt;%* } %&gt;
+
+&lt;%*
+function log(msg) {
+	console.log(msg);
+}
+%&gt;
+&lt;%* log("标题: " + tp.file.title) %&gt;
+    
+&lt;%* tR += tp.file.content.replace(/stuff/, "things"); %&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="空白控制"><a class="header" href="#空白控制">空白控制</a></h1>
+<p>默认情况下，Templater中的<strong>命令</strong>不会删除任何换行符。命令被替换为它们的值，仅此而已。</p>
+<p>有时候在插入命令后控制一些空白(空格)非常有用，此命令工具正是为此而设计的。</p>
+<p>让我们看一个例子。以下模板：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;%* if (tp.file.title == "MyFile" ) { %&gt;
+这是我的文件！
+&lt;%* } else { %&gt;
+这不是我的文件！
+&lt;%* } %&gt;
+一些内容...
+</code></pre>
+<p>如果条件为假（当条件为真时也一样），将产生以下输出，注意空行：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">
+这不是我的文件！
+
+一些内容...
+</code></pre>
+<p>您可能想要删除由<strong>执行命令</strong>产生的空行，这些命令不会产生任何输出。</p>
+<p>空白控制有一种特定的语法：</p>
+<ul>
+<li><strong>开始标签</strong>后跟一个下划线<code class="hljs">_</code>（<code class="hljs">&lt;%_</code>）将删除命令<strong>之前</strong>的<strong>所有</strong>空格</li>
+<li><strong>结束标签</strong>前添一个下划线<code class="hljs">_</code>（<code class="hljs">_%&gt;</code>）将删除命令<strong>之后</strong>的<strong>所有</strong>空格</li>
+<li><strong>开始标签</strong>后跟一个短横杠(减号)<code class="hljs">-</code>（<code class="hljs">&lt;%-</code>）将删除命令<strong>之前</strong>的<strong>一个</strong>换行符</li>
+<li><strong>结束标签</strong>前添一个短横杠(减号)<code class="hljs">-</code>（<code class="hljs">-%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>一个</strong>换行符</li>
+</ul>
+<p>在我们的例子中，要修复我们的模板以删除空行，我们将使用以下模板（注意标签末尾的减号<code class="hljs">-</code>），以删除执行命令<strong>之后</strong>的空行：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;%* if (tp.file.title == "MyFile" ) { -%&gt;
+这是我的文件！
+&lt;%* } else { -%&gt;
+这不是我的文件！
+&lt;%* } -%&gt;
+一些内容...
+</code></pre>
+<p>这将产生以下输出：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">这不是我的文件！
+一些内容...
+</code></pre>
+<p>默认情况下，Templater中的<strong>命令</strong>不会删除任何换行符。命令被替换为它们的值，仅此而已。</p>
+<p>有时候在插入命令后控制一些空白非常有用，这正是此命令工具提供的功能。</p>
+<p>让我们看一个例子。以下模板：</p>
+<pre><code>&lt;%* if (tp.file.title == "MyFile" ) { %&gt;
+这是我的文件！
+&lt;%* } else { %&gt;
+这不是我的文件！
+&lt;%* } %&gt;
+一些内容...
+</code></pre>
+<p>如果条件为假（当条件为真时也一样），将产生以下输出，注意空行：</p>
+<pre><code>
+这不是我的文件！
+
+一些内容...
+</code></pre>
+<p>您可能想要删除由<strong>执行命令</strong>产生的空行，这些命令不会产生任何输出。</p>
+<p>空白控制有一种特定的语法：</p>
+<ul>
+<li>标签<strong>开头</strong>的下划线<code>_</code>（<code>&lt;%_</code>）将修剪命令<strong>之前</strong>的<strong>所有</strong>空白</li>
+<li>标签<strong>结尾</strong>的下划线<code>_</code>（<code>_%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>所有</strong>空白</li>
+<li>标签<strong>开头</strong>的破折号<code>-</code>（<code>&lt;%-</code>）将修剪命令<strong>之前</strong>的<strong>一个</strong>换行符</li>
+<li>标签<strong>结尾</strong>的破折号<code>-</code>（<code>-%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>一个</strong>换行符</li>
+</ul>
+<p>在我们的例子中，要修复我们的模板以删除空行，我们将使用以下模板（注意标签末尾的破折号<code>-</code>），以删除执行命令<strong>之后</strong>的空行：</p>
+<pre><code>&lt;%* if (tp.file.title == "MyFile" ) { -%&gt;
+这是我的文件！
+&lt;%* } else { -%&gt;
+这不是我的文件！
+&lt;%* } -%&gt;
+一些内容...
+</code></pre>
+<p>这将产生以下输出：</p>
+<pre><code>这不是我的文件！
+一些内容...
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
