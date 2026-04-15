@@ -156,22 +156,22 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="系统命令用户函数"><a class="header" href="#系统命令用户函数">系统命令用户函数</a></h1>
-<p>这种类型的用户函数允许您执行系统命令并获取其输出。</p>
+<p>这种类型的用户函数允许您执行系统命令并获取其输出结果。</p>
 <p>系统命令用户函数需要在Templater的设置中启用。</p>
-<h2 id="定义系统命令用户函数"><a class="header" href="#定义系统命令用户函数">定义系统命令用户函数</a></h2>
+<h2 id="定义系统命令用户函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E7%94%A8%E6%88%B7%E5%87%BD%E6%95%B0">定义系统命令用户函数</a></h2>
 <p>要定义新的系统命令用户函数，您需要定义一个<strong>函数名</strong>，并与<strong>系统命令</strong>关联。</p>
-<p>为此，请转到插件设置并点击<code>添加用户函数</code>。</p>
+<p>为此，请转到插件设置并点击<code class="hljs">Add User Function</code>添加用户函数。</p>
 <p>完成后，<a href="https://github.com/SilentVoid13/Templater">Templater</a>将创建一个以您定义的名称命名的用户函数，该函数将执行您的系统命令并返回其输出。</p>
-<p>与内置函数一样，用户函数在<code>tp</code> JavaScript对象下可用，更具体地说是在<code>tp.user</code>对象下。</p>
-<p><img src="../imgs/templater_user_templates.png" alt="用户模板" /></p>
-<h2 id="函数参数"><a class="header" href="#函数参数">函数参数</a></h2>
-<p>您可以向用户函数传递可选参数。它们必须作为单个JavaScript对象传递，该对象包含属性及其对应的值：<code>{arg1: value1, arg2: value2, ...}</code>。</p>
+<p>与内部函数一样，用户函数在<code class="hljs">tp</code> JavaScript对象下可用，更具体地说是在<code class="hljs">tp.user</code>对象下。</p>
+<p><img src="./系统命令 - Templater_files/templater_user_templates.png" alt="用户模板"></p>
+<h2 id="函数参数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0">函数参数</a></h2>
+<p>您可以向用户函数传递可选参数。它们必须作为单个JavaScript对象传递，该对象包含属性及其对应的值：<code class="hljs">{arg1: value1, arg2: value2, ...}</code>。</p>
 <p>这些参数将以<a href="https://en.wikipedia.org/wiki/Environment_variable">环境变量</a>的形式提供给您的程序/脚本。</p>
-<p>在我们之前的示例中，这将给出以下命令声明：<code>&lt;% tp.user.echo({a: "值 1", b: "值 2"})&gt;</code>。</p>
-<p>如果我们的系统命令调用bash脚本，我们将能够使用<code>$a</code>和<code>$b</code>访问变量<code>a</code>和<code>b</code>。</p>
-<h2 id="系统命令中的内置函数"><a class="header" href="#系统命令中的内置函数">系统命令中的内置函数</a></h2>
-<p>您可以在系统命令中使用内置函数。内置函数将在系统命令执行前被替换。</p>
-<p>例如，如果您配置了系统命令<code>cat &lt;% tp.file.path() %&gt;</code>，在系统命令执行前，它将被替换为<code>cat /path/to/file</code>。</p>
+<p>在我们之前的示例中，这将生成以下命令声明：<code class="hljs">&lt;% tp.user.echo({a: "值 1", b: "值 2"})&gt;</code>。</p>
+<p>如果我们的系统命令调用bash脚本，我们将能够使用<code class="hljs">$a</code>和<code class="hljs">$b</code>访问变量<code class="hljs">a</code>和<code class="hljs">b</code>。</p>
+<h2 id="系统命令中的内置函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/system-user-functions.html#%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4%E4%B8%AD%E7%9A%84%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0">系统命令中的内部函数</a></h2>
+<p>您可以在系统命令中使用内部函数。这些内部函数将在系统命令执行前被替换。</p>
+<p>例如，如果您配置了系统命令<code class="hljs">cat &lt;% tp.file.path() %&gt;</code>，在系统命令执行前，该表达式将被替换为<code class="hljs">cat /path/to/file</code>。</p>
 
                     </main>
 
