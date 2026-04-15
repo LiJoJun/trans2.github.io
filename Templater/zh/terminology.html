@@ -156,27 +156,23 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="术语"><a class="header" href="#术语">术语</a></h1>
-<p>在Templater中，我们使用以下术语：</p>
+<p>为了理解 <a href="https://github.com/SilentVoid13/Templater">Templater</a> 的工作原理, 我们先第一几个术语</p>
 <ul>
-<li>
-<p><strong>命令</strong>：一个由开始标签<code>&lt;%</code>和结束标签<code>%&gt;</code>包围的代码块，例如<code>&lt;% tp.date.now() %&gt;</code>。命令是用户与Templater交互的基本方式。</p>
-</li>
-<li>
-<p><strong>内置函数</strong>：Templater预定义的函数，用于执行特定任务，如<code>tp.date.now()</code>、<code>tp.file.title</code>等。这些函数按功能分组到不同的模块中。</p>
-</li>
-<li>
-<p><strong>用户函数</strong>：用户自定义的函数，可以是JavaScript脚本或系统命令。</p>
-</li>
-<li>
-<p><strong>变量</strong>：存储值的容器，如<code>tp</code>（Templater的主对象）或<code>tR</code>（模板结果）。</p>
-</li>
+<li>一个包含 <strong><a href="https://silentvoid13.github.io/Templater/commands/overview.html">commands</a></strong> 的文件 <strong>模板</strong> 。</li>
+<li>以开始标签 <code class="hljs">&lt;%</code> 开头、以结束标签 <code class="hljs">%&gt;</code> 结尾的文本片段，我们将称之为 <strong><a href="https://silentvoid13.github.io/Templater/commands/overview.html">命令</a></strong>。</li>
+<li><strong>函数</strong> 是一种对象，它可以在 <strong>命令</strong> 中被我们调用，并返回一个值(用于替换的字符串)</li>
 </ul>
-<h3 id="示例"><a class="header" href="#示例">示例</a></h3>
-<p>以下模板包含2个命令，调用2个不同的内置函数：</p>
-<pre><code>昨天: &lt;% tp.date.yesterday("YYYY-MM-DD") %&gt;
-明天: &lt;% tp.date.tomorrow("YYYY-MM-DD") %&gt;
+<p>你可以使用的函数分为两种类型:</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/overview.html">内部函数</a>。它们是插件内部内置的 <strong>预定义</strong> 函数。例如， <code class="hljs">tp.date.now</code> 是一个内部函数，它将返回当前日期。</li>
+<li><a href="https://silentvoid13.github.io/Templater/user-functions/overview.html">用户函数</a>。用户可以定义自己的函数。这些函数可以是<a href="https://silentvoid13.github.io/Templater/user-functions/system-user-functions.html">系统命令</a> 或 <a href="https://silentvoid13.github.io/Templater/user-functions/script-user-functions.html">用户脚本</a>。</li>
+</ul>
+<h3 id="example"><a class="header" href="https://silentvoid13.github.io/Templater/terminology.html#example">示例</a></h3>
+<p>以下模板包含2个命令，调用2个不同的内部函数:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">Yesterday: &lt;% tp.date.yesterday("YYYY-MM-DD") %&gt;
+Tomorrow: &lt;% tp.date.tomorrow("YYYY-MM-DD") %&gt;
 </code></pre>
-<p>我们将在下一部分看到编写命令所需的语法。</p>
+<p>我们将在下一部分看到编写一些命令所需的语法。</p>
 
                     </main>
 
