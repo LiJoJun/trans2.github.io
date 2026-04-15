@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>tp.file - Templater</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Templater</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="file-module"><a class="header" href="#file模块">File 模块</a></h1>
+<p>File模块包含与当前文件和文件系统相关的函数和属性。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecontent"><code class="hljs">tp.file.content</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><code class="hljs">tp.file.create_new(template: TFile | string, filename: string = 'Untitled', open_new: boolean = false, folder?: TFolder | string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code class="hljs">tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursororder-number"><code class="hljs">tp.file.cursor(order?: number)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent-string"><code class="hljs">tp.file.cursor_append(content: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileexistsfilepath-string"><code class="hljs">tp.file.exists(filepath: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename-string"><code class="hljs">tp.file.find_tfile(filename: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefolderabsolute-boolean--false"><code class="hljs">tp.file.folder(absolute: boolean = false)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link-string--tfile"><code class="hljs">tp.file.include(include_link: string | TFile)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code class="hljs">tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilemovenew_path-string-file_to_move-tfile"><code class="hljs">tp.file.move(new_path: string, file_to_move?: TFile)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilepathrelative-boolean--false"><code class="hljs">tp.file.path(relative: boolean = false)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilerenamenew_title-string"><code class="hljs">tp.file.rename(new_title: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileselection"><code class="hljs">tp.file.selection()</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletags"><code class="hljs">tp.file.tags</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletitle"><code class="hljs">tp.file.title</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-16">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#documentation">文档</a></h2>
+<p>函数文档采用特定的语法。详见参见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">此处</a>。</p>
+<h3 id="tpfilecontent"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecontent"><code>tp.file.content</code></a></h3>
+<p>以字符串格式返回当前文件的全部内容。 修改此字符串 <em>不会</em> 反馈到当前文件。</p>
+<h5 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Retrieve file content</span>
+&lt;% tp.file.content %&gt;
+</code></pre>
+<h3 id="tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreate_newtemplate-tfile--string-filename-string--untitled-open_new-boolean--false-folder-tfolder--string"><code>tp.file.create_new(template: TFile | string, filename: string = 'Untitled', open_new: boolean = false, folder?: TFolder | string)</code></a></h3>
+<p>使用指定的模板创建一个新文件。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments">Arguments</a></h5>
+<ul>
+<li><code class="hljs">template</code>: 要使用的模板路径（相对于模板文件夹）。</li>
+<li><code class="hljs">filename</code>: 新文件的文件名。</li>
+<li><code class="hljs">open_new</code>: 创建后是否打开新文件。默认为true。</li>
+<li><code class="hljs">folder</code>: 存放新文件的目标文件夹（相对于保险库根目录）。可以使用<code class="hljs">"PATH/TO/FOLDERNAME"</code> 或 <code class="hljs">tp.app.vault.getAbstractFileByPath("PATH/TO/FOLDERNAME")</code>指定。默认为当前文件所在文件夹。</li>
+<p></p>
+</ul>
+<h5 id="examples-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-1">Examples</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File creation</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>) %&gt;
+<span class="hljs-comment">// File creation with template</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(tp.file.find_tfile(<span class="hljs-string">"MyTemplate"</span>), <span class="hljs-string">"MyFilename"</span>) %&gt;
+<span class="hljs-comment">// File creation and open created note</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">true</span>) %&gt;
+<span class="hljs-comment">// File creation in current folder</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, tp.file.folder(<span class="hljs-literal">true</span>)) %&gt;
+<span class="hljs-comment">// File creation in specified folder with string path</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, <span class="hljs-string">"Path/To/MyFolder"</span>) %&gt;
+<span class="hljs-comment">// File creation in specified folder with TFolder</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>, <span class="hljs-literal">false</span>, tp.app.vault.getAbstractFileByPath(<span class="hljs-string">"MyFolder"</span>)) %&gt;
+<span class="hljs-comment">// File creation and append link to current note</span>
+[[&lt;% (<span class="hljs-keyword">await</span> tp.file.create_new(<span class="hljs-string">"MyFileContent"</span>, <span class="hljs-string">"MyFilename"</span>)).basename %&gt;]]
+</code></pre>
+<h3 id="tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecreation_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.creation_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
+<p>获取文件的创建日期。</p>
+<h5 id="arguments-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-1">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File creation date</span>
+&lt;% tp.file.creation_date() %&gt;
+<span class="hljs-comment">// File creation date with format</span>
+&lt;% tp.file.creation_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilecursororder-number"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursororder-number"><code>tp.file.cursor(order?: number)</code></a></h3>
+<p>在插入模板后，将光标定位到此处。
+</p>
+<p>可以通过在 Obsidian 设置中配置的快捷键在不同的光标之间切换。</p>
+<h5 id="arguments-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-2">参数</a></h5>
+<ul>
+<li><code class="hljs">order</code>: 决定光标放置的顺序（如果有多个光标）。默认为1。如果你指定了多个具有相同顺序的 tp.file.cursor，编辑器将切换到多光标模式。</li>
+</ul>
+<h5 id="examples-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-3">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File cursor</span>
+&lt;% tp.file.cursor() %&gt;
+<span class="hljs-comment">// File multi-cursor</span>
+&lt;% tp.file.cursor(<span class="hljs-number">1</span>) %&gt;Content&lt;% tp.file.cursor(<span class="hljs-number">1</span>) %&gt;
+</code></pre>
+<h3 id="tpfilecursor_appendcontent-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilecursor_appendcontent-string"><code>tp.file.cursor_append(content: string)</code></a></h3>
+<p>在光标位置追加内容。</p>
+<h5 id="arguments-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-3">参数</a></h5>
+<ul>
+<li><code class="hljs">content</code>: 要追加的内容。</li>
+</ul>
+<h5 id="examples-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-4">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File cursor append</span>
+&lt;% tp.file.cursor_append(<span class="hljs-string">"Some text"</span>) %&gt;
+</code></pre>
+<h3 id="tpfileexistsfilepath-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileexistsfilepath-string"><code>tp.file.exists(filepath: string)</code></a></h3>
+<p>通过文件路径检查文件是否存在。必须提供文件的完整路径，该路径应以 Vault 为基准，并包含文件扩展名。</p>
+<h5 id="arguments-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-4">参数</a></h5>
+<ul>
+<li><code class="hljs">filepath</code>: The full file path of the file we want to check existence for.</li>
+</ul>
+<h5 id="examples-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-5">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File existence</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.exists(<span class="hljs-string">"MyFolder/MyFile.md"</span>) %&gt;
+<span class="hljs-comment">// File existence of current file</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.exists(tp.file.folder(<span class="hljs-literal">true</span>) + <span class="hljs-string">"/"</span> + tp.file.title + <span class="hljs-string">".md"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilefind_tfilefilename-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefind_tfilefilename-string"><code>tp.file.find_tfile(filename: string)</code></a></h3>
+<p>通过名称查找一个<code class="hljs">TFile</code> 对象。</p>
+<h5 id="arguments-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-5">参数</a></h5>
+<ul>
+<li><code class="hljs">filename</code>: 文件名（绝对路径或相对于保险库根目录的路径）。</li>
+</ul>
+<h5 id="examples-6"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-6">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File find TFile</span>
+&lt;% tp.file.find_tfile(<span class="hljs-string">"MyFile"</span>).basename %&gt;
+</code></pre>
+<h3 id="tpfilefolderabsolute-boolean--false"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilefolderabsolute-boolean--false"><code>tp.file.folder(absolute: boolean = false)</code></a></h3>
+<p>获取文件所在的文件路径。</p>
+<h5 id="arguments-6"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-6">参数</a></h5>
+<ul>
+<li><code class="hljs">absolute</code>: 参数输入 <code class="hljs">true</code>，则返回相对于保险库根目录的路径。 输入 <code class="hljs">false</code>，则返回路径的最后一部分。默认为 <code class="hljs">false</code>。</li>
+</ul>
+<h5 id="examples-7"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-7">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File folder (Folder)</span>
+&lt;% tp.file.folder() %&gt;
+<span class="hljs-comment">// File folder with vault-absolute path (Path/To/Folder)</span>
+&lt;% tp.file.folder(<span class="hljs-literal">true</span>) %&gt;
+</code></pre>
+<h3 id="tpfileincludeinclude_link-string--tfile"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileincludeinclude_link-string--tfile"><code>tp.file.include(include_link: string | TFile)</code></a></h3>
+<p>包含另一个文件的内容。</p>
+<h5 id="arguments-7"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-7">参数</a></h5>
+<ul>
+<li><code class="hljs">include_link</code>: 要包含的文件的链接（可以是文件名、相对路径或Wiki链接）。 例如 <code class="hljs">"[[MyFile]]"</code>，或一个 TFile 对象，同时也支持章节或代码块。</li>
+</ul>
+<h5 id="examples-8"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-8">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File include</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[Template1]]"</span>) %&gt;
+<span class="hljs-comment">// File include TFile</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(tp.file.find_tfile(<span class="hljs-string">"MyFile"</span>)) %&gt;
+<span class="hljs-comment">// File include section</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[MyFile#Section1]]"</span>) %&gt;
+<span class="hljs-comment">// File include block</span>
+&lt;% <span class="hljs-keyword">await</span> tp.file.include(<span class="hljs-string">"[[MyFile#^block1]]"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilelast_modified_dateformat-string--yyyy-mm-dd-hhmm"><code>tp.file.last_modified_date(format: string = "YYYY-MM-DD HH:mm")</code></a></h3>
+<p>获取文件的最后修改日期。</p>
+<h5 id="arguments-8"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-8">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+</ul>
+<h5 id="examples-9"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-9">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File last modified date</span>
+&lt;% tp.file.last_modified_date() %&gt;
+<span class="hljs-comment">// File last modified date with format</span>
+&lt;% tp.file.last_modified_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilemovenew_path-string-file_to_move-tfile"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilemovenew_path-string-file_to_move-tfile"><code>tp.file.move(new_path: string, file_to_move?: TFile)</code></a></h3>
+<p>将文件移动到新位置。</p>
+<h5 id="arguments-9"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-9">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">new_path</code>该文件在存储库中的新相对路径（不包含文件扩展名）。注意：新路径必须包含文件夹和文件名，例如：<code class="hljs">"/Notes/MyNote"</code>。</p>
+</li>
+<li>
+<p><code class="hljs">file_to_move</code>: 要移动的文件（TFile对象）。如果未提供，默认移动当前文件。</p>
+</li>
+</ul>
+<h5 id="examples-10"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-10">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File move</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.move(<span class="hljs-string">"/A/B/"</span> + tp.file.title) %&gt;
+<span class="hljs-comment">// File move and rename</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.move(<span class="hljs-string">"/A/B/NewTitle"</span>) %&gt;
+</code></pre>
+<h3 id="tpfilepathrelative-boolean--false"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilepathrelative-boolean--false"><code>tp.file.path(relative: boolean = false)</code></a></h3>
+<p>获取该文件的路径。</p>
+<h5 id="arguments-10"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-10">参数</a></h5>
+<ul>
+<li><code class="hljs">relative</code>: 该参数如果输入<code class="hljs">true</code>，则返回相对于保险库根目录的路径。默认为false。</li>
+</ul>
+<h5 id="examples-11"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-11">Examples</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File path</span>
+&lt;% tp.file.path() %&gt;
+<span class="hljs-comment">// File relative path (relative to vault root)</span>
+&lt;% tp.file.path(<span class="hljs-literal">true</span>) %&gt;
+</code></pre>
+<h3 id="tpfilerenamenew_title-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfilerenamenew_title-string"><code>tp.file.rename(new_title: string)</code></a></h3>
+<p>重命名当前文件(扩展名不变)。</p>
+<h5 id="arguments-11"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#arguments-11">参数</a></h5>
+<ul>
+<li><code class="hljs">new_title</code>: 新文件名。</li>
+</ul>
+<h5 id="examples-12"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-12">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File rename</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.rename(<span class="hljs-string">"MyNewName"</span>) %&gt;
+<span class="hljs-comment">// 在原文件名后加个2</span>
+&lt;%* <span class="hljs-keyword">await</span> tp.file.rename(tp.file.title + <span class="hljs-string">"2"</span>) %&gt;
+</code></pre>
+<h3 id="tpfileselection"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfileselection"><code>tp.file.selection()</code></a></h3>
+<p>返回当前选择的文本。</p>
+<h5 id="examples-13"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-13">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File selection</span>
+&lt;% tp.file.selection() %&gt;
+</code></pre>
+<h3 id="tpfiletags"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletags"><code>tp.file.tags</code></a></h3>
+<p>返回文件的标签列表(以数组或字符串形式)</p>
+<h5 id="examples-14"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-14">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File tags</span>
+&lt;% tp.file.tags %&gt;
+</code></pre>
+<h3 id="tpfiletitle"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#tpfiletitle"><code>tp.file.title</code></a></h3>
+<p>获取当前文件的标题（不带扩展名）。</p>
+<h5 id="examples-15"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-15">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// File title</span>
+&lt;% tp.file.title %&gt;
+<span class="hljs-comment">// Strip the Zettelkasten ID of title (if space separated)</span>
+&lt;% tp.file.title.split(<span class="hljs-string">" "</span>)[<span class="hljs-number">1</span>] %&gt;
+</code></pre>
+<h2 id="examples-16"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/file-module.html#examples-16">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.creation_date() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.file.creation_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.cursor() %&gt;
+
+<span class="hljs-comment">// 指定顺序</span>
+&lt;% tp.file.cursor(<span class="hljs-number">2</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.cursor_append(<span class="hljs-string">"追加的内容"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.exists(<span class="hljs-string">"MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 使用绝对路径</span>
+&lt;% tp.file.exists(<span class="hljs-string">"C:\\Path\\To\\MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.find_tfile(<span class="hljs-string">"MyFile.md"</span>) %&gt;
+
+<span class="hljs-comment">// 绝对路径</span>
+&lt;% tp.file.folder() %&gt;
+
+<span class="hljs-comment">// 相对路径</span>
+&lt;% tp.file.folder(<span class="hljs-literal">true</span>) %&gt;
+
+<span class="hljs-comment">// 使用文件名</span>
+&lt;% tp.file.include(<span class="hljs-string">"MyFile"</span>) %&gt;
+
+<span class="hljs-comment">// 使用Wiki链接</span>
+&lt;% tp.file.include(<span class="hljs-string">"[[MyFile]]"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.last_modified_date() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.file.last_modified_date(<span class="hljs-string">"dddd Do MMMM YYYY HH:mm"</span>) %&gt;
+
+<span class="hljs-comment">// 移动当前文件</span>
+&lt;% tp.file.move(<span class="hljs-string">"target_folder/new_name"</span>) %&gt;
+
+<span class="hljs-comment">// 移动指定文件</span>
+&lt;% tp.file.move(<span class="hljs-string">"target_folder/new_name"</span>, tp.file.find_tfile(<span class="hljs-string">"MyFile.md"</span>)) %&gt;
+
+<span class="hljs-comment">// 绝对路径</span>
+&lt;% tp.file.path() %&gt;
+
+<span class="hljs-comment">// 相对路径</span>
+&lt;% tp.file.path(<span class="hljs-literal">true</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.rename(<span class="hljs-string">"新文件名"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.selection() %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.tags %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.title %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>) %&gt;
+
+<span class="hljs-comment">// 不打开新文件</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">false</span>) %&gt;
+
+<span class="hljs-comment">// 指定目标文件夹（即保险库根目录下的"target_folder"文件夹）</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">"target_folder"</span>) %&gt;
+
+<span class="hljs-comment">// 指定目标文件夹（当前文件所在文件夹的子文件夹"target_folder"）</span>
+&lt;% tp.file.create_new(<span class="hljs-string">"my_template"</span>, <span class="hljs-string">"MyFile"</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">"./target_folder"</span>) %&gt;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../internal-functions/internal-modules/date-module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../internal-functions/internal-modules/frontmatter-module.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../internal-functions/internal-modules/date-module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../internal-functions/internal-modules/frontmatter-module.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>tp.date - Templater</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Templater</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="date-module"><a class="header" href="#date模块">Date 模块</a></h1>
+<p>该模块包含与日期时间相关的函数。</p>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a>
+<ul>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code class="hljs">tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code class="hljs">tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code class="hljs">tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code class="hljs">tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></li>
+</ul>
+</li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></li>
+</ul>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#documentation">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">syntax 文档</a>。</p>
+<h3 id="tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatenowformat-string--yyyy-mm-dd-offset-number--string-reference-string-reference_format-string"><code>tp.date.now(format: string = "YYYY-MM-DD", offset?: number | string, reference?: string, reference_format?: string)</code></a></h3>
+<p>返回日期。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments">参数</a></h5>
+<ul>
+<li>
+<p><code class="hljs">format</code>: 按照此参数的格式，设定输出日期的格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
+<li>
+<p><code class="hljs">offset</code>: 日期偏移量(可以是正数或负数)，输入的数字将以天为单位加(负数等效为减)在参考日期上。 你还可以输入按照 ISO 8601 格式输入字符串。</p>
+</li>
+<li>
+<p><code class="hljs">reference</code>: 参考日期，默认为今天日期。你也可以把文件名作为参考日期。</p>
+</li>
+<li>
+<p><code class="hljs">reference_format</code>: 参考日期的格式。详见 <a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考</a>。</p>
+</li>
+</ul>
+<h5 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按照默认格式返回今天的日期</span></span>
+&lt;% tp.date.now() %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回今天的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周前(七天前)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一周后(七天后)的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一个月前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P-1M"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回一年后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-string"><span class="hljs-string">"P1Y"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天后的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按照设定的格式返回文件名为参考日期一天前的日期</span></span>
+&lt;% tp.date.now(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-1</span></span>, tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdatetomorrowformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdatetomorrowformat-string--yyyy-mm-dd"><code>tp.date.tomorrow(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回明天的日期。</p>
+<h5 id="arguments-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-1">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
+</ul>
+<h5 id="examples-1"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-1">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// Date tomorrow</span></span>
+&lt;% tp.date.tomorrow() %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// Date tomorrow with format</span></span>
+&lt;% tp.date.tomorrow(<span class="hljs-string"><span class="hljs-string">"Do MMMM YYYY"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateweekdayformat-string--yyyy-mm-dd-weekday-number-reference-string-reference_format-string"><code>tp.date.weekday(format: string = "YYYY-MM-DD", weekday: number, reference?: string, reference_format?: string)</code></a></h3><p>返回特定的日期。</p>
+<h5 id="arguments-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-2">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为"YYYY-MM-DD"。</li>
+<li><code class="hljs">weekday</code>: 工作日的数字(0-6，0表示星期日)。默认为1(星期一)。</li>
+<li><code class="hljs">reference</code>: 参考日期，找到参考日期所在的周，根据
+<code class="hljs">weekday</code>
+确定是星期几的日期。默认为今天。</li>
+<li><code class="hljs">reference_format</code>: 参考日期的输入格式。默认为null。</li>
+</ul>
+<h5 id="examples-2"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-2">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出本周星期一的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下周星期天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">7</span></span>) %&gt;
+<span class="hljs-comment">// 按设定格式输出参考日期所在周的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">1</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按格式输出参考日期所在周的上周天的日期</span></span>
+&lt;% tp.date.weekday(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>, <span class="hljs-number"><span class="hljs-number">-7</span></span>, "2021-04-09", <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h3 id="tpdateyesterdayformat-string--yyyy-mm-dd"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#tpdateyesterdayformat-string--yyyy-mm-dd"><code>tp.date.yesterday(format: string = "YYYY-MM-DD")</code></a></h3>
+<p>只能返回昨天的日期。</p>
+<h5 id="arguments-3"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#arguments-3">参数</a></h5>
+<ul>
+<li><code class="hljs">format</code>: 日期的输出格式。默认为: <code class="hljs">"YYYY-MM-DD"</code>。详见<a href="https://momentjs.com/docs/#/displaying/format/">Momentjs 格式参考文档</a>。</li>
+</ul>
+<h5 id="examples-3"><h5 id="示例-3"><a class="header" href="file:///D:/Download/edgedownload/Templater-ZH/tp.date%20-%20Templater.html#%E7%A4%BA%E4%BE%8B-3">示例</a></h5></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.yesterday() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+</code></pre>
+<h2 id="momentjs"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#momentjs">Moment.js</a></h2>
+<p>Templater 允许你访问 <code class="hljs">moment</code>对象，并使用该对象的所有功能。</p>
+<p>详见 moment.js <a href="https://momentjs.com/docs/#/displaying/">文档</a>.</p>
+<h5 id="examples-4"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-4">示例</a></h5>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出文件名(如果文件以日期命名)</span></span>
+&lt;% moment(tp.file.title, <span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).startOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出当月的最后一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).endOf(<span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+<span class="hljs-comment"><span class="hljs-comment">// 按设定格式输出下个月的第一天的日期</span></span>
+&lt;% moment(<span class="hljs-string"><span class="hljs-string"></span></span>).add(<span class="hljs-number">1</span>, <span class="hljs-string"><span class="hljs-string">"month"</span></span>).format(<span class="hljs-string"><span class="hljs-string">"YYYY-MM-DD"</span></span>) %&gt;
+</code></pre>
+<h2 id="examples-5"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/date-module.html#examples-5">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.now() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+
+<span class="hljs-comment">// 带偏移量</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">7</span>) %&gt;
+
+<span class="hljs-comment">// 使用参考日期</span>
+&lt;% tp.date.now(<span class="hljs-string">"dddd Do MMMM YYYY"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
+
+<span class="hljs-comment">// 使用参考日期和格式</span>
+&lt;% tp.date.now(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法（默认星期一）</span>
+&lt;% tp.date.weekday() %&gt;
+
+<span class="hljs-comment">// 星期三</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">3</span>) %&gt;
+
+<span class="hljs-comment">// 从参考日期开始的星期一</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"2021-04-09"</span>) %&gt;
+
+<span class="hljs-comment">// 从参考日期开始的星期天</span>
+&lt;% tp.date.weekday(<span class="hljs-string">"YYYY-MM-DD"</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"2021-04-09"</span>, <span class="hljs-string">"YYYY-MM-DD"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.yesterday() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.yesterday(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+
+<span class="hljs-comment">// 基本用法</span>
+&lt;% tp.date.tomorrow() %&gt;
+
+<span class="hljs-comment">// 自定义格式</span>
+&lt;% tp.date.tomorrow(<span class="hljs-string">"Do MMMM YYYY"</span>) %&gt;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../internal-functions/internal-modules/config-module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../internal-functions/internal-modules/file-module.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../internal-functions/internal-modules/config-module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../internal-functions/internal-modules/file-module.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
