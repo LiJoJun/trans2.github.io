@@ -157,9 +157,9 @@
                     <main>
                         <h1 id="空白控制"><a class="header" href="#空白控制">空白控制</a></h1>
 <p>默认情况下，Templater中的<strong>命令</strong>不会删除任何换行符。命令被替换为它们的值，仅此而已。</p>
-<p>有时候在插入命令后控制一些空白非常有用，这正是此命令工具提供的功能。</p>
+<p>有时候在插入命令后控制一些空白(空格)非常有用，此命令工具正是为此而设计的。</p>
 <p>让我们看一个例子。以下模板：</p>
-<pre><code>&lt;%* if (tp.file.title == "MyFile" ) { %&gt;
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;%* if (tp.file.title == "MyFile" ) { %&gt;
 这是我的文件！
 &lt;%* } else { %&gt;
 这不是我的文件！
@@ -167,7 +167,7 @@
 一些内容...
 </code></pre>
 <p>如果条件为假（当条件为真时也一样），将产生以下输出，注意空行：</p>
-<pre><code>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">
 这不是我的文件！
 
 一些内容...
@@ -175,13 +175,13 @@
 <p>您可能想要删除由<strong>执行命令</strong>产生的空行，这些命令不会产生任何输出。</p>
 <p>空白控制有一种特定的语法：</p>
 <ul>
-<li>标签<strong>开头</strong>的下划线<code>_</code>（<code>&lt;%_</code>）将修剪命令<strong>之前</strong>的<strong>所有</strong>空白</li>
-<li>标签<strong>结尾</strong>的下划线<code>_</code>（<code>_%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>所有</strong>空白</li>
-<li>标签<strong>开头</strong>的破折号<code>-</code>（<code>&lt;%-</code>）将修剪命令<strong>之前</strong>的<strong>一个</strong>换行符</li>
-<li>标签<strong>结尾</strong>的破折号<code>-</code>（<code>-%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>一个</strong>换行符</li>
+<li><strong>开始标签</strong>后跟一个下划线<code class="hljs">_</code>（<code class="hljs">&lt;%_</code>）将删除命令<strong>之前</strong>的<strong>所有</strong>空格</li>
+<li><strong>结束标签</strong>前添一个下划线<code class="hljs">_</code>（<code class="hljs">_%&gt;</code>）将删除命令<strong>之后</strong>的<strong>所有</strong>空格</li>
+<li><strong>开始标签</strong>后跟一个短横杠(减号)<code class="hljs">-</code>（<code class="hljs">&lt;%-</code>）将删除命令<strong>之前</strong>的<strong>一个</strong>换行符</li>
+<li><strong>结束标签</strong>前添一个短横杠(减号)<code class="hljs">-</code>（<code class="hljs">-%&gt;</code>）将修剪命令<strong>之后</strong>的<strong>一个</strong>换行符</li>
 </ul>
-<p>在我们的例子中，要修复我们的模板以删除空行，我们将使用以下模板（注意标签末尾的破折号<code>-</code>），以删除执行命令<strong>之后</strong>的空行：</p>
-<pre><code>&lt;%* if (tp.file.title == "MyFile" ) { -%&gt;
+<p>在我们的例子中，要修复我们的模板以删除空行，我们将使用以下模板（注意标签末尾的减号<code class="hljs">-</code>），以删除执行命令<strong>之后</strong>的空行：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;%* if (tp.file.title == "MyFile" ) { -%&gt;
 这是我的文件！
 &lt;%* } else { -%&gt;
 这不是我的文件！
@@ -189,10 +189,9 @@
 一些内容...
 </code></pre>
 <p>这将产生以下输出：</p>
-<pre><code>这不是我的文件！
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">这不是我的文件！
 一些内容...
 </code></pre>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
