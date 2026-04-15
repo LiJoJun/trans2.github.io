@@ -156,42 +156,41 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="脚本用户函数"><a class="header" href="#脚本用户函数">脚本用户函数</a></h1>
-<p>这种类型的用户函数允许您从JavaScript文件中调用JavaScript函数并获取其输出。</p>
-<p>要使用脚本用户函数，您需要在Templater的设置中指定一个脚本文件夹。该文件夹需要可以从您的保管库访问。</p>
-<h2 id="定义脚本用户函数"><a class="header" href="#定义脚本用户函数">定义脚本用户函数</a></h2>
-<p>假设您在Templater的设置中将<code>Scripts</code>文件夹指定为脚本文件夹。</p>
-<p>Templater将加载<code>Scripts</code>文件夹中的所有JavaScript（<code>.js</code>文件）脚本。</p>
-<p>然后您可以创建名为<code>Scripts/my_script.js</code>的脚本（需要<code>.js</code>扩展名）。您可能需要在Obsidian外部创建该文件，因为Obsidian只创建markdown文件。</p>
-<p>然后您将能够将您的脚本作为用户函数调用。函数名对应于脚本文件名。</p>
+<p>这种类型的用户函数允许您从JavaScript文件中调用JavaScript函数并获取其输出结果。</p>
+<p>要使用脚本用户函数，您需要在Templater的设置中指定一个脚本文件夹。该文件夹必须能在您的保管库找到。</p>
+<h2 id="定义脚本用户函数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%AE%9A%E4%B9%89%E8%84%9A%E6%9C%AC%E7%94%A8%E6%88%B7%E5%87%BD%E6%95%B0">定义脚本用户函数</a></h2>
+<p>假设您在Templater的设置中将<code class="hljs">Scripts</code>文件夹指定为脚本文件夹。</p>
+<p>Templater将加载<code class="hljs">Scripts</code>文件夹中的所有JavaScript（<code class="hljs">.js</code>文件）脚本。</p>
+<p>然后您可以创建名为<code class="hljs">Scripts/my_script.js</code>的脚本（需要<code class="hljs">.js</code>扩展名）。您可能需要在Obsidian外部创建该文件，因为Obsidian只创建markdown(.md)文件。</p>
+<p>然后您将能够将您的脚本作为用户函数调用。函数名是对应的脚本文件名。</p>
 <p>脚本应遵循<a href="https://flaviocopes.com/commonjs/">CommonJS模块规范</a>，并导出单个函数。</p>
-<pre><code class="language-javascript">function my_function (msg) {
-    return `来自我的脚本的消息: ${msg}`;
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">my_function</span> (<span class="hljs-params">msg</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`来自我的脚本的消息: <span class="hljs-subst">${msg}</span>`</span>;
 }
-module.exports = my_function;
+<span class="hljs-built_in">module</span>.exports = my_function;
 </code></pre>
 <p>在此示例中，完整的命令调用如下所示：</p>
-<pre><code class="language-javascript">&lt;% tp.user.my_script("Hello World!") %&gt;
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">&lt;% tp.user.my_script(<span class="hljs-string">"Hello World!"</span>) %&gt;
 </code></pre>
-<p>这将输出<code>来自我的脚本的消息: Hello World!</code>。</p>
-<h2 id="全局命名空间"><a class="header" href="#全局命名空间">全局命名空间</a></h2>
-<p>在脚本用户函数中，您仍然可以访问全局命名空间变量，如<code>app</code>或<code>moment</code>。</p>
-<p>但是，您不能访问模板引擎作用域变量，如<code>tp</code>或<code>tR</code>。如果您想使用它们，必须将它们作为参数传递给您的函数。</p>
-<h2 id="函数参数"><a class="header" href="#函数参数">函数参数</a></h2>
+<p>这将输出<code class="hljs">来自我的脚本的消息: Hello World!</code>。</p>
+<h2 id="全局命名空间"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%85%A8%E5%B1%80%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4">全局命名空间</a></h2>
+<p>在脚本用户函数中，您仍然可以访问全局命名空间变量，如<code class="hljs">app</code>或<code class="hljs">moment</code>。</p>
+<p>但是，您不能访问模板引擎作用域变量，如<code class="hljs">tp</code>或<code class="hljs">tR</code>。如果您想使用它们，必须将它们作为参数传递给您的函数。</p>
+<h2 id="函数参数"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0">函数参数</a></h2>
 <p>您可以根据函数的定义方式向函数传递任意数量的参数。</p>
-<p>例如，您可以将<code>tp</code>对象传递给您的函数，以便能够使用Templater的所有<a href="../internal-functions/overview.html">内置变量/函数</a>：<code>&lt;% tp.user.&lt;用户函数名&gt;(tp) %&gt;</code></p>
-<h2 id="用户脚本文档"><a class="header" href="#用户脚本文档">用户脚本文档</a></h2>
-<p>您可以选择使用<a href="https://tsdoc.org/">TSDoc标准</a>在方法文件的<strong>顶部</strong>记录脚本的功能。如果提供，这将为您的用户脚本提供类似intellisense的体验，类似于其他templater函数的体验。</p>
-<h3 id="带文档的用户脚本示例"><a class="header" href="#带文档的用户脚本示例">带文档的用户脚本示例</a></h3>
-<pre><code class="language-javascript">/**
+<p>例如，您可以将<code class="hljs">tp</code>对象传递给您的函数，以便能够使用Templater的所有<a href="https://fjie.github.io/Templater/zh/internal-functions/overview.html">内部变量/函数</a>：<code class="hljs">&lt;% tp.user.&lt;用户函数名&gt;(tp) %&gt;</code></p>
+<h2 id="用户脚本文档"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC%E6%96%87%E6%A1%A3">用户脚本文档</a></h2>
+<p>您可以选择使用<a href="https://tsdoc.org/">TSDoc标准</a>在方法文件的<strong>顶部</strong>记录脚本的功能。如果使用该功能，这将为您的用户脚本提供类似intellisense(智能感知)的体验，类似于其他templater函数的体验。</p>
+<h3 id="带文档的用户脚本示例"><a class="header" href="https://fjie.github.io/Templater/zh/user-functions/script-user-functions.html#%E5%B8%A6%E6%96%87%E6%A1%A3%E7%9A%84%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B">带文档的用户脚本示例</a></h3>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">/**
  * 这会做一些很酷的事情
- */
-function doSomething() {
-    console.log('完成了某事')
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doSomething</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'完成了某事'</span>)
 }
 
-module.exports = doSomething;
+<span class="hljs-built_in">module</span>.exports = doSomething;
 </code></pre>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
