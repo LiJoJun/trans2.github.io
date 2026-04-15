@@ -158,45 +158,63 @@
                         <h1 id="javascript执行命令"><a class="header" href="#javascript执行命令">JavaScript执行命令</a></h1>
 <p>这种类型的命令允许我们执行JavaScript代码。</p>
 <p>通过JavaScript执行命令，我们几乎可以做JavaScript允许我们做的所有事情。下面给出了一些示例。</p>
-<p>我们仍然可以从这种类型的命令中访问<code>tp</code>对象和所有内置变量/函数。</p>
-<p>JavaScript执行命令允许您访问全局命名空间变量。这意味着您可以访问诸如<code>app</code>或<code>moment</code>之类的内容。</p>
-<h2 id="异步函数"><a class="header" href="#异步函数">异步函数</a></h2>
-<p>某些内置函数是异步的。在JavaScript执行命令中调用此类函数时，如有必要，不要忘记使用<code>await</code>关键字。</p>
-<h2 id="如何从javascript执行命令输出值"><a class="header" href="#如何从javascript执行命令输出值">如何从JavaScript执行命令输出值？</a></h2>
+<p>我们仍然可以从这种类型的命令中访问<code class="hljs">tp</code>对象和所有内部变量/函数。</p>
+<p>JavaScript执行命令允许您访问全局命名空间变量。这意味着您可以访问诸如<code class="hljs">app</code>或<code class="hljs">moment</code>之类的内容。</p>
+<h2 id="异步函数"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0">异步函数</a></h2>
+<p>某些内部函数是异步的。在JavaScript执行命令中调用此类函数时，如有必要，不要忘记使用<code class="hljs">await</code>关键字。</p>
+<h2 id="如何从javascript执行命令输出值"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%A6%82%E4%BD%95%E4%BB%8Ejavascript%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%BE%93%E5%87%BA%E5%80%BC">如何从JavaScript执行命令输出值？</a></h2>
 <p>有时，您可能希望在使用JS执行命令时输出某些内容。</p>
-<p>当我们的模板引擎使用所有命令结果生成替换字符串时，它存储在名为<code>tR</code>的变量中。这个字符串将包含处理后的文件内容。您可以从JS执行命令访问该变量。</p>
-<p>这意味着，要从JS执行命令输出内容，您只需要将要输出的内容附加到<code>tR</code>字符串变量上。</p>
-<p>例如，以下命令：<code>&lt;%* tR += "测试" %&gt;</code>将输出<code>测试</code>。</p>
-<h3 id="建议器和提示"><a class="header" href="#建议器和提示">建议器和提示</a></h3>
-<p>重要的是要注意<code>tp.system.prompt()</code>和<code>tp.system.suggester()</code>都需要<code>await</code>语句才能将值保存到变量中</p>
-<h2 id="示例"><a class="header" href="#示例">示例</a></h2>
+<p>当我们的模板引擎使用所有命令结果生成替换字符串时，该字符串会被存储在名为<code class="hljs">tR</code>的变量中。这个字符串将包含处理后的文件内容。您可以从JS执行命令访问该变量。</p>
+<p>这意味着，要从JS执行命令输出内容，您只需要将要输出的内容附加到那个<code class="hljs">tR</code>字符串变量中。</p>
+<p>例如，以下命令：<code class="hljs">&lt;%* tR += "测试" %&gt;</code>将输出<code class="hljs">测试</code>。</p><p>您还可以覆盖 <code class="hljs">tR</code> 变量，以忽略模板引擎截至该点生成的所有内容。如果您希望在模板中包含前置信息或其他内容，但不希望在应用模板时插入这些内容，此方法会很有用。</p>
+<p>例如，以下模板:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+type: template
+---
+This is a person template.
+
+&lt;%* tR = "" -%&gt;
+---
+type: person
+---
+# &lt;% tp.file.cursor() %&gt;
+</code></pre>
+<p>将会输出:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
+type: person
+---
+# 
+</code></pre>
+<h3 id="建议器和提示"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E5%BB%BA%E8%AE%AE%E5%99%A8%E5%92%8C%E6%8F%90%E7%A4%BA">建议器和提示</a></h3>
+<p>重要的是要注意<code class="hljs">tp.system.prompt()</code>和<code class="hljs">tp.system.suggester()</code>都需要<code class="hljs">await</code>语句才能将值保存到变量中</p>
+<h2 id="示例"><a class="header" href="https://fjie.github.io/Templater/zh/commands/execution-command.html#%E7%A4%BA%E4%BE%8B">示例</a></h2>
 <p>以下是使用JavaScript执行命令可以做的一些事情的示例：</p>
-<pre><code class="language-javascript">&lt;%* if (tp.file.title.startsWith("Hello")) { %&gt;
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs">&lt;%* <span class="hljs-keyword">if</span> (tp.file.title.startsWith(<span class="hljs-string">"Hello"</span>)) { %&gt;
 这是一个hello文件！
-&lt;%* } else { %&gt;
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
 这是一个普通文件！
 &lt;%* } %&gt;
     
-&lt;%* if (tp.frontmatter.type === "seedling") { %&gt;
+&lt;%* <span class="hljs-keyword">if</span> (tp.frontmatter.type === <span class="hljs-string">"seedling"</span>) { %&gt;
 这是一个seedling文件！
-&lt;%* } else { %&gt;
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
 这是一个普通文件！
 &lt;%* } %&gt;
     
-&lt;%* if (tp.file.tags.contains("#todo")) { %&gt;
+&lt;%* <span class="hljs-keyword">if</span> (tp.file.tags.contains(<span class="hljs-string">"#todo"</span>)) { %&gt;
 这是一个待办事项文件！
-&lt;%* } else { %&gt;
+&lt;%* } <span class="hljs-keyword">else</span> { %&gt;
 这是一个已完成文件！
 &lt;%* } %&gt;
 
 &lt;%*
-function log(msg) {
-	console.log(msg);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">msg</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(msg);
 }
 %&gt;
-&lt;%* log("标题: " + tp.file.title) %&gt;
+&lt;%* log(<span class="hljs-string">"标题: "</span> + tp.file.title) %&gt;
     
-&lt;%* tR += tp.file.content.replace(/stuff/, "things"); %&gt;
+&lt;%* tR += tp.file.content.replace(<span class="hljs-regexp">/stuff/</span>, <span class="hljs-string">"things"</span>); %&gt;
 </code></pre>
 
                     </main>
