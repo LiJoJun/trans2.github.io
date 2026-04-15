@@ -155,42 +155,43 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="hooks模块"><a class="header" href="#hooks模块">Hooks模块</a></h1>
-<p>Hooks模块允许您在特定事件发生时注册回调函数。</p>
+                        <h1 id="hooks-module"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#hooks-module">Hooks 模块</a></h1>
+<p>Hooks模块允许您在特定事件发生时调用回调函数。</p>
 <ul>
-<li><a href="#%E6%96%87%E6%A1%A3">文档</a>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#documentation">文档</a>
 <ul>
-<li><a href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback_function---any"><code class="hljs">tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></li>
 </ul>
 </li>
-<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#examples">示例</a></li>
 </ul>
-<h2 id="文档"><a class="header" href="#文档">文档</a></h2>
-<p>函数文档使用特定语法。更多信息<a href="../../syntax.html#%E5%87%BD%E6%95%B0%E6%96%87%E6%A1%A3%E8%AF%AD%E6%B3%95">在此</a>。</p>
-<h3 id="tphookson_all_templates_executedcallback"><a class="header" href="#tphookson_all_templates_executedcallback"><code>tp.hooks.on_all_templates_executed(callback)</code></a></h3>
-<p>当当前活动文件中的所有模板都已执行完毕时调用。</p>
-<h5 id="参数"><a class="header" href="#参数">参数</a></h5>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#documentation">文档</a></h2>
+<p>函数文档使用特定语法。详见<a href="https://silentvoid13.github.io/Templater/syntax.html#function-documentation-syntax">此处</a>。</p>
+<h3 id="tphookson_all_templates_executedcallback_function---any"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#tphookson_all_templates_executedcallback_function---any"><code>tp.hooks.on_all_templates_executed(callback_function: () =&gt; any)</code></a></h3>
+<p>在所有正在运行的模板执行完毕时触发。大多数情况下，这将是一个单一模板，除非您使用了 
+<code class="hljs">tp.file.include</code> 或 <code class="hljs">tp.file.create_new</code>.</p>
+<p>多次调用此方法时，其回调函数将并行执行。</p>
+<h5 id="arguments"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#arguments">参数</a></h5>
 <ul>
-<li><code>callback</code>: 在所有模板执行完毕后要调用的回调函数。</li>
+<li><code class="hljs">callback_function</code>在所有模板执行完毕后要调用的回调函数。</li>
 </ul>
-<h2 id="示例"><a class="header" href="#示例">示例</a></h2>
-<pre><code class="language-javascript">// 模板执行完成后更新frontmatter
+<h2 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/hooks-module.html#examples">示例</a></h2>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-javascript hljs"><span class="hljs-comment">// Update frontmatter after template finishes executing</span>
 &lt;%*
-tp.hooks.on_all_templates_executed(async () =&gt; {
-  const file = tp.file.find_tfile(tp.file.path(true));
-  await tp.app.fileManager.processFrontMatter(file, (frontmatter) =&gt; {
-    frontmatter["key"] = "value";
+tp.hooks.on_all_templates_executed(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> file = tp.file.find_tfile(tp.file.path(<span class="hljs-literal">true</span>));
+  <span class="hljs-keyword">await</span> tp.app.fileManager.processFrontMatter(file, <span class="hljs-function">(<span class="hljs-params">frontmatter</span>) =&gt;</span> {
+    frontmatter[<span class="hljs-string">"key"</span>] = <span class="hljs-string">"value"</span>;
   });
 });
 %&gt;
-// Templater更新文件后，从另一个插件运行修改当前文件的命令
+<span class="hljs-comment">// Run a command from another plugin that modifies the current file, after Templater has updated the file</span>
 &lt;%*
-tp.hooks.on_all_templates_executed(() =&gt; {
-  tp.app.commands.executeCommandById("obsidian-linter:lint-file");
+tp.hooks.on_all_templates_executed(<span class="hljs-function">() =&gt;</span> {
+  tp.app.commands.executeCommandById(<span class="hljs-string">"obsidian-linter:lint-file"</span>);
 });
 -%&gt;
 </code></pre>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
