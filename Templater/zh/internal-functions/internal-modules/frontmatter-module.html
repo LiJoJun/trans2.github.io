@@ -155,45 +155,48 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="frontmatter模块"><a class="header" href="#frontmatter模块">Frontmatter模块</a></h1>
-<p>这个模块允许您访问当前文件的frontmatter变量。</p>
+                        <h1 id="frontmatter-module"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#frontmatter-module">Frontmatter 模块</a></h1>
+<p>通过这个模块你可以访问文件的frontmatter(前置信息)。
+
+</p>
 <ul>
-<li><a href="#%E6%96%87%E6%A1%A3">文档</a>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#documentation">文档</a>
 <ul>
-<li><a href="#tpfrontmatterfrontmatter%E5%8F%98%E9%87%8F%E5%90%8D"><code>tp.frontmatter.&lt;frontmatter变量名&gt;</code></a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#tpfrontmatterfrontmatter_variable_name"><code class="hljs">tp.frontmatter.&lt;frontmatter_variable_name&gt;</code></a></li>
 </ul>
 </li>
-<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#examples">示例</a></li>
 </ul>
-<h2 id="文档"><a class="header" href="#文档">文档</a></h2>
-<h3 id="tpfrontmatterfrontmatter变量名"><a class="header" href="#tpfrontmatterfrontmatter变量名"><code>tp.frontmatter.&lt;frontmatter变量名&gt;</code></a></h3>
+<h2 id="documentation"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#documentation">文档</a></h2>
+<h3 id="tpfrontmatterfrontmatter_variable_name"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#tpfrontmatterfrontmatter_variable_name"><code>tp.frontmatter.&lt;frontmatter_variable_name&gt;</code></a></h3>
 <p>获取文件frontmatter变量的值。</p>
-<p>如果您的frontmatter变量名称包含空格，可以使用方括号表示法引用它，如下所示：</p>
-<pre><code>&lt;% tp.frontmatter["包含空格的变量名"] %&gt;
+<p>如果文件的frontmatter变量名称包含空格，可以使用方括号表示法引用它，如下所示：</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;% tp.frontmatter["variable name with spaces"] %&gt;
 </code></pre>
-<h2 id="示例"><a class="header" href="#示例">示例</a></h2>
-<p>假设您有以下文件：</p>
-<pre><code>---
+<h2 id="examples"><a class="header" href="https://silentvoid13.github.io/Templater/internal-functions/internal-modules/frontmatter-module.html#examples">示例</a></h2>
+<p>假设你有如下文件: </p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
 alias: myfile
 note type: seedling
 ---
 
-文件内容
+file content
 </code></pre>
-<p>那么您可以使用以下模板：</p>
-<pre><code>文件元数据别名：&lt;% tp.frontmatter.alias %&gt;
-笔记类型：&lt;% tp.frontmatter["note type"] %&gt;
+<p>那么你可以使用以下模板:</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">File's metadata alias: &lt;% tp.frontmatter.alias %&gt;
+Note's type: &lt;% tp.frontmatter["note type"] %&gt;
 </code></pre>
-<p>对于frontmatter中的列表，您可以使用JavaScript数组原型方法来操作数据的显示方式。</p>
-<pre><code>---
+<p>对于frontmatter中的列表，您可以使用JavaScript数组原型方法来操作该列表的显示方式。
+
+</p>
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">---
 categories:
   - book
   - movie
 ---
 </code></pre>
-<pre><code>&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
+<pre><div class="buttons"><button class="fa fa-copy clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="hljs">&lt;% tp.frontmatter.categories.map(prop =&gt; `  - "${prop}"`).join("\n") %&gt;
 </code></pre>
-<p>`</p>
 
                     </main>
 
