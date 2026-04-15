@@ -156,73 +156,73 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="贡献"><a class="header" href="#贡献">贡献</a></h1>
-<p>您可以通过开发新的内置函数/变量来为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献。</p>
+<p>您可以通过开发新的内部函数/变量来为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献。</p>
 <p>开发新功能的过程非常简单。</p>
-<p>请记住，只有相关的提交才会被接受，不要提交只有您自己会使用的非常特定的内置变量/函数。</p>
-<h2 id="布局"><a class="header" href="#布局">布局</a></h2>
-<p>内置变量/函数按模块分类。每个模块在<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates">src/InternalTemplates</a>下都有专门的文件夹。</p>
+<p>请记住，只有相关的提交才会被接受，不要提交只有您自己会使用的非常特定的内部变量/函数。</p>
+<h2 id="布局"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/contribute.html#%E5%B8%83%E5%B1%80">布局</a></h2>
+<p>内部变量/函数按模块分类。每个模块在<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates">src/InternalTemplates</a>下都有专门的文件夹。</p>
 <p>让我们以<a href="https://github.com/SilentVoid13/Templater/tree/master/src/InternalTemplates/date">date模块</a>为例。</p>
-<p>它包含一个<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/date/InternalModuleDate.ts">InternalModuleDate</a>文件，其中定义并注册了所有与日期相关的内置变量和函数：</p>
-<pre><code class="language-typescript">export class InternalModuleDate extends InternalModule {
-    name = "date";
+<p>它包含一个<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/date/InternalModuleDate.ts">InternalModuleDate</a>文件，其中定义并注册了所有与日期相关的内部变量和函数：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-typescript hljs"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> InternalModuleDate <span class="hljs-keyword">extends</span> InternalModule {
+    name = <span class="hljs-string">"date"</span>;
 
-    async createStaticTemplates() {
-        this.static_templates.set("now", this.generate_now());
-        this.static_templates.set("tomorrow", this.generate_tomorrow());
-        this.static_templates.set("yesterday", this.generate_yesterday());
+    <span class="hljs-keyword">async</span> createStaticTemplates() {
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"now"</span>, <span class="hljs-built_in">this</span>.generate_now());
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"tomorrow"</span>, <span class="hljs-built_in">this</span>.generate_tomorrow());
+        <span class="hljs-built_in">this</span>.static_templates.set(<span class="hljs-string">"yesterday"</span>, <span class="hljs-built_in">this</span>.generate_yesterday());
     }
 
-    async updateTemplates() {}
+    <span class="hljs-keyword">async</span> updateTemplates() {}
 
     generate_now() {
-        return (format: string = "YYYY-MM-DD", offset?: number, reference?: string, reference_format?: string) =&gt; {
-            if (reference &amp;&amp; !window.moment(reference, reference_format).isValid()) {
-                throw new Error("Invalid title date format, try specifying one with the argument 'reference'");
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span>, offset?: <span class="hljs-built_in">number</span>, reference?: <span class="hljs-built_in">string</span>, reference_format?: <span class="hljs-built_in">string</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span> (reference &amp;&amp; !<span class="hljs-built_in">window</span>.moment(reference, reference_format).isValid()) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Invalid title date format, try specifying one with the argument 'reference'"</span>);
             }
-            return get_date_string(format, offset, reference, reference_format);
+            <span class="hljs-keyword">return</span> get_date_string(format, offset, reference, reference_format);
         }
     }
 
     generate_tomorrow() {
-        return (format: string = "YYYY-MM-DD") =&gt; {
-            return get_date_string(format, 1);
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> get_date_string(format, <span class="hljs-number">1</span>);
         }
     }
 
     generate_yesterday() {
-        return (format: string = "YYYY-MM-DD") =&gt; {
-            return get_date_string(format, -1);
+        <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">format: <span class="hljs-built_in">string</span> = <span class="hljs-string">"YYYY-MM-DD"</span></span>) =&gt;</span> {
+            <span class="hljs-keyword">return</span> get_date_string(format, <span class="hljs-number">-1</span>);
         }
     }
 }
 </code></pre>
 <p>每个模块都继承自<a href="https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/InternalModule.ts">InternalModule</a>抽象类，这意味着它们包含以下属性和方法：</p>
 <ul>
-<li><code>this.app</code>属性：Obsidian API的<code>App</code>对象。</li>
-<li><code>this.file</code>属性：模板将被插入的目标文件。</li>
-<li><code>this.plugin</code>属性：Templater插件对象。</li>
-<li><code>this.static_templates</code>属性：包含所有静态(名称；变量/函数)的映射。静态变量/函数意味着它在执行时不依赖于文件。每次插入新模板时，这类变量/函数不会更新，以节省开销。</li>
-<li><code>this.dynamic_templates</code>属性：与<code>static_templates</code>相同，只是它包含执行时依赖于文件的变量/函数。</li>
-<li><code>this.createStaticTemplates()</code>方法：注册该模块的所有静态内置变量/函数。</li>
-<li><code>this.updateTemplates()</code>方法：注册该模块的所有动态内置变量/函数。</li>
+<li><code class="hljs">this.app</code>属性：Obsidian API的<code class="hljs">App</code>对象。</li>
+<li><code class="hljs">this.file</code>属性：模板将被插入的目标文件。</li>
+<li><code class="hljs">this.plugin</code>属性：Templater插件对象。</li>
+<li><code class="hljs">this.static_templates</code>属性：包含所有静态(名称；变量/函数)的映射。静态变量/函数意味着它在执行时不依赖于文件。每次插入新模板时，这类变量/函数不会更新，以节省开销。</li>
+<li><code class="hljs">this.dynamic_templates</code>属性：与<code class="hljs">static_templates</code>相同，只是它包含执行时依赖于文件的变量/函数。</li>
+<li><code class="hljs">this.createStaticTemplates()</code>方法：注册该模块的所有静态内置变量/函数。</li>
+<li><code class="hljs">this.updateTemplates()</code>方法：注册该模块的所有动态内置变量/函数。</li>
 </ul>
 <p>如果需要，您可以在新的内置变量/函数中使用这些属性。</p>
-<h2 id="注册新的内置变量函数"><a class="header" href="#注册新的内置变量函数">注册新的内置变量/函数</a></h2>
+<h2 id="注册新的内置变量函数"><a class="header" href="https://fjie.github.io/Templater/zh/internal-functions/contribute.html#%E6%B3%A8%E5%86%8C%E6%96%B0%E7%9A%84%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F%E5%87%BD%E6%95%B0">注册新的内部变量/函数</a></h2>
 <p>以下是注册模块中新内置变量/函数的不同步骤。</p>
-<p>**第1步：**在模块内创建一个名为<code>generate_&lt;内置变量或函数名&gt;()</code>的方法，该方法将生成您的内置变量/函数，这意味着它将返回lambda函数（表示内置函数）或直接返回您想要暴露的内置变量。</p>
+<p><strong>第一步:</strong>在模块内创建一个名为<code class="hljs">generate_&lt;内置变量或函数名&gt;()</code>的方法，该方法将生成您的内置变量/函数，这意味着它将返回lambda函数（表示内置函数）或直接返回您想要暴露的内置变量。</p>
 <p>所有生成方法按照内置变量/函数名称的字母顺序排序。</p>
 <p>尝试为您的变量/函数提供一个好的、自解释的名称。</p>
-<p>**第2步：**根据您的内置变量/函数在执行时是否依赖于文件，在<code>static_templates</code>或<code>dynamic_templates</code>映射中注册它。注册发生在<code>createStaticTemplates</code>或<code>updateTemplates</code>中。</p>
-<p>要注册您的变量/函数，请使用您之前定义的<code>this.generate_&lt;内置变量或函数名&gt;()</code>方法：</p>
-<pre><code class="language-typescript">this.static_templates.set(&lt;内置变量或函数名&gt;, this.generate_&lt;内置变量或函数名&gt;());
+<p><strong>第二步:</strong>
+根据您的内置变量/函数在执行时是否依赖于文件，在<code class="hljs">static_templates</code>或<code class="hljs">dynamic_templates</code>映射中注册它。注册发生在<code class="hljs">createStaticTemplates</code>或<code class="hljs">updateTemplates</code>中。</p>
+<p>要注册您的变量/函数，请使用您之前定义的<code class="hljs">this.generate_&lt;内置变量或函数名&gt;()</code>方法：</p>
+<pre><div class="buttons"><button class="clip-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="tooltiptext"></i></button></div><code class="language-typescript hljs"><span class="hljs-built_in">this</span>.static_templates.set(&lt;内置变量或函数名&gt;, <span class="hljs-built_in">this</span>.generate_&lt;内置变量或函数名&gt;());
 或
-this.dynamic_templates.set(&lt;内置变量或函数名&gt;, this.generate_&lt;内置变量或函数名&gt;());
+<span class="hljs-built_in">this</span>.dynamic_templates.set(&lt;内置变量或函数名&gt;, <span class="hljs-built_in">this</span>.generate_&lt;内置变量或函数名&gt;());
 </code></pre>
 <p>内置变量/函数注册也按变量/函数名称的字母顺序排序。</p>
-<p>**第3步：**将您的内置变量/函数文档添加到Templater的<a href="https://github.com/SilentVoid13/Templater/tree/master/docs/docs/internal-variables-functions/internal-modules">文档</a>中。</p>
+<p><strong>第三步:</strong>将您的内置变量/函数文档添加到Templater的<a href="https://github.com/SilentVoid13/Templater/tree/master/docs/docs/internal-variables-functions/internal-modules">文档</a>中。</p>
 <p>完成了！感谢您为<a href="https://github.com/SilentVoid13/Templater">Templater</a>做出贡献！</p>
 <p>现在，只需在Github上提交一个<a href="https://github.com/SilentVoid13/Templater/pulls">拉取请求</a>，我会尽可能快地做出反应。</p>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
